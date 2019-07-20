@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+   >
+
+
+        <ImageView
+            android:id="@+id/iv_ser_ble_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon_ble_on" />
+
+        <TextView
+            android:id="@+id/tv_ser_ble_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/shower_str12"
+            android:textColor="@color/light_blue"
+            android:textSize="15sp"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/tv_ser_bind_status"
+            android:layout_marginTop="50dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="未连接"
+            android:textColor="@color/light_blue"
+            android:layout_centerHorizontal="true"/>
+
+
+
+
+
+        <Button
+        android:id="@+id/button_go_retrieve"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="查看记录"
+        />
+        <ListView
+        android:id="@+id/ble_list_view"
+        android:layout_below="@id/button_go_retrieve"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp"
+        android:divider="#cccccc"
+        android:dividerHeight="1px" />
+
+
+        <LinearLayout
+        android:id="@+id/opera_view"
+        android:layout_marginTop="10dp"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
+
+
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+
+            <Button
+                android:id="@+id/start_service"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="存数据"
+                />
+            <Button
+                android:id="@+id/stop_service"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="清数据"
+            />
+            <Button
+                android:id="@+id/save_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="存图像"
+                />
+            <Button
+                android:id="@+id/reconnect_ble"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="重连蓝牙"
+                />
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/tv_response"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="设备返回："
+            android:maxLines="5"
+            android:scrollbars="vertical"
+            />
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/chart"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+
+            />
+            <TextView
+                android:id="@+id/position_text_viewble"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/button_start_service"
+                android:text="开启前台服务"/>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/button_stop_service"
+                android:text="关闭前台服务"/>
+
+    </LinearLayout>
+
+
+</LinearLayout>
