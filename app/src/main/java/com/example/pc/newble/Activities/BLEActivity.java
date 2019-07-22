@@ -176,7 +176,7 @@ public class BLEActivity extends AppCompatActivity {
         }
 
         // 标记今天日期和时间
-        FileUtils.addStringToFile(getSDCardPath() + "/bletest/Datalist.txt", "\n");
+        FileUtils.addStringToFile(getSDCardPath() + "/bletest/Datalist.txt", "\n");    //datalist
         FileUtils.addStringToFile(getSDCardPath() + "/bletest/Datalist.txt", DateUtil.getNowDateTime().substring(0, 8));
 
         // 跳转查看记录的活动。这个跳转方式被移除

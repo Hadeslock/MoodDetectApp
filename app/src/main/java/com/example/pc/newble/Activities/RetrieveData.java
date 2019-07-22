@@ -85,7 +85,7 @@ public class RetrieveData extends AppCompatActivity {
         //是否显示边界
         mChart.setDrawBorders(true);
         //是否可以拖动
-        mChart.setDragEnabled(false);
+        mChart.setDragEnabled(true);
         // 设置触摸模式
         mChart.setTouchEnabled(true);
         //设置XY轴动画效果

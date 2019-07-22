@@ -13,7 +13,7 @@ public class Products {
     private String _productName;
 
     // 懒得写get 和 set 了……
-    public String data;
+    public String data;//其实是date
     public String time;
     public String voltage;
     public String longitude;
