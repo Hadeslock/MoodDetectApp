@@ -19,6 +19,7 @@ public class Products {
     public String longitude;
     public String latitude;
     public String channel;
+    public String address;
 
     public void DefaultInitialization(){
         this._productName = "不存在的记录";
@@ -28,6 +29,7 @@ public class Products {
         this.longitude = "not_available";
         this.latitude = "not_available";
         this.channel = " 第5号 ";
+        this.address = "not_available";
     }
 
     /**
@@ -51,13 +53,14 @@ public class Products {
     /**
      * 由蓝牙直接添加 entry 到数据库的构造函数。包含经纬度。
      * */
-    public Products(Float voltage, Double longitude, Double latitude) {
+    public Products(Float voltage, Double longitude, Double latitude,String address) {
         this.DefaultInitialization();
         this._productName = "存在的记录";
         this.voltage = voltage.toString();
         try{
             this.latitude = latitude.toString();
             this.longitude = longitude.toString();
+            this.latitude = address;
         } catch (NullPointerException e) {
             e.printStackTrace();
             Log.e(TAG, "Products: 定位数据读取失败，已在数据库内写入0" );

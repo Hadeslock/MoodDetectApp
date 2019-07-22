@@ -195,7 +195,7 @@ public class BLEActivity extends AppCompatActivity {
         });
         */
 
-        //蓝牙所需
+        //所需
         mLocationClientble = new LocationClient(getApplicationContext());
         mLocationClientble.registerLocationListener(new MyLocationListenerble());
         positionTextble = (TextView) findViewById(R.id.position_text_viewble);
@@ -737,7 +737,7 @@ public class BLEActivity extends AppCompatActivity {
                 Log.e(TAG, "onCharacteristicChanged: 哈哈哈哈零零落落" );
                 // 如果要更改往数据库内传入的参数的话，务必在 Products.java 里面重写构造函数
                 Log.e(TAG, "onCharacteristicChanged: 哈哈哈哈" );
-                Products product = new Products(dataview, currentLongittude, currentLatitude);
+                Products product = new Products(dataview, currentLongittude, currentLatitude,currentAddressStr);
                 Log.e(TAG, "addButtonClicked: 哈哈哈哈哈哈哈" + product);
                 dbHandler.addItem(product);
                 Log.i(TAG, "Invoked: Add Item To Database. ");

@@ -28,6 +28,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
     public static final String COLUMN_LONGITUDE = "longitude";
     public static final String COLUMN_LATITUDE = "latitude";
     public static final String COLUMN_CHANNEL = "channel";
+    public static final String COLUMN_ADDRESSS = "address";
 
     public MyDBHandler(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, DATABASE_NAME, factory, DATABASE_VERSION);
@@ -44,6 +45,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
                 COLUMN_LONGITUDE + " TEXT, " +
                 COLUMN_LATITUDE + " TEXT, " +
                 COLUMN_CHANNEL + " TEXT " +
+                COLUMN_ADDRESSS+ " TEXT " +
                 ");";
         db.execSQL(query);
         // query = "INSERT INTO " + TABLE_PRODUCTS + "(productname) VALUES(\"Apple\");";
@@ -67,6 +69,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
         values.put(COLUMN_LONGITUDE, product.longitude);
         values.put(COLUMN_LATITUDE, product.latitude);
         values.put(COLUMN_CHANNEL, product.channel);
+        values.put(COLUMN_ADDRESSS, product.address);
 
         SQLiteDatabase db = getWritableDatabase();
         db.insert(TABLE_PRODUCTS, null, values);
@@ -98,6 +101,26 @@ public class MyDBHandler extends SQLiteOpenHelper {
         if (c.moveToFirst()) {
             do {
                 retval = c.getString(c.getColumnIndex(COLUMN_VOLTAGE));
+                Log.e(TAG, "GetDataOfOneCertainTime: 发现了 " + retval );
+                break;
+            } while (c.moveToNext());
+        }
+        db.close();
+        return retval;
+    }
+    /**
+     * 查询某天的某个时间点的地址。
+     * */
+    public String getaddrOfOneCertainTime(String date, int time){
+        String retval = "none";
+        SQLiteDatabase db = getWritableDatabase();
+        String query = "SELECT * FROM " + TABLE_PRODUCTS + " WHERE " + COLUMN_DATA + "=\"" + date + "\"" + " AND " + COLUMN_TIME + "=\"" + Integer.toString(time) + "\";" ;
+        Log.e(TAG, "GetDataOfOneCertainTime: SQL输出是  " + query );
+        // Cursor point to a location in your results
+        Cursor c = db.rawQuery(query, null);
+        if (c.moveToFirst()) {
+            do {
+                retval = c.getString(c.getColumnIndex(COLUMN_ADDRESSS));
                 Log.e(TAG, "GetDataOfOneCertainTime: 发现了 " + retval );
                 break;
             } while (c.moveToNext());

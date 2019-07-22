@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -32,6 +33,8 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.Vector;
 
+import static com.github.mikephil.charting.components.Legend.LegendPosition.RIGHT_OF_CHART_INSIDE;
+
 public class RetrieveData extends AppCompatActivity {
 
     public static final String TAG = "RetrieveData.this";
@@ -40,6 +43,7 @@ public class RetrieveData extends AppCompatActivity {
     private boolean isRunning;
     private Thread thread;
     private TextView textView;
+
 
     // 在 onCreate 里取消了 handler 转而直接调用 onClick，由于这个过程耗时不长，没有必要用handler
     private Handler handler;
@@ -69,14 +73,9 @@ public class RetrieveData extends AppCompatActivity {
         }
 
         textView =  findViewById(R.id.text_retrieved_data);
-        textView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // TODO
-            }
-        });
+        textView.setMovementMethod(ScrollingMovementMethod.getInstance());//滚动
 
-        mChart =  findViewById(R.id.chart);
+        mChart =  (LineChart) findViewById(R.id.chart);
 
         // 设置描述
         mChart.setDescription("5号（红色）的电压");
@@ -92,7 +91,6 @@ public class RetrieveData extends AppCompatActivity {
         mChart.animateY(600);
         mChart.animateX(1500);
         //
-
 
 
         // 得到所要的日期
@@ -217,7 +215,7 @@ public class RetrieveData extends AppCompatActivity {
         Vector<Double> doubleVector = new Vector<>();
         int TIME_INTERVAL = 60;
         // 一天内所有数据点
-        for (int i=0; i<(int)86400/TIME_INTERVAL; i++){
+        for (int i=0; i<(int)86400/TIME_INTERVAL; i++){//获取电压数据
             String a = dbHandler.getDataOfOneCertainTime(date, i);
             Log.e(TAG, "GetTodayData: 哈哈哈哈 + a " +i + "  "+ a );
             if (a == "none") {
@@ -226,10 +224,25 @@ public class RetrieveData extends AppCompatActivity {
             } else {
                 doubleVector.add(Double.parseDouble(a));
             }
+            if (i%60==0){//获取地址
+                String j = Integer.toString(i/60)+"点："+dbHandler.getaddrOfOneCertainTime(date, i);
+                addText(textView,j);
+            }
         }
+
 
         return doubleVector;
 
+    }
+//添加数据到textview中
+    private void addText(TextView textView, String content) {
+        textView.append(content);
+        textView.append("\n");
+        textView.setMovementMethod(ScrollingMovementMethod.getInstance());
+        //  int offset = textView.getLineCount() * textView.getLineHeight();
+        //  if (offset > textView.getHeight()) {
+        //      textView.scrollTo(0, offset - textView.getHeight());
+        //  }
     }
 
 
