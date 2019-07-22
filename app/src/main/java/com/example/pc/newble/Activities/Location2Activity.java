@@ -146,7 +146,7 @@ public class Location2Activity extends AppCompatActivity {
                 currentPosition.append("\ngps status : ");
                 currentPosition.append(location.getGpsAccuracyStatus());// *****gps质量判断*****
                 currentPosition.append("\ndescribe : ");
-                currentPosition.append("gps定位成功");
+                currentPosition.append("gps已经定位成功");
             } else if (location.getLocType() == BDLocation.TypeNetWorkLocation) {// 网络定位结果
                 // 运营商信息
                 if (location.hasAltitude()) {// *****如果有海拔高度*****
