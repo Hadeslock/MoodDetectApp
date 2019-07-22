@@ -3,6 +3,7 @@ package com.example.pc.newble.SQLite;
 
 import android.util.Log;
 
+import com.example.pc.newble.Activities.MainActivity;
 import com.example.pc.newble.TheUtils.DateUtil;
 
 import static com.example.pc.newble.Activities.RetrieveData.TAG;
@@ -97,10 +98,10 @@ public class Products {
 
     /**
      * 将一个"HH:mm:ss"格式的String化为一个int，代表当天的第几个时间点
-     * TODO 若更改此处的 TIME_INTERVAL，RetrieveData.java的time interval一块改了。
+     *
      * */
     public static int TransTimeToInteger(String time) {
-        int timeInterval = 60;
+        int timeInterval = MainActivity.TIME_INTERVAL;
         int hour = Integer.parseInt(time.substring(0,2));
         int minute = Integer.parseInt(time.substring(3, 5));
         int second = Integer.parseInt(time.substring(6, 8));

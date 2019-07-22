@@ -29,6 +29,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static final int TIME_INTERVAL = 60;
 
     private final int SDK_PERMISSION_REQUEST = 127;
     private ListView FunctionList;

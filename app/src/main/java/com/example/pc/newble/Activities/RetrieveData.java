@@ -155,7 +155,27 @@ public class RetrieveData extends AppCompatActivity {
 
         ArrayList<String> xVals = new ArrayList<String>();
         for (int i = 0; i < count; i++) {
-            xVals.add((i + 1) + "");
+            // 进行处理，以便让时间显示为 "HH：MM" 的形式
+            int TIME_INTERVAL = MainActivity.TIME_INTERVAL;
+            String string = new String();
+            int SecondPastSinceTheDayBegin = TIME_INTERVAL * i;
+            int hour = (int) Math.floor(SecondPastSinceTheDayBegin / 3600.0);
+            int minute = (int) Math.floor((SecondPastSinceTheDayBegin % 3600.0) / 60.0);
+            // 如果小时/分钟数小于10，则加0补全
+            if (hour < 10){
+                string = "0" + hour;
+            } else {
+                string = Integer.toString(hour);
+            }
+            string = string + ":";
+            if (minute < 10){
+                string = string + "0" + minute;
+            } else {
+                string = string + minute;
+            }
+
+
+            xVals.add(string);
         }
 
         ArrayList<Entry> yVals = new ArrayList<Entry>();
@@ -206,16 +226,15 @@ public class RetrieveData extends AppCompatActivity {
 
 
     /**
-     * TODO 若更改此处的 TIME_INTERVAL，请把products.java的time interval一块改了。
      * date：YYYYMMDD
      * */
     public Vector<Double> GetTodayData(String date){
 
         Log.e(TAG, "GetTodayData: 今天的日期是"  + date );
         Vector<Double> doubleVector = new Vector<>();
-        int TIME_INTERVAL = 60;
+        int TIME_INTERVAL = MainActivity.TIME_INTERVAL;
         // 一天内所有数据点
-        for (int i=0; i<(int)86400/TIME_INTERVAL; i++){//获取电压数据
+        for (int i=0; i<(int)86400/TIME_INTERVAL; i++){    //获取电压数据
             String a = dbHandler.getDataOfOneCertainTime(date, i);
             Log.e(TAG, "GetTodayData: 哈哈哈哈 + a " +i + "  "+ a );
             if (a == "none") {
@@ -224,7 +243,8 @@ public class RetrieveData extends AppCompatActivity {
             } else {
                 doubleVector.add(Double.parseDouble(a));
             }
-            if (i%60==0){//获取地址
+            // 获取每个整点时刻的地理位置
+            if (i % 60 == 0){
                 String j = Integer.toString(i/60)+"点："+dbHandler.getaddrOfOneCertainTime(date, i);
                 addText(textView,j);
             }
@@ -234,7 +254,8 @@ public class RetrieveData extends AppCompatActivity {
         return doubleVector;
 
     }
-//添加数据到textview中
+
+    //添加数据到textview中
     private void addText(TextView textView, String content) {
         textView.append(content);
         textView.append("\n");
