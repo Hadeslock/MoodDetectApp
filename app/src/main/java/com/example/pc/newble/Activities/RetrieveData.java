@@ -91,6 +91,7 @@ public class RetrieveData extends AppCompatActivity {
         //设置XY轴动画效果
         mChart.animateY(600);
         mChart.animateX(1500);
+        //
 
 
 
