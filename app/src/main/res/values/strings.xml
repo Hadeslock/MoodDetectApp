@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">NewBLE</string>
+    <string name="app_name">BLE</string>
     <string name="shower_str11">其他方式绑定</string>
     <string name="shower_str12">停止搜索</string>
     <string name="shower_str4">搜索中</string>
