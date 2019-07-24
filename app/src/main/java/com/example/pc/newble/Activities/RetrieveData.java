@@ -93,6 +93,7 @@ public class RetrieveData extends AppCompatActivity {
         //
 
 
+
         // 得到所要的日期
         Intent intent = getIntent();
         String date = intent.getStringExtra("file_to_read").substring(0,8);

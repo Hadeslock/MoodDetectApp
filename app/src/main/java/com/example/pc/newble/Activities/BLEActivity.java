@@ -53,6 +53,7 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 
 import com.github.mikephil.charting.formatter.ValueFormatter;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
@@ -417,7 +418,27 @@ public class BLEActivity extends AppCompatActivity {
         set.setHighLightColor(Color.GREEN);
         set.setValueTextColor(Color.RED);
         set.setValueTextSize(10f);
-        set.setDrawValues(true);
+     //   set.setDrawValues(true);
+
+
+
+        set.setAxisDependency(YAxis.AxisDependency.LEFT);
+        set.setColor(ColorTemplate.getHoloBlue());
+        set.setCircleColor(Color.YELLOW);
+        set.setLineWidth(0f);
+        set.setCircleSize(0f);
+        set.setFillAlpha(45);
+
+
+        //设置曲线值的圆点是实心还是空心
+        set.setDrawCircleHole(false);
+        set.setValueTextSize(10f);
+        //设置折线图填充
+        set.setDrawFilled(true);
+        set.setFillColor(ColorTemplate.getHoloBlue());
+        set.setHighLightColor(Color.rgb(244, 117, 117));
+        set.setDrawCircleHole(false);
+
 
         set.setValueFormatter(new ValueFormatter() {
             @Override
