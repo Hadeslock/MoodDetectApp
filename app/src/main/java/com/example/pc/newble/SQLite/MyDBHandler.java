@@ -108,7 +108,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
     }
 
     /**
-     * 查询某天的某个时间点的地址。
+     * 查询某天的某个时间点的地址信息。
      * */
     public String getaddrOfOneCertainTime(String date, int time){
         String retval = "none";
@@ -171,7 +171,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
     }
 
     /**
-     * 取出所有条目。在当前版本下，除了测试用途，最好避免使用这个函数。
+     * 取出所有条目。纯粹的测试用。
      * */
     public String getAllItemsFromDatabase() {
         StringBuilder dbString = new StringBuilder();
@@ -187,7 +187,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
                 dbString.append(c.getString(c.getColumnIndex("time")));
           //      dbString.append("   ");
             //    dbString.append(c.getString(c.getColumnIndex("date")));
-                Log.e(TAG, "getAllItemsFromDatabase: 哦乒乒乓乓乒乒乓乓" + dbString );
+
                 dbString.append("\n");
             } while (c.moveToNext());
         }
