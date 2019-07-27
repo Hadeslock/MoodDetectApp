@@ -61,7 +61,7 @@ public class Products {
         try{
             this.latitude = latitude.toString();
             this.longitude = longitude.toString();
-            this.latitude = address;
+            this.address = address;
         } catch (NullPointerException e) {
             e.printStackTrace();
             Log.e(TAG, "Products: 定位数据读取失败，已在数据库内写入0" );
@@ -69,6 +69,29 @@ public class Products {
 
         this.time  = Integer.toString(TransTimeToInteger(DateUtil.getNowTime()));
         this.data = DateUtil.getNowDateTime().substring(0, 8);
+    }
+
+
+
+    /**
+     * 从csv恢复时的构造函数。
+     * */
+    public Products(String date, String time, String voltage, String longitude, String latitude, String address, String channel) {
+        this.DefaultInitialization();
+        this._productName = "存在的记录";
+        this.voltage = voltage.toString();
+        try{
+            this.latitude = latitude.toString();
+            this.longitude = longitude.toString();
+            this.address = address;
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+            Log.e(TAG, "Products: 定位数据读取失败，已在数据库内写入0" );
+        }
+
+        this.time  = time;
+        this.data = date;
+        this.channel = channel;
     }
 
     /**

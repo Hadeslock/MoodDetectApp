@@ -15,6 +15,7 @@ import android.widget.ListView;
 
 import com.example.pc.newble.R;
 import com.example.pc.newble.SQLite.MyDBHandler;
+import com.example.pc.newble.TheUtils.FileUtils;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -29,6 +30,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    // 显示图表时每两个点之间点间隔时间。如果设的太小，可能导致载入较慢
     public static final int TIME_INTERVAL = 60;
 
     private final int SDK_PERMISSION_REQUEST = 127;
@@ -45,6 +47,9 @@ public class MainActivity extends AppCompatActivity {
 
         // after andrioid m,must request Permiision on runtime
         getPersimmions();
+
+        // 创建 data.csv 文件
+        FileUtils.makeFilePath(FileUtils.getSDCardPath() + "/bletest/", "data.csv");
     }
 
     @TargetApi(23)
@@ -153,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
         data.add("跳转查看记录");
         data.add("自定义回调示例");
         data.add("连续定位示例");
-        data.add("跳转查看地理信息");
+        data.add("从csv文件中读取");
         data.add("室内定位功能");
         data.add("判断移动热点");
         data.add("android 8.0后台定位示例");

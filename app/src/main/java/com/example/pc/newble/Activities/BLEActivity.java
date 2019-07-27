@@ -64,6 +64,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.Vector;
 
 import static android.bluetooth.BluetoothDevice.TRANSPORT_LE;
 import com.example.pc.newble.SQLite.*;
@@ -741,7 +742,6 @@ public class BLEActivity extends AppCompatActivity {
 
         /**
          * 接收到硬件返回的数据，并将它们写入数据库
-         * TODO 将更多的数据写入数据库的接口
          * */
         public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
             super.onCharacteristicChanged(gatt, characteristic);
@@ -762,6 +762,19 @@ public class BLEActivity extends AppCompatActivity {
                 Log.e(TAG, "addButtonClicked: 哈哈哈哈哈哈哈" + product);
                 dbHandler.addItem(product);
                 Log.i(TAG, "Invoked: Add Item To Database. ");
+
+                // 保存到 csv 文件
+                // 此 csv 文件创建的时机在 MainActivity
+                Vector<String> string = new Vector<>();
+                string.add(product.data);
+                string.add(product.time);
+                string.add(product.voltage);
+                string.add(product.longitude);
+                string.add(product.latitude);
+                string.add(product.address);
+                string.add(product.channel);
+
+                FileUtils.addLineToCsvFile(getSDCardPath() + "/bletest/data.csv", string);
 
             } catch (Exception e){
                 e.printStackTrace();

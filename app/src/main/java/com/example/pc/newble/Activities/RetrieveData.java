@@ -21,8 +21,10 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 
 
+import java.io.BufferedReader;
 import java.io.File;
 
+import java.io.FileReader;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
@@ -227,6 +229,7 @@ public class RetrieveData extends AppCompatActivity {
 
 
     /**
+     * 获得某一天的电压数据，并将其保存到一个Vector
      * date：YYYYMMDD
      * */
     public Vector<Double> GetTodayData(String date){
@@ -245,18 +248,74 @@ public class RetrieveData extends AppCompatActivity {
                 doubleVector.add(Double.parseDouble(a));
             }
             // 获取每个整点时刻的地理位置
+            // 注：此处的60是基于TIME_INTERVAL = 60 而来的，如果修改了TIME_INTERVAL，须对此60作出修改
             if (i % 60 == 0){
                 String j = Integer.toString(i/60)+"点："+dbHandler.getaddrOfOneCertainTime(date, i);
                 addText(textView,j);
             }
         }
-
-
         return doubleVector;
+    }
+
+
+    /**
+     * 从csv文件读取并存入数据库的函数
+     */
+    public void readFromCsvAndSaveToSQLite(){
+
+        String file = FileUtils.getSDCardPath() + "/bletest/data.csv";
+
+        try {
+            BufferedReader in = new BufferedReader(new FileReader(file));
+            String str = in.readLine();
+
+            while ((str = in.readLine()) != null) {
+                if (str.isEmpty() == true){
+                    // 本行是空行，直接跳过
+                    continue;
+                } else {
+                    try{
+                        // 读取这一行的数据
+                        String items[] = str.split(",");
+                        Log.e(TAG, "onClick: 111111" );
+                        String date = items[0];
+                        String time = items[1];
+                        Log.e(TAG, "onClick: 2222222" );
+                        String voltage = (items[2]);
+                        Log.e(TAG, "onClick: 33333333" + items[3] + "  " + items[4]);
+                        String longitude = (items[3]);
+                        String latitude = (items[4]);
+                        Log.e(TAG, "onClick: 44444444" );
+                        String addressStr = items[5];
+                        String channel = items[6];
+                        Log.e(TAG, "onClick: 55555555" );
+                        Products product = new Products(date, time, voltage, longitude, latitude, addressStr, channel);
+                        Log.e(TAG, "addButtonClicked: 哈哈哈哈哈哈哈" + product);
+                        dbHandler.addItem(product);
+                    } catch (Exception e){
+                        Log.e(TAG, "readFromCsvAndSaveToSQLite: Something wrong in retrieving data from the csv file. " +
+                                "It might be helpful to get the csv file checked." );
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+
+        } catch (java.io.IOException e) {
+            Log.e(TAG, "readVoltageFromFile: 读取出现了错误！！！" );
+        }
 
     }
 
-    //添加数据到textview中
+
+
+
+
+
+
+
+
+    // 添加数据到textview中
     private void addText(TextView textView, String content) {
         textView.append(content);
         textView.append("\n");
@@ -266,6 +325,8 @@ public class RetrieveData extends AppCompatActivity {
         //      textView.scrollTo(0, offset - textView.getHeight());
         //  }
     }
+
+
 
 
 

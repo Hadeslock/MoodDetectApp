@@ -140,12 +140,8 @@ public class BLEReadService extends Service {
 
     private DownloadBinder mBinder = new DownloadBinder();
     class DownloadBinder extends Binder {
-        public void startDownload() {
-            Log.d(TAG, "startDownload: 开始下载");
-        }
-        public int getProgress(){
-            Log.d(TAG, "getProgress: 查看进度");
-            return 0;
+        public void todo() {
+            Log.d(TAG, "todo");
         }
     }
 
@@ -161,14 +157,14 @@ public class BLEReadService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.d(TAG, "onCreate: 哈哈哈哈");
+
         // 前台服务
         /*
         Intent intent = new Intent(this, MainActivity.class);
         PendingIntent pi = PendingIntent.getActivity(this, 0, intent, 0);
         Notification notification = new NotificationCompat.Builder(this)
-                .setContentTitle("dsfaafdsfads")
-                .setContentText("asfsadfdsaffsadfds")
+                .setContentTitle("")
+                .setContentText("")
                 .setWhen(System.currentTimeMillis())
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher))
@@ -180,7 +176,7 @@ public class BLEReadService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d(TAG, "onStartCommand: 哈哈哈");
+
         //   return super.onStartCommand(intent, flags, startId);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -203,15 +199,6 @@ public class BLEReadService extends Service {
         }
         startForeground(1, notification);
 
-
-
-
-
-
-
-
-
-
         return START_STICKY;
 
     }
@@ -219,7 +206,7 @@ public class BLEReadService extends Service {
     @Override
     public void onDestroy(){
         super.onDestroy();
-        Log.d(TAG, "onDestroy: 哈哈哈哈哈哈");
+
     }
 
 

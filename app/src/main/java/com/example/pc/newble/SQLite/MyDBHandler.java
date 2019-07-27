@@ -7,8 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.example.pc.newble.TheUtils.DateUtil;
-
 import java.util.Vector;
 
 import static android.content.ContentValues.TAG;
@@ -28,7 +26,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
     public static final String COLUMN_LONGITUDE = "longitude";
     public static final String COLUMN_LATITUDE = "latitude";
     public static final String COLUMN_CHANNEL = "channel";
-    public static final String COLUMN_ADDRESSS = "address";
+    public static final String COLUMN_ADDRESS = "address";
 
     public MyDBHandler(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, DATABASE_NAME, factory, DATABASE_VERSION);
@@ -44,8 +42,8 @@ public class MyDBHandler extends SQLiteOpenHelper {
                 COLUMN_VOLTAGE + " TEXT, " +
                 COLUMN_LONGITUDE + " TEXT, " +
                 COLUMN_LATITUDE + " TEXT, " +
-                COLUMN_CHANNEL + " TEXT " +
-                COLUMN_ADDRESSS+ " TEXT " +
+                COLUMN_CHANNEL + " TEXT, " +
+                COLUMN_ADDRESS + " TEXT " +
                 ");";
         db.execSQL(query);
         // query = "INSERT INTO " + TABLE_PRODUCTS + "(productname) VALUES(\"Apple\");";
@@ -69,7 +67,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
         values.put(COLUMN_LONGITUDE, product.longitude);
         values.put(COLUMN_LATITUDE, product.latitude);
         values.put(COLUMN_CHANNEL, product.channel);
-        values.put(COLUMN_ADDRESSS, product.address);
+        values.put(COLUMN_ADDRESS, product.address);
 
         SQLiteDatabase db = getWritableDatabase();
         db.insert(TABLE_PRODUCTS, null, values);
@@ -108,6 +106,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
         db.close();
         return retval;
     }
+
     /**
      * 查询某天的某个时间点的地址。
      * */
@@ -120,7 +119,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
         Cursor c = db.rawQuery(query, null);
         if (c.moveToFirst()) {
             do {
-                retval = c.getString(c.getColumnIndex(COLUMN_ADDRESSS));
+                retval = c.getString(c.getColumnIndex(COLUMN_ADDRESS));
                 Log.e(TAG, "GetDataOfOneCertainTime: 发现了 " + retval );
                 break;
             } while (c.moveToNext());

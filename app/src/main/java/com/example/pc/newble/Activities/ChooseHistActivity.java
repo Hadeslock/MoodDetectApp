@@ -47,15 +47,17 @@ public class ChooseHistActivity extends AppCompatActivity {
             Log.i(TAG, errors.toString());
         }
 
-        // 添加listview项
+        // 添加ListView项
         getAvailableHistData();
         // 哈希去重复 LinkedHashSet可以保持输出顺序与进入顺序一致
         Set<String> set = new LinkedHashSet<String>(existingData);
+        Log.e(TAG, "onCreate: 列表：existingData" + set );
         existingData = new Vector<String>(set);
         Set<String> set2 = new LinkedHashSet<String>(existingDataUI);
+        Log.e(TAG, "onCreate: 列表：existingDateUI" + set2);
         existingDataUI = new Vector<String>(set2);
 
-        existingDataUI.add("🌏清空所有数据🌍");
+       // existingDataUI.add("🌏清空所有数据🌍");
 
         android.widget.ArrayAdapter<String> adapter = new android.widget.ArrayAdapter<>(
                 ChooseHistActivity.this,   // Context上下文
