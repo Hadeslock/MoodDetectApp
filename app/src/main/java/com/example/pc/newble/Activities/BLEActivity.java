@@ -46,6 +46,7 @@ import com.example.pc.newble.TheUtils.FileUtils;
 import com.example.pc.newble.TheUtils.HexUtil;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.LimitLine;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
@@ -155,7 +156,7 @@ public class BLEActivity extends AppCompatActivity {
             }
         });
 
-
+        // 初始化
         initView();
         initData();
         requestRxPermissions(android.Manifest.permission.WRITE_EXTERNAL_STORAGE);//申请权限
@@ -178,24 +179,11 @@ public class BLEActivity extends AppCompatActivity {
             Log.i(TAG, errors.toString());
         }
 
-        // 标记今天日期和时间
-        FileUtils.addStringToFile(getSDCardPath() + "/bletest/Datalist.txt", "\n");    //datalist
-        FileUtils.addStringToFile(getSDCardPath() + "/bletest/Datalist.txt", DateUtil.getNowDateTime().substring(0, 8));
 
-        // 跳转查看记录的活动。这个跳转方式被移除
-        /*
-        Button button = findViewById(R.id.button_go_retrieve);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // 更新 DataList.txt，详细参见 FileUtils.java
-                FileUtils.updateDataList();
-                Toast.makeText(BLEActivity.this, "哈哈哈哈哈😂", Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(BLEActivity.this, ChooseHistActivity.class);
-                startActivity(intent);
-            }
-        });
-        */
+        // 标记今天日期和时间
+  //      FileUtils.addStringToFile(getSDCardPath() + "/bletest/Datalist.txt", "\n");    //datalist
+  //      FileUtils.addStringToFile(getSDCardPath() + "/bletest/Datalist.txt", DateUtil.getNowDateTime().substring(0, 8));
+
 
         //定位所需
         mLocationClientble = new LocationClient(getApplicationContext());
@@ -282,8 +270,8 @@ public class BLEActivity extends AppCompatActivity {
                 currentPosition.append("网络");
             }
 
-            // 如果地址无效，则沿袭上一个有效地址
-            if (string.equals("null") ) {
+            // 如果地址无效，则沿袭上一个有效地址，如果有效则更新
+            if (string.equals("null") != true ) {
                 currentAddressStr = location.getAddrStr();
                 currentLongittude = location.getLongitude();
                 currentLatitude = location.getLatitude();
@@ -367,13 +355,22 @@ public class BLEActivity extends AppCompatActivity {
         // 最大值
         leftAxis.setAxisMaxValue(50f);
         // 最小值
-        leftAxis.setAxisMinValue(-140f);
+     //   leftAxis.setAxisMinValue(-140f);
         // 不一定要从0开始
-        leftAxis.setStartAtZero(false);
+        leftAxis.setStartAtZero(true);
         leftAxis.setDrawGridLines(true);
         YAxis rightAxis = mChart.getAxisRight();
         // 不显示图表的右边y坐标轴线
         rightAxis.setEnabled(false);
+
+        // 警戒线
+        LimitLine ll = new LimitLine(40f, "警戒线");
+        ll.setLineColor(Color.RED);
+        ll.setLineWidth(2f);
+        ll.setTextColor(Color.BLACK);
+        ll.setTextSize(12f);
+        leftAxis.addLimitLine(ll);
+
     }
 
 
@@ -439,6 +436,8 @@ public class BLEActivity extends AppCompatActivity {
         set.setFillColor(ColorTemplate.getHoloBlue());
         set.setHighLightColor(Color.rgb(244, 117, 117));
         set.setDrawCircleHole(false);
+
+
 
 
         set.setValueFormatter(new ValueFormatter() {
@@ -754,6 +753,9 @@ public class BLEActivity extends AppCompatActivity {
             datautf8 = datautf8.replaceAll("[a-zA-Z]","" );  //^[0-9]+ [+-*\] [0-9]
             dataview = Float.parseFloat(datautf8);
 
+            // 电压取绝对值
+            dataview = Math.abs(dataview);
+
             try {
                 Log.e(TAG, "onCharacteristicChanged: 哈哈哈哈零零落落" );
                 // 如果要更改往数据库内传入的参数的话，务必在 Products.java 里面重写构造函数
@@ -762,6 +764,11 @@ public class BLEActivity extends AppCompatActivity {
                 Log.e(TAG, "addButtonClicked: 哈哈哈哈哈哈哈" + product);
                 dbHandler.addItem(product);
                 Log.i(TAG, "Invoked: Add Item To Database. ");
+
+                // 创建 csv 文件
+                // 每次对csv读写前都要检查。makeFilePath 在文件已存在时不会报错，类似 python open 的w模式
+                FileUtils.makeFilePath(FileUtils.getSDCardPath() + "/bletest/",
+                        DateUtil.getNowDateTime().substring(0, 8) + ".csv");
 
                 // 保存到 csv 文件
                 // 此 csv 文件创建的时机在 MainActivity
@@ -774,7 +781,7 @@ public class BLEActivity extends AppCompatActivity {
                 string.add(product.address);
                 string.add(product.channel);
 
-                FileUtils.addLineToCsvFile(getSDCardPath() + "/bletest/data.csv", string);
+                FileUtils.addLineToCsvFile(getSDCardPath() + "/bletest/" + DateUtil.getNowDateTime().substring(0, 8) + ".csv", string);
 
             } catch (Exception e){
                 e.printStackTrace();

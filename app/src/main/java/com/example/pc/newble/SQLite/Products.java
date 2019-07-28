@@ -14,7 +14,7 @@ public class Products {
     private String _productName;
 
     // 懒得写get 和 set 了……
-    public String data;//其实是date
+    public String data; // typo 其实是date
     public String time;
     public String voltage;
     public String longitude;
@@ -23,15 +23,16 @@ public class Products {
     public String address;
 
     public void DefaultInitialization(){
-        this._productName = "不存在的记录";
+        this._productName = "0";
         this.data = "2019/1/1";
-        this.time = "00:01";
+        this.time = "00:00:00";
         this.voltage = "not_available";
         this.longitude = "not_available";
         this.latitude = "not_available";
         this.channel = " 第5号 ";
         this.address = "not_available";
     }
+
 
     /**
      * 默认构造函数。
@@ -40,23 +41,13 @@ public class Products {
         this.DefaultInitialization();
     }
 
-    /**
-     * 由蓝牙直接添加 entry 到数据库的构造函数。
-     * */
-    public Products(Float voltage) {
-        this.DefaultInitialization();
-        this._productName = "存在的记录";
-        this.voltage = voltage.toString();
-        this.time  = Integer.toString(TransTimeToInteger(DateUtil.getNowTime()));
-        this.data = DateUtil.getNowDateTime().substring(0, 8);
-    }
 
     /**
      * 由蓝牙直接添加 entry 到数据库的构造函数。包含经纬度。
      * */
     public Products(Float voltage, Double longitude, Double latitude,String address) {
         this.DefaultInitialization();
-        this._productName = "存在的记录";
+
         this.voltage = voltage.toString();
         try{
             this.latitude = latitude.toString();
@@ -64,13 +55,13 @@ public class Products {
             this.address = address;
         } catch (NullPointerException e) {
             e.printStackTrace();
-            Log.e(TAG, "Products: 定位数据读取失败，已在数据库内写入0" );
+            Log.e(TAG, "Products: 定位数据读取失败，已在数据库内写入 not_available" );
         }
 
-        this.time  = Integer.toString(TransTimeToInteger(DateUtil.getNowTime()));
+        this._productName = Integer.toString(TransTimeToInteger(DateUtil.getNowTime()));
+        this.time  = DateUtil.getNowTime();
         this.data = DateUtil.getNowDateTime().substring(0, 8);
     }
-
 
 
     /**
@@ -78,7 +69,7 @@ public class Products {
      * */
     public Products(String date, String time, String voltage, String longitude, String latitude, String address, String channel) {
         this.DefaultInitialization();
-        this._productName = "存在的记录";
+        this._productName = Integer.toString(TransTimeToInteger(time));
         this.voltage = voltage.toString();
         try{
             this.latitude = latitude.toString();
@@ -94,14 +85,6 @@ public class Products {
         this.channel = channel;
     }
 
-    /**
-     * 用于存储有记录的日期的构造函数。
-     * */
-    public Products(String _productName) {
-        this.DefaultInitialization();
-        this._productName = "available";
-        this.data = DateUtil.getNowDateTime().substring(0, 8);
-    }
 
     public int get_id() {
         return _id;
@@ -121,7 +104,7 @@ public class Products {
 
     /**
      * 将一个"HH:mm:ss"格式的String化为一个int，代表当天的第几个时间点
-     *
+     * 注意本函数依赖于 MainActivity.TIME_INTERVAL
      * */
     public static int TransTimeToInteger(String time) {
         int timeInterval = MainActivity.TIME_INTERVAL;

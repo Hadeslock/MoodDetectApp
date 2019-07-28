@@ -15,6 +15,7 @@ import com.example.pc.newble.R;
 import com.example.pc.newble.TheUtils.FileUtils;
 import com.example.pc.newble.SQLite.*;
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.LimitLine;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
@@ -65,7 +66,7 @@ public class RetrieveData extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_retrieve_data);
 
-        // 实例化 dpHandler。
+        // 实例化 dbHandler。
         try {
             dbHandler = new MyDBHandler(this, null, null, 1);
         } catch (Exception e) {
@@ -93,6 +94,23 @@ public class RetrieveData extends AppCompatActivity {
         mChart.animateY(600);
         mChart.animateX(1500);
         //
+        // y坐标轴的设定。需要改y轴最大值的话可以在这里改
+        YAxis yAxisLeft = mChart.getAxisLeft();
+        yAxisLeft.setStartAtZero(true);
+        yAxisLeft.setAxisMaxValue(60f);
+        // 右边的坐标轴。未来可以拓展为健康百分比之类的东西
+        YAxis yAxisRight = mChart.getAxisRight();
+        yAxisRight.setStartAtZero(true);
+        yAxisRight.setAxisMaxValue(60f);
+        yAxisRight.setEnabled(false);
+
+        // 警戒线
+        LimitLine ll = new LimitLine(40f, "警戒线");
+        ll.setLineColor(Color.RED);
+        ll.setLineWidth(2f);
+        ll.setTextColor(Color.BLACK);
+        ll.setTextSize(12f);
+        yAxisLeft.addLimitLine(ll);
 
 
 
@@ -106,8 +124,6 @@ public class RetrieveData extends AppCompatActivity {
         // 得到所要日期的数据
         Log.e(TAG, "onClick: 数据从vector读取结束");
         LineData lineData = RetrieveDataFromVector(todayData);
-
-        Log.e(TAG, "onClick: 数据读取结束");
 
         mChart.clear();
 
@@ -123,7 +139,7 @@ public class RetrieveData extends AppCompatActivity {
     }
 
 
-
+  /*
     public void doStart(View view) {
         isRunning = true;
         thread = new Thread(new Runnable() {
@@ -146,7 +162,7 @@ public class RetrieveData extends AppCompatActivity {
         isRunning = false;
         thread = null;
     }
-
+  */
 
 
 
@@ -188,6 +204,7 @@ public class RetrieveData extends AppCompatActivity {
             yVals.add(new Entry(val, i));
         }
 
+
         // 创建数据集
         LineDataSet set = new LineDataSet(yVals, "数据集");
         set.setAxisDependency(YAxis.AxisDependency.LEFT);
@@ -203,16 +220,10 @@ public class RetrieveData extends AppCompatActivity {
         set.setValueTextSize(10f);
         //设置折线图填充
         set.setDrawFilled(true);
-
-
-     //   set.     setMode(set.Mode.CUBIC_BEZIER);
-
         set.setFillColor(ColorTemplate.getHoloBlue());
         set.setHighLightColor(Color.rgb(244, 117, 117));
         set.setDrawCircleHole(false);
 
-
-        ////////////////////////////////////////////////
 
         // 创建数据集列表
         ArrayList<LineDataSet> dataSets = new ArrayList<LineDataSet>();
@@ -250,66 +261,12 @@ public class RetrieveData extends AppCompatActivity {
             // 获取每个整点时刻的地理位置
             // 注：此处的60是基于TIME_INTERVAL = 60 而来的，如果修改了TIME_INTERVAL，须对此60作出修改
             if (i % 60 == 0){
-                String j = Integer.toString(i/60)+"点："+dbHandler.getaddrOfOneCertainTime(date, i);
-                addText(textView,j);
+                String j = Integer.toString(i/60)+"点：" + dbHandler.getaddrOfOneCertainTime(date, i);
+                addText(textView, j);
             }
         }
         return doubleVector;
     }
-
-
-    /**
-     * 从csv文件读取并存入数据库的函数
-     */
-    public void readFromCsvAndSaveToSQLite(){
-
-        String file = FileUtils.getSDCardPath() + "/bletest/data.csv";
-
-        try {
-            BufferedReader in = new BufferedReader(new FileReader(file));
-            String str = in.readLine();
-
-            while ((str = in.readLine()) != null) {
-                if (str.isEmpty() == true){
-                    // 本行是空行，直接跳过
-                    continue;
-                } else {
-                    try{
-                        // 读取这一行的数据
-                        String items[] = str.split(",");
-                        Log.e(TAG, "onClick: 111111" );
-                        String date = items[0];
-                        String time = items[1];
-                        Log.e(TAG, "onClick: 2222222" );
-                        String voltage = (items[2]);
-                        Log.e(TAG, "onClick: 33333333" + items[3] + "  " + items[4]);
-                        String longitude = (items[3]);
-                        String latitude = (items[4]);
-                        Log.e(TAG, "onClick: 44444444" );
-                        String addressStr = items[5];
-                        String channel = items[6];
-                        Log.e(TAG, "onClick: 55555555" );
-                        Products product = new Products(date, time, voltage, longitude, latitude, addressStr, channel);
-                        Log.e(TAG, "addButtonClicked: 哈哈哈哈哈哈哈" + product);
-                        dbHandler.addItem(product);
-                    } catch (Exception e){
-                        Log.e(TAG, "readFromCsvAndSaveToSQLite: Something wrong in retrieving data from the csv file. " +
-                                "It might be helpful to get the csv file checked." );
-                        e.printStackTrace();
-                    }
-
-                }
-            }
-
-        } catch (java.io.IOException e) {
-            Log.e(TAG, "readVoltageFromFile: 读取出现了错误！！！" );
-        }
-
-    }
-
-
-
-
 
 
 
