@@ -197,7 +197,7 @@ public class BLEActivity extends AppCompatActivity {
         });
         */
 
-        //所需
+        //定位所需
         mLocationClientble = new LocationClient(getApplicationContext());
         mLocationClientble.registerLocationListener(new MyLocationListenerble());
         positionTextble = (TextView) findViewById(R.id.position_text_viewble);

@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         FunctionList = (ListView) findViewById(R.id.functionList);
         FunctionList
-                .setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_expandable_list_item_1, getData()));
+                .setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_expandable_list_item_1, getData()));//listview 使用
 
         // after andrioid m,must request Permiision on runtime
         getPersimmions();
@@ -128,13 +128,13 @@ public class MainActivity extends AppCompatActivity {
                     case 1:   // 跳转查看记录
                         TargetClass = ChooseHistActivity.class;
                         break;
-                    case 2:    // 自定义回调示例  （有时无效）
+                    /*case 2:    // 自定义回调示例  （有时无效）
                         TargetClass = LocationActivity.class;
-                        break;
-                    case 3:    // 连续定位示例
+                        break;*/
+                    case 2:    // 连续定位示例
                         TargetClass = Location2Activity.class;
                         break;
-                    case 4:    // test activity
+                    case 3:    // test activity
                         TargetClass = TestActivity.class;
                         break;
                     case 5:
@@ -156,13 +156,13 @@ public class MainActivity extends AppCompatActivity {
         List<String> data = new ArrayList<String>();
         data.add("跳转蓝牙连接");
         data.add("跳转查看记录");
-        data.add("自定义回调示例");
+     //   data.add("自定义回调示例");
         data.add("连续定位示例");
         data.add("从csv文件中读取");
-        data.add("室内定位功能");
-        data.add("判断移动热点");
-        data.add("android 8.0后台定位示例");
-        data.add("常见问题说明");
+     //   data.add("室内定位功能");
+     //   data.add("判断移动热点");
+     //   data.add("android 8.0后台定位示例");
+     //   data.add("常见问题说明");
 
         return data;
     }
