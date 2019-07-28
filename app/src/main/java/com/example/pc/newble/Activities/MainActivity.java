@@ -48,8 +48,7 @@ public class MainActivity extends AppCompatActivity {
         // after andrioid m,must request Permiision on runtime
         getPersimmions();
 
-        // 创建 data.csv 文件
-        FileUtils.makeFilePath(FileUtils.getSDCardPath() + "/bletest/", "data.csv");
+
     }
 
     @TargetApi(23)

@@ -92,7 +92,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
     public String getDataOfOneCertainTime(String date, int time){
         String retval = "none";
         SQLiteDatabase db = getWritableDatabase();
-        String query = "SELECT * FROM " + TABLE_PRODUCTS + " WHERE " + COLUMN_DATA + "=\"" + date + "\"" + " AND " + COLUMN_TIME + "=\"" + Integer.toString(time) + "\";" ;
+        String query = "SELECT * FROM " + TABLE_PRODUCTS + " WHERE " + COLUMN_DATA + "=\"" + date + "\"" + " AND " + COLUMN_PRODUCTNAME + "=\"" + Integer.toString(time) + "\";" ;
         Log.e(TAG, "GetDataOfOneCertainTime: SQL输出是  " + query );
         // Cursor point to a location in your results
         Cursor c = db.rawQuery(query, null);
@@ -113,7 +113,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
     public String getaddrOfOneCertainTime(String date, int time){
         String retval = "none";
         SQLiteDatabase db = getWritableDatabase();
-        String query = "SELECT * FROM " + TABLE_PRODUCTS + " WHERE " + COLUMN_DATA + "=\"" + date + "\"" + " AND " + COLUMN_TIME + "=\"" + Integer.toString(time) + "\";" ;
+        String query = "SELECT * FROM " + TABLE_PRODUCTS + " WHERE " + COLUMN_DATA + "=\"" + date + "\"" + " AND " + COLUMN_PRODUCTNAME + "=\"" + Integer.toString(time) + "\";" ;
         Log.e(TAG, "GetDataOfOneCertainTime: SQL输出是  " + query );
         // Cursor point to a location in your results
         Cursor c = db.rawQuery(query, null);
@@ -128,26 +128,6 @@ public class MyDBHandler extends SQLiteOpenHelper {
         return retval;
     }
 
-    /**
-     * 返回所有有记录的日期。用于构建 ChooseHistActivity 的 ListView。
-     * */
-    public Vector<String> getAllAvailableDateFromDatabase() {
-        Vector<String> availableDate = new Vector<>();
-
-        SQLiteDatabase db = getWritableDatabase();
-        String query = "SELECT * FROM " + TABLE_PRODUCTS + " WHERE " + COLUMN_PRODUCTNAME + "=\"" + "available" + "\";" ;
-
-        // Cursor point to a location in your results
-        Cursor c = db.rawQuery(query, null);
-        if (c.moveToFirst()) {
-            do {
-                // 添加可用日期
-                availableDate.add(c.getString(c.getColumnIndex(COLUMN_DATA)));
-            } while (c.moveToNext());
-        }
-        db.close();
-        return availableDate;
-    }
 
     /**
      * 返回所欲查询的日期的所有记录。
