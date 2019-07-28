@@ -6,12 +6,12 @@
     </shared>
   </component>
   <component name="AndroidLogFilters">
-    <option name="TOOL_WINDOW_CUSTOM_FILTER" value="哈哈哈" />
+    <option name="TOOL_WINDOW_CUSTOM_FILTER" value="当前" />
     <option name="TOOL_WINDOW_LOG_LEVEL" value="info" />
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c7cd644b-5d59-4ab4-a07e-2789ae1232c2" name="默认" comment="增加了readme，删除了几个函数">
+    <list default="true" id="c7cd644b-5d59-4ab4-a07e-2789ae1232c2" name="默认" comment="存储格式改变，csv按天创建，修复了一个关于地址的小bug">
       <change beforePath="$PROJECT_DIR$/.gradle/5.1.1/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.1.1/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/5.1.1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.1.1/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/5.1.1/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.1.1/fileHashes/fileHashes.bin" afterDir="false" />
@@ -21,12 +21,8 @@
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/pc/newble/Activities/BLEActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/pc/newble/Activities/BLEActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/pc/newble/Activities/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/pc/newble/Activities/MainActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/pc/newble/Activities/ChooseHistActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/pc/newble/Activities/ChooseHistActivity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/pc/newble/Activities/RetrieveData.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/pc/newble/Activities/RetrieveData.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/pc/newble/Activities/TestActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/pc/newble/Activities/TestActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/pc/newble/SQLite/MyDBHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/pc/newble/SQLite/MyDBHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/pc/newble/SQLite/Products.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/pc/newble/SQLite/Products.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/pc/newble/TheUtils/FileUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/pc/newble/TheUtils/FileUtils.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -51,8 +47,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/pc/newble/Activities/BLEActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2">
-              <caret line="751" lean-forward="true" selection-start-line="751" selection-end-line="751" />
+            <state relative-caret-position="202">
+              <caret line="755" column="17" selection-start-line="755" selection-start-column="17" selection-end-line="755" selection-end-column="17" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -63,8 +59,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/pc/newble/Activities/RetrieveData.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="387">
-              <caret line="98" column="18" selection-start-line="98" selection-start-column="18" selection-end-line="98" selection-end-column="18" />
+            <state relative-caret-position="211">
+              <caret line="103" column="8" selection-start-line="103" selection-start-column="8" selection-end-line="103" selection-end-column="40" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -76,7 +72,7 @@
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/pc/newble/Activities/TestActivity.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="221">
-              <caret line="68" column="32" lean-forward="true" selection-start-line="68" selection-start-column="32" selection-end-line="68" selection-end-column="32" />
+              <caret line="68" column="32" selection-start-line="68" selection-start-column="32" selection-end-line="68" selection-end-column="32" />
               <folding>
                 <element signature="e#1693#3995#0" expanded="true" />
                 <element signature="e#3994#3995#0" expanded="true" />
@@ -86,10 +82,19 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/pc/newble/Activities/ChooseHistActivity.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="930">
+              <caret line="95" column="19" selection-start-line="95" selection-start-column="19" selection-end-line="95" selection-end-column="19" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/pc/newble/TheUtils/FileUtils.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-5">
-              <caret line="2" selection-start-line="2" selection-end-line="2" />
+            <state relative-caret-position="880">
+              <caret line="223" column="48" selection-start-line="223" selection-start-column="33" selection-end-line="223" selection-end-column="48" />
               <folding>
                 <element signature="method#writeTxtToFile#0;class#FileUtils#0" />
                 <element signature="method#makeRootDirectory#0;class#FileUtils#0" />
@@ -140,24 +145,6 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/pc/newble/Activities/MainActivity.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="151">
-              <caret line="50" selection-start-line="50" selection-end-line="50" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/pc/newble/StripListView.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="119">
-              <caret line="17" selection-start-line="17" selection-end-line="17" />
-            </state>
-          </provider>
-        </entry>
-      </file>
     </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
@@ -176,6 +163,8 @@
       <find>data</find>
       <find>csv</find>
       <find>沿袭</find>
+      <find>right</find>
+      <find>axis</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -191,15 +180,15 @@
         <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_retrieve_data.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/pc/newble/BLEReadService.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_test.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/example/pc/newble/Activities/ChooseHistActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/pc/newble/TheUtils/DateUtil.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/pc/newble/Activities/MainActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/pc/newble/TheUtils/FileUtils.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/example/pc/newble/Activities/BLEActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/pc/newble/Activities/TestActivity.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/example/pc/newble/Activities/RetrieveData.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/pc/newble/SQLite/Products.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/pc/newble/SQLite/MyDBHandler.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/pc/newble/Activities/ChooseHistActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/pc/newble/Activities/RetrieveData.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/pc/newble/Activities/BLEActivity.java" />
       </list>
     </option>
   </component>
@@ -628,14 +617,21 @@
       <option name="project" value="LOCAL" />
       <updated>1564259852733</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="存储格式改变，csv按天创建，修复了一个关于地址的小bug">
+      <created>1564295860053</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1564295860056</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="143" y="75" width="1488" height="886" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.23060942" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.23060942" />
       <window_info id="Structure" order="1" weight="0.25" />
       <window_info id="Build Variants" order="2" side_tool="true" />
       <window_info id="Image Layers" order="3" />
@@ -646,20 +642,20 @@
       <window_info id="Designer" order="8" />
       <window_info id="Resources Explorer" order="9" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.49238226" visible="true" weight="0.32786885" />
-      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.49238226" weight="0.32786885" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49930748" weight="0.32912987" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Gradle Console" order="7" side_tool="true" />
       <window_info anchor="bottom" id="Android Profiler" order="8" />
-      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.5076177" side_tool="true" visible="true" weight="0.32786885" />
-      <window_info anchor="bottom" id="Logcat" order="10" sideWeight="0.734072" weight="0.32786885" />
+      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.28393352" side_tool="true" visible="true" weight="0.26986128" />
+      <window_info anchor="bottom" id="Logcat" order="10" sideWeight="0.7333795" weight="0.32786885" />
       <window_info anchor="bottom" id="Version Control" order="11" />
       <window_info anchor="bottom" id="Terminal" order="12" sideWeight="0.49930748" weight="0.32912987" />
       <window_info anchor="bottom" id="Messages" order="13" sideWeight="0.4969743" weight="0.3289689" />
-      <window_info anchor="bottom" id="Build" order="14" sideWeight="0.716759" weight="0.26986128" />
+      <window_info active="true" anchor="bottom" id="Build" order="14" sideWeight="0.7160665" visible="true" weight="0.26986128" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -676,7 +672,8 @@
     <MESSAGE value="将BLEActivity的图表进行了少许美化" />
     <MESSAGE value="增加了csv读写的方法，可以从本地csv文件恢复原有数据了；增加了一些注释" />
     <MESSAGE value="增加了readme，删除了几个函数" />
-    <option name="LAST_COMMIT_MESSAGE" value="增加了readme，删除了几个函数" />
+    <MESSAGE value="存储格式改变，csv按天创建，修复了一个关于地址的小bug" />
+    <option name="LAST_COMMIT_MESSAGE" value="存储格式改变，csv按天创建，修复了一个关于地址的小bug" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/pc/newble/Activities/Location2Activity.java">
@@ -740,13 +737,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/pc/newble/Activities/ChooseHistActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="59" column="9" selection-start-line="59" selection-start-column="9" selection-end-line="59" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/pc/newble/LocationService.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="238">
@@ -778,26 +768,10 @@
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/pc/newble/Activities/TestActivity.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="221">
-          <caret line="68" column="32" lean-forward="true" selection-start-line="68" selection-start-column="32" selection-end-line="68" selection-end-column="32" />
+          <caret line="68" column="32" selection-start-line="68" selection-start-column="32" selection-end-line="68" selection-end-column="32" />
           <folding>
             <element signature="e#1693#3995#0" expanded="true" />
             <element signature="e#3994#3995#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/pc/newble/TheUtils/FileUtils.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-5">
-          <caret line="2" selection-start-line="2" selection-end-line="2" />
-          <folding>
-            <element signature="method#writeTxtToFile#0;class#FileUtils#0" />
-            <element signature="method#makeRootDirectory#0;class#FileUtils#0" />
-            <element signature="method#getFileContent#0;class#FileUtils#0" />
-            <element signature="method#getSDCardPath#0;class#FileUtils#0" />
-            <element signature="method#readVoltageFromFile#0;class#FileUtils#0" />
-            <element signature="method#readTextFromFile#0;class#FileUtils#0" />
-            <element signature="method#addStringToFile#0;class#FileUtils#0" />
           </folding>
         </state>
       </provider>
@@ -824,10 +798,40 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/pc/newble/TheUtils/FileUtils.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="880">
+          <caret line="223" column="48" selection-start-line="223" selection-start-column="33" selection-end-line="223" selection-end-column="48" />
+          <folding>
+            <element signature="method#writeTxtToFile#0;class#FileUtils#0" />
+            <element signature="method#makeRootDirectory#0;class#FileUtils#0" />
+            <element signature="method#getFileContent#0;class#FileUtils#0" />
+            <element signature="method#getSDCardPath#0;class#FileUtils#0" />
+            <element signature="method#readVoltageFromFile#0;class#FileUtils#0" />
+            <element signature="method#readTextFromFile#0;class#FileUtils#0" />
+            <element signature="method#addStringToFile#0;class#FileUtils#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/pc/newble/Activities/ChooseHistActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="930">
+          <caret line="95" column="19" selection-start-line="95" selection-start-column="19" selection-end-line="95" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Library/android/sdk/sources/android-27/android/graphics/Color.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="169">
+          <caret line="298" column="38" selection-start-line="298" selection-start-column="38" selection-end-line="298" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/pc/newble/Activities/RetrieveData.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="387">
-          <caret line="98" column="18" selection-start-line="98" selection-start-column="18" selection-end-line="98" selection-end-column="18" />
+        <state relative-caret-position="211">
+          <caret line="103" column="8" selection-start-line="103" selection-start-column="8" selection-end-line="103" selection-end-column="40" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -836,8 +840,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/pc/newble/Activities/BLEActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2">
-          <caret line="751" lean-forward="true" selection-start-line="751" selection-end-line="751" />
+        <state relative-caret-position="202">
+          <caret line="755" column="17" selection-start-line="755" selection-start-column="17" selection-end-line="755" selection-end-column="17" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

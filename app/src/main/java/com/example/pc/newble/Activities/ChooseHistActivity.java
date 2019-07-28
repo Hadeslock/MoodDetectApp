@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.ListView;
 import android.content.Intent;
+import android.widget.Toast;
 
 import com.example.pc.newble.R;
 import com.example.pc.newble.TheUtils.FileUtils;
@@ -49,7 +50,7 @@ public class ChooseHistActivity extends AppCompatActivity {
 
         // 添加ListView项
         getAvailableHistData();
-        // 哈希去重复 LinkedHashSet可以保持输出顺序与进入顺序一致
+        // 哈希去重复。LinkedHashSet可以保持输出顺序与进入顺序一致
         Set<String> set = new LinkedHashSet<String>(existingData);
         Log.e(TAG, "onCreate: 列表：existingData" + set );
         existingData = new Vector<String>(set);
@@ -57,7 +58,7 @@ public class ChooseHistActivity extends AppCompatActivity {
         Log.e(TAG, "onCreate: 列表：existingDateUI" + set2);
         existingDataUI = new Vector<String>(set2);
 
-       // existingDataUI.add("🌏清空所有数据🌍");
+        existingDataUI.add("🌏清空所有数据🌍");
 
         android.widget.ArrayAdapter<String> adapter = new android.widget.ArrayAdapter<>(
                 ChooseHistActivity.this,   // Context上下文
@@ -70,12 +71,13 @@ public class ChooseHistActivity extends AppCompatActivity {
             @Override
             //parent 代表listView View 代表 被点击的列表项 position 代表第几个 id 代表列表编号
             public void onItemClick(android.widget.AdapterView<?> parent, android.view.View view, int position, long id) {
-          /*      if (position == existingData.size() - 1) {
-                    android.widget.Toast.makeText(ChooseHistActivity.this, existingData.size() + "remain to be done", android.widget.Toast.LENGTH_LONG).show();
+                Log.e(TAG, "onItemClick: " + position + "  " + existingData.size() );
+                if (position == existingData.size() ) {
+                    android.widget.Toast.makeText(ChooseHistActivity.this, existingData.size() + "请在主界面跳转到csv测试中抹除数据库中的数据", android.widget.Toast.LENGTH_LONG).show();
                     return;
                 }
-                */
-                android.widget.Toast.makeText(ChooseHistActivity.this, "打开文件" + existingData.get(position), android.widget.Toast.LENGTH_LONG).show();
+
+                android.widget.Toast.makeText(ChooseHistActivity.this, "打开文件" + existingData.get(position) + "\n耗时可能较长，请耐心等待", Toast.LENGTH_SHORT).show();
                 String string = existingData.get(position);
                     Intent intent = new Intent(ChooseHistActivity.this, RetrieveData.class);
                     intent.putExtra("file_to_read", string);

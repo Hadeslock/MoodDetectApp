@@ -46,6 +46,7 @@ import com.example.pc.newble.TheUtils.FileUtils;
 import com.example.pc.newble.TheUtils.HexUtil;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.LimitLine;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
@@ -354,13 +355,22 @@ public class BLEActivity extends AppCompatActivity {
         // 最大值
         leftAxis.setAxisMaxValue(50f);
         // 最小值
-        leftAxis.setAxisMinValue(-140f);
+     //   leftAxis.setAxisMinValue(-140f);
         // 不一定要从0开始
-        leftAxis.setStartAtZero(false);
+        leftAxis.setStartAtZero(true);
         leftAxis.setDrawGridLines(true);
         YAxis rightAxis = mChart.getAxisRight();
         // 不显示图表的右边y坐标轴线
         rightAxis.setEnabled(false);
+
+        // 警戒线
+        LimitLine ll = new LimitLine(40f, "警戒线");
+        ll.setLineColor(Color.RED);
+        ll.setLineWidth(2f);
+        ll.setTextColor(Color.BLACK);
+        ll.setTextSize(12f);
+        leftAxis.addLimitLine(ll);
+
     }
 
 
@@ -426,6 +436,8 @@ public class BLEActivity extends AppCompatActivity {
         set.setFillColor(ColorTemplate.getHoloBlue());
         set.setHighLightColor(Color.rgb(244, 117, 117));
         set.setDrawCircleHole(false);
+
+
 
 
         set.setValueFormatter(new ValueFormatter() {
@@ -740,6 +752,9 @@ public class BLEActivity extends AppCompatActivity {
             datautf8 = datautf8.substring(9);
             datautf8 = datautf8.replaceAll("[a-zA-Z]","" );  //^[0-9]+ [+-*\] [0-9]
             dataview = Float.parseFloat(datautf8);
+
+            // 电压取绝对值
+            dataview = Math.abs(dataview);
 
             try {
                 Log.e(TAG, "onCharacteristicChanged: 哈哈哈哈零零落落" );

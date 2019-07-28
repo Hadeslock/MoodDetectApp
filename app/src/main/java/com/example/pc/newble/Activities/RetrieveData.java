@@ -15,6 +15,7 @@ import com.example.pc.newble.R;
 import com.example.pc.newble.TheUtils.FileUtils;
 import com.example.pc.newble.SQLite.*;
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.LimitLine;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
@@ -65,7 +66,7 @@ public class RetrieveData extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_retrieve_data);
 
-        // 实例化 dpHandler。
+        // 实例化 dbHandler。
         try {
             dbHandler = new MyDBHandler(this, null, null, 1);
         } catch (Exception e) {
@@ -93,6 +94,23 @@ public class RetrieveData extends AppCompatActivity {
         mChart.animateY(600);
         mChart.animateX(1500);
         //
+        // y坐标轴的设定。需要改y轴最大值的话可以在这里改
+        YAxis yAxisLeft = mChart.getAxisLeft();
+        yAxisLeft.setStartAtZero(true);
+        yAxisLeft.setAxisMaxValue(60f);
+        // 右边的坐标轴。未来可以拓展为健康百分比之类的东西
+        YAxis yAxisRight = mChart.getAxisRight();
+        yAxisRight.setStartAtZero(true);
+        yAxisRight.setAxisMaxValue(60f);
+        yAxisRight.setEnabled(false);
+
+        // 警戒线
+        LimitLine ll = new LimitLine(40f, "警戒线");
+        ll.setLineColor(Color.RED);
+        ll.setLineWidth(2f);
+        ll.setTextColor(Color.BLACK);
+        ll.setTextSize(12f);
+        yAxisLeft.addLimitLine(ll);
 
 
 
@@ -106,8 +124,6 @@ public class RetrieveData extends AppCompatActivity {
         // 得到所要日期的数据
         Log.e(TAG, "onClick: 数据从vector读取结束");
         LineData lineData = RetrieveDataFromVector(todayData);
-
-        Log.e(TAG, "onClick: 数据读取结束");
 
         mChart.clear();
 
@@ -123,7 +139,7 @@ public class RetrieveData extends AppCompatActivity {
     }
 
 
-
+  /*
     public void doStart(View view) {
         isRunning = true;
         thread = new Thread(new Runnable() {
@@ -146,7 +162,7 @@ public class RetrieveData extends AppCompatActivity {
         isRunning = false;
         thread = null;
     }
-
+  */
 
 
 
@@ -188,6 +204,7 @@ public class RetrieveData extends AppCompatActivity {
             yVals.add(new Entry(val, i));
         }
 
+
         // 创建数据集
         LineDataSet set = new LineDataSet(yVals, "数据集");
         set.setAxisDependency(YAxis.AxisDependency.LEFT);
@@ -203,16 +220,10 @@ public class RetrieveData extends AppCompatActivity {
         set.setValueTextSize(10f);
         //设置折线图填充
         set.setDrawFilled(true);
-
-
-     //   set.     setMode(set.Mode.CUBIC_BEZIER);
-
         set.setFillColor(ColorTemplate.getHoloBlue());
         set.setHighLightColor(Color.rgb(244, 117, 117));
         set.setDrawCircleHole(false);
 
-
-        ////////////////////////////////////////////////
 
         // 创建数据集列表
         ArrayList<LineDataSet> dataSets = new ArrayList<LineDataSet>();
