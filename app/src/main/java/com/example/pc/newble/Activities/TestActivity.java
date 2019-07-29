@@ -12,7 +12,7 @@ import com.example.pc.newble.R;
 import com.example.pc.newble.SQLite.*;
 import com.example.pc.newble.TheUtils.FileUtils;
 
-import junit.framework.Test;
+//import junit.framework.Test;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
