@@ -771,7 +771,7 @@ public class BLEActivity extends AppCompatActivity {
                         DateUtil.getNowDateTime().substring(0, 8) + ".csv");
 
                 // 保存到 csv 文件
-                // 此 csv 文件创建的时机在 MainActivity
+
                 Vector<String> string = new Vector<>();
                 string.add(product.data);
                 string.add(product.time);

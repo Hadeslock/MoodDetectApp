@@ -103,7 +103,7 @@ public class Products {
     }
 
     /**
-     * 将一个"HH:mm:ss"格式的String化为一个int，代表当天的第几个时间点
+     * 将一个"HH:mm:ss"格式的String化为一个int，代表当天的第几个时间点  一分钟内的时间点都一样
      * 注意本函数依赖于 MainActivity.TIME_INTERVAL
      * */
     public static int TransTimeToInteger(String time) {

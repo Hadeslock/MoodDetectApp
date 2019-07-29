@@ -89,7 +89,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
     /**
      * 查询某天的某个时间点的条目。
      * */
-    public String getDataOfOneCertainTime(String date, int time){
+    public String getDataOfOneCertainTime(String date, int time){  //这里的time指的是一天中的86400秒处以60后转换成的数据点，即0点0分为1，0点2分为2
         String retval = "none";
         SQLiteDatabase db = getWritableDatabase();
         String query = "SELECT * FROM " + TABLE_PRODUCTS + " WHERE " + COLUMN_DATA + "=\"" + date + "\"" + " AND " + COLUMN_PRODUCTNAME + "=\"" + Integer.toString(time) + "\";" ;

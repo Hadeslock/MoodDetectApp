@@ -177,7 +177,7 @@ public class RetrieveData extends AppCompatActivity {
             // 进行处理，以便让时间显示为 "HH：MM" 的形式
             int TIME_INTERVAL = MainActivity.TIME_INTERVAL;
             String string = new String();
-            int SecondPastSinceTheDayBegin = TIME_INTERVAL * i;
+            int SecondPastSinceTheDayBegin = TIME_INTERVAL * i;  //过去了多少秒
             int hour = (int) Math.floor(SecondPastSinceTheDayBegin / 3600.0);
             int minute = (int) Math.floor((SecondPastSinceTheDayBegin % 3600.0) / 60.0);
             // 如果小时/分钟数小于10，则加0补全
@@ -200,7 +200,7 @@ public class RetrieveData extends AppCompatActivity {
         ArrayList<Entry> yVals = new ArrayList<Entry>();
 
         for (int i = 0; i < count; i++) {
-            float val = (float) vector.get(i).floatValue();
+            float val = (float) vector.get(i).floatValue();//获取数据
             yVals.add(new Entry(val, i));
         }
 
@@ -250,7 +250,7 @@ public class RetrieveData extends AppCompatActivity {
         int TIME_INTERVAL = MainActivity.TIME_INTERVAL;
         // 一天内所有数据点
         for (int i=0; i<(int)86400/TIME_INTERVAL; i++){    //获取电压数据
-            String a = dbHandler.getDataOfOneCertainTime(date, i);
+            String a = dbHandler.getDataOfOneCertainTime(date, i); //将一天变成86400/60个点，获取那个点对应的电压值
             Log.e(TAG, "GetTodayData: 哈哈哈哈 + a " +i + "  "+ a );
             if (a == "none") {
                 // 如果数据库里没有记录，默认是 0.0
