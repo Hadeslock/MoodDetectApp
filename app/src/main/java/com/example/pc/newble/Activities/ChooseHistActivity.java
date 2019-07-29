@@ -1,14 +1,26 @@
 package com.example.pc.newble.Activities;
 
+import android.graphics.Color;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.CalendarView;
 import android.widget.ListView;
 import android.content.Intent;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.pc.newble.Decorator.EventDecorator;
+import com.example.pc.newble.Decorator.HighlightWeekendsDecorator;
 import com.example.pc.newble.R;
 import com.example.pc.newble.TheUtils.FileUtils;
+import android.app.Activity;
+import android.os.Bundle;
+import android.widget.CalendarView;
+import android.widget.Toast;
+import android.widget.CalendarView.OnDateChangeListener;
+import android.widget.TextView;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -17,24 +29,102 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.Vector;
 import com.example.pc.newble.SQLite.*;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 
-public class ChooseHistActivity extends AppCompatActivity {
+public class ChooseHistActivity extends AppCompatActivity implements OnDateSelectedListener {
 
     // existingDataUI: 2008年1月1日9点48分21秒
     // existingData：20080101094821
-    private Vector<String> existingDataUI;
-    private Vector<String> existingData;
+      private Vector<String> existingDataUI;
+      private Vector<String> existingData;
 
-    private MyDBHandler dbHandler;
+      private MyDBHandler dbHandler;
 
-    private ListView listView;
+    //  private ListView listView;
     private static final String TAG = "ChooseHistActivity: ";
+  //  private CalendarView calendarView;
+    private MaterialCalendarView materialCalendarView;
+    private TextView textView;
 
-
+    /**
+     * Time.MONTH及Calendar.MONTH 默认的月份为  0-11，
+     * 所以使用的时候要自己加1.
+     * */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_hist);
+
+
+        materialCalendarView = findViewById(R.id.calendarView);
+     //   calendarView =  findViewById(R.id.cal);
+
+        materialCalendarView.setOnDateChangedListener(this);
+
+        textView = (TextView) findViewById(R.id.tv);
+
+        Vector<CalendarDay> temp = this.checkHistData();
+
+        materialCalendarView.addDecorators(
+                new EventDecorator(Color.RED, temp),
+                new HighlightWeekendsDecorator()
+        );
+    }
+
+
+
+    @Override
+    public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
+        //selected is no value on logcat
+        Log.d("selected", "" + selected);
+        //It can't be show
+
+    //    Toast.makeText(this, "enterDateSelected" + date, Toast.LENGTH_SHORT).show();
+
+        if (selected == true) {
+            //It can't be show
+     //       Toast.makeText(this, "onClick" + date, Toast.LENGTH_SHORT).show();
+            int year = date.getYear();
+            int month = date.getMonth();
+            int dayOfMonth = date.getDay();
+            month++;
+            Toast.makeText(ChooseHistActivity.this,
+                    "查询「" + year + "年" + month + "月" + dayOfMonth + "日」的信息", Toast.LENGTH_LONG).show();
+            // 补全文字
+            String stringMonth = month < 10 ? "0" + Integer.toString(month) : Integer.toString(month);
+            String stringDay = dayOfMonth < 10 ? "0" + Integer.toString(dayOfMonth) : Integer.toString(dayOfMonth);
+            String string = Integer.toString(year) + stringMonth + stringDay;
+            // 新的活动
+            Intent intent = new Intent(ChooseHistActivity.this, RetrieveData.class);
+            intent.putExtra("file_to_read", string);
+            startActivity(intent);
+        }
+    }
+
+
+    /**
+     * 获取已储存的信息条目，并将它们添加到existingData中，以便用户点选
+     * 返回值：Vector<String> 类型的原始数据。
+     * */
+    protected void getAvailableHistData(){
+
+        // 获取已存档信息的检索
+        String path = FileUtils.getSDCardPath() + "/bletest/DataList.txt";
+        Vector<String> retval = FileUtils.readTextFromFile(path);
+        // 将从数据库中读取的每一条信息添加到 existingData 里
+        for (String item : retval){
+            Log.e(TAG, "getAvailableHistData: 条目" + item );
+            String string = item.substring(0,4) + "年" + item.substring(4,6) + "月" + item.substring(6,8) + "日";
+            //+ item.substring(8,10) + "时" + item.substring(10,12) + "分" + item.substring(12,14) + "秒";
+            existingDataUI.add(string);
+            existingData.add(item);
+        }
+
+    }
+
+    private Vector<CalendarDay> checkHistData(){
 
         existingData = new Vector<String>();
         existingDataUI = new Vector<String>();
@@ -52,11 +142,37 @@ public class ChooseHistActivity extends AppCompatActivity {
         getAvailableHistData();
         // 哈希去重复。LinkedHashSet可以保持输出顺序与进入顺序一致
         Set<String> set = new LinkedHashSet<String>(existingData);
-        Log.e(TAG, "onCreate: 列表：existingData" + set );
         existingData = new Vector<String>(set);
         Set<String> set2 = new LinkedHashSet<String>(existingDataUI);
-        Log.e(TAG, "onCreate: 列表：existingDateUI" + set2);
         existingDataUI = new Vector<String>(set2);
+
+        // 将每个日期换成 CalendarDay
+        Vector<CalendarDay> calendarDayVector= new Vector<>();
+        for (int i=0; i<existingData.size(); i++){
+            int year = Integer.parseInt(existingData.get(i).substring(0, 4));
+            int month = Integer.parseInt(existingData.get(i).substring(4, 6));
+            int day = Integer.parseInt(existingData.get(i).substring(6, 8));
+            month--;
+            CalendarDay calendarDay = new CalendarDay(year, month, day);
+            calendarDayVector.add(calendarDay);
+
+        }
+
+        return calendarDayVector;
+
+    }
+
+
+}
+
+  /*  @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_choose_hist);
+
+
+
+
 
         existingDataUI.add("🌏清空所有数据🌍");
 
@@ -87,28 +203,19 @@ public class ChooseHistActivity extends AppCompatActivity {
             }
         });
     }
+    */
 
-
-   /**
-    * 获取已储存的信息条目，并将它们添加到existingData中，以便用户点选
-    * 返回值：Vector<String> 类型的原始数据。
-    * */
-    protected void getAvailableHistData(){
-
-        // 获取已存档信息的检索
-        String path = FileUtils.getSDCardPath() + "/bletest/DataList.txt";
-        Vector<String> retval = FileUtils.readTextFromFile(path);
-        // 将从数据库中读取的每一条信息添加到 existingData 里
-        for (String item : retval){
-            Log.e(TAG, "getAvailableHistData: 条目" + item );
-            String string = item.substring(0,4) + "年" + item.substring(4,6) + "月" + item.substring(6,8) + "日";
-                    //+ item.substring(8,10) + "时" + item.substring(10,12) + "分" + item.substring(12,14) + "秒";
-            existingDataUI.add(string);
-            existingData.add(item);
-        }
-
-    }
-
-}
 
 //Adapter.notifyDataSetChanged()
+
+/*
+  <CalendarView android:id="@+id/cal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:firstDayOfWeek="3"
+        android:shownWeekCount="7"
+        android:focusedMonthDateColor="#FF8000"
+        android:selectedWeekBackgroundColor="#9BFFFF"
+        android:weekSeparatorLineColor="#0000FF"/>
+
+        */

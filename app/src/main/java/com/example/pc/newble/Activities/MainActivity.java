@@ -15,6 +15,7 @@ import android.widget.ListView;
 
 import com.example.pc.newble.R;
 import com.example.pc.newble.SQLite.MyDBHandler;
+import com.example.pc.newble.TheUtils.DateUtil;
 import com.example.pc.newble.TheUtils.FileUtils;
 
 import java.io.PrintWriter;
@@ -41,6 +42,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        // 创建 DataList.txt 文件
+        FileUtils.makeFilePath(FileUtils.getSDCardPath() + "/bletest/",
+                "DataList.csv");
         FunctionList = (ListView) findViewById(R.id.functionList);
         FunctionList
                 .setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_expandable_list_item_1, getData()));//listview 使用
