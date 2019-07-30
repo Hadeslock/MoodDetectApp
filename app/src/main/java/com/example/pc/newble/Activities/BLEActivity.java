@@ -181,8 +181,8 @@ public class BLEActivity extends AppCompatActivity {
 
 
         // 标记今天日期和时间
-  //      FileUtils.addStringToFile(getSDCardPath() + "/bletest/Datalist.txt", "\n");    //datalist
-  //      FileUtils.addStringToFile(getSDCardPath() + "/bletest/Datalist.txt", DateUtil.getNowDateTime().substring(0, 8));
+        FileUtils.addStringToFile(getSDCardPath() + "/bletest/Datalist.txt", "\n");    //datalist
+        FileUtils.addStringToFile(getSDCardPath() + "/bletest/Datalist.txt", DateUtil.getNowDateTime().substring(0, 8));
 
 
         //定位所需

@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         // 创建 DataList.txt 文件
         FileUtils.makeFilePath(FileUtils.getSDCardPath() + "/bletest/",
-                "DataList.csv");
+                "DataList.txt");
         FunctionList = (ListView) findViewById(R.id.functionList);
         FunctionList
                 .setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_expandable_list_item_1, getData()));//listview 使用
