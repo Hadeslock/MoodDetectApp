@@ -1,6 +1,7 @@
 package com.example.pc.newble.Activities;
 
 import android.graphics.Color;
+import android.service.autofill.FillCallback;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -24,6 +25,7 @@ import android.widget.TextView;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.lang.reflect.Field;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -111,14 +113,34 @@ public class ChooseHistActivity extends AppCompatActivity implements OnDateSelec
     protected void getAvailableHistData(){
 
         // 获取已存档信息的检索
+        Vector<String> strings = FileUtils.getFilesAllName(FileUtils.getSDCardPath() + "/bletest/");
+        for (String item : strings){
+            if (item.length() >= 10){
+                int i = item.length();
+                Log.e(TAG, "getAvailableHistData: 哈哈哈哈" + item + "  " );
+                if (item.substring(i-4, i).equals(".csv")){
+                    Log.e(TAG, "getAvailableHistData: 这个是对的" );
+                    // TODO 避免其他csv被涵盖进去
+                    if (item.substring(i-4, i).equals("DataList.csv") == false){
+                        existingData.add(item.substring(i-12, i));
+                    }
+
+                } else {
+                    Log.e(TAG, "getAvailableHistData: 错了" );
+
+                }
+
+            }
+        }
+        // 以下是从datalist里读取已有日期的代码
         String path = FileUtils.getSDCardPath() + "/bletest/DataList.txt";
         Vector<String> retval = FileUtils.readTextFromFile(path);
         // 将从数据库中读取的每一条信息添加到 existingData 里
         for (String item : retval){
             Log.e(TAG, "getAvailableHistData: 条目" + item );
-            String string = item.substring(0,4) + "年" + item.substring(4,6) + "月" + item.substring(6,8) + "日";
+            String string = item.substring(0, 4) + "年" + item.substring(4, 6) + "月" + item.substring(6, 8) + "日";
             //+ item.substring(8,10) + "时" + item.substring(10,12) + "分" + item.substring(12,14) + "秒";
-            existingDataUI.add(string);
+    //        existingDataUI.add(string);
             existingData.add(item);
         }
 
@@ -138,7 +160,7 @@ public class ChooseHistActivity extends AppCompatActivity implements OnDateSelec
             Log.i(TAG, errors.toString());
         }
 
-        // 添加ListView项
+
         getAvailableHistData();
         // 哈希去重复。LinkedHashSet可以保持输出顺序与进入顺序一致
         Set<String> set = new LinkedHashSet<String>(existingData);
@@ -149,12 +171,18 @@ public class ChooseHistActivity extends AppCompatActivity implements OnDateSelec
         // 将每个日期换成 CalendarDay
         Vector<CalendarDay> calendarDayVector= new Vector<>();
         for (int i=0; i<existingData.size(); i++){
-            int year = Integer.parseInt(existingData.get(i).substring(0, 4));
-            int month = Integer.parseInt(existingData.get(i).substring(4, 6));
-            int day = Integer.parseInt(existingData.get(i).substring(6, 8));
-            month--;
-            CalendarDay calendarDay = new CalendarDay(year, month, day);
-            calendarDayVector.add(calendarDay);
+            try {
+                Log.e(TAG, "checkHistData: " + existingData.get(i));
+                int year = Integer.parseInt(existingData.get(i).substring(0, 4));
+                int month = Integer.parseInt(existingData.get(i).substring(4, 6));
+                int day = Integer.parseInt(existingData.get(i).substring(6, 8));
+                month--;
+                CalendarDay calendarDay = new CalendarDay(year, month, day);
+                calendarDayVector.add(calendarDay);
+            } catch (Exception e){
+                // 啥也不做
+                Log.e(TAG, "checkHistData: csv有一个" );
+            }
 
         }
 
