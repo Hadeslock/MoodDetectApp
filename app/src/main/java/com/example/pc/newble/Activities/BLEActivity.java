@@ -353,7 +353,7 @@ public class BLEActivity extends AppCompatActivity {
         YAxis leftAxis = mChart.getAxisLeft();
         leftAxis.setTextColor(0xff37474f);
         // 最大值
-        leftAxis.setAxisMaxValue(50f);
+        leftAxis.setAxisMaxValue(100f);  //改为100
         // 最小值
      //   leftAxis.setAxisMinValue(-140f);
         // 不一定要从0开始

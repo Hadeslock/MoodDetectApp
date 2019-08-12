@@ -97,11 +97,11 @@ public class RetrieveData extends AppCompatActivity {
         // y坐标轴的设定。需要改y轴最大值的话可以在这里改
         YAxis yAxisLeft = mChart.getAxisLeft();
         yAxisLeft.setStartAtZero(true);
-        yAxisLeft.setAxisMaxValue(60f);
+        yAxisLeft.setAxisMaxValue(100f);
         // 右边的坐标轴。未来可以拓展为健康百分比之类的东西
         YAxis yAxisRight = mChart.getAxisRight();
         yAxisRight.setStartAtZero(true);
-        yAxisRight.setAxisMaxValue(60f);
+        yAxisRight.setAxisMaxValue(100f);
         yAxisRight.setEnabled(false);
 
         // 警戒线
