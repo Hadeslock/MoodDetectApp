@@ -166,7 +166,6 @@ public class MainActivity extends AppCompatActivity {
      //   data.add("判断移动热点");
      //   data.add("android 8.0后台定位示例");
      //   data.add("常见问题说明");
-
         return data;
     }
 }

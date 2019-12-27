@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="百度定位sdk产品Demo"
+        android:text="情绪监测目录"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <ListView
