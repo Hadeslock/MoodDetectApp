@@ -1,5 +1,6 @@
 package com.example.pc.newble.Activities;
 
+import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.service.autofill.FillCallback;
 import android.support.annotation.NonNull;
@@ -43,7 +44,6 @@ public class ChooseHistActivity extends AppCompatActivity implements OnDateSelec
       private Vector<String> existingData;
 
       private MyDBHandler dbHandler;
-
     //  private ListView listView;
     private static final String TAG = "ChooseHistActivity: ";
   //  private CalendarView calendarView;
@@ -82,18 +82,25 @@ public class ChooseHistActivity extends AppCompatActivity implements OnDateSelec
         //selected is no value on logcat
         Log.d("selected", "" + selected);
         //It can't be show
-
     //    Toast.makeText(this, "enterDateSelected" + date, Toast.LENGTH_SHORT).show();
+        int flag=0;
 
         if (selected == true) {
+            flag=1;
             //It can't be show
      //       Toast.makeText(this, "onClick" + date, Toast.LENGTH_SHORT).show();
             int year = date.getYear();
             int month = date.getMonth();
             int dayOfMonth = date.getDay();
             month++;
-            Toast.makeText(ChooseHistActivity.this,
-                    "查询「" + year + "年" + month + "月" + dayOfMonth + "日」的信息", Toast.LENGTH_LONG).show();
+        //    Toast.makeText(ChooseHistActivity.this,
+          //          "查询「" + year +  "年" + month + "月" + dayOfMonth + "日」的信息", Toast.LENGTH_LONG).show();
+            if (flag==1){    //使用滚动进度条的方式阻止用户反复点击日期出现bug
+            ProgressDialog progressDialog = new ProgressDialog(ChooseHistActivity.this);
+            progressDialog.setTitle("正在打开");
+            progressDialog.setMessage("请稍等");
+            progressDialog.setCancelable(true);
+            progressDialog.show();}
             // 补全文字
             String stringMonth = month < 10 ? "0" + Integer.toString(month) : Integer.toString(month);
             String stringDay = dayOfMonth < 10 ? "0" + Integer.toString(dayOfMonth) : Integer.toString(dayOfMonth);
@@ -102,6 +109,8 @@ public class ChooseHistActivity extends AppCompatActivity implements OnDateSelec
             Intent intent = new Intent(ChooseHistActivity.this, RetrieveData.class);
             intent.putExtra("file_to_read", string);
             startActivity(intent);
+            finish();  //跳转后直接销毁当前进程
+
         }
     }
 
@@ -190,7 +199,10 @@ public class ChooseHistActivity extends AppCompatActivity implements OnDateSelec
 
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
 }
 
   /*  @Override
