@@ -105,7 +105,7 @@ public class RetrieveData extends AppCompatActivity {
         yAxisRight.setEnabled(false);
 
         // 警戒线
-        LimitLine ll = new LimitLine(40f, "警戒线");
+        LimitLine ll = new LimitLine(70f, "警戒线");//修改警戒线为70
         ll.setLineColor(Color.RED);
         ll.setLineWidth(2f);
         ll.setTextColor(Color.BLACK);
@@ -260,8 +260,17 @@ public class RetrieveData extends AppCompatActivity {
             }
             // 获取每个整点时刻的地理位置
             // 注：此处的60是基于TIME_INTERVAL = 60 而来的，如果修改了TIME_INTERVAL，须对此60作出修改
-            if (i % 60 == 0){
-                String j = Integer.toString(i/60)+"点：" + dbHandler.getaddrOfOneCertainTime(date, i);
+            int h=i;//作为计数，如果当前整点没有数据记录，那么就用前一个点的地址代替当前整点，以此类推，直到h小于0
+            if (h % TIME_INTERVAL == 0){
+                String j = dbHandler.getaddrOfOneCertainTime(date, h);
+               // String j = Integer.toString(h/TIME_INTERVAL)+"点：" + dbHandler.getaddrOfOneCertainTime(date, h);
+                while (j == "none" && i-h<= 60){
+                    h--;
+                    j = dbHandler.getaddrOfOneCertainTime(date, h);
+                    Log.e(TAG, "GetTodayData:  " +h );
+                }
+                j = Integer.toString(i/TIME_INTERVAL)+"点：" + j;
+                Log.e(TAG, "GetTodayData:  " +j);
                 addText(textView, j);
             }
         }

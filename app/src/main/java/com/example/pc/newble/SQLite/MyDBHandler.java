@@ -103,6 +103,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
                 break;
             } while (c.moveToNext());
         }
+        c.close();//关闭cursor 防止爆栈
         db.close();
         return retval;
     }
@@ -124,6 +125,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
                 break;
             } while (c.moveToNext());
         }
+        c.close();//关闭cursor 防止爆栈
         db.close();
         return retval;
     }

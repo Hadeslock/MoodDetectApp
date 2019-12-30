@@ -364,7 +364,7 @@ public class BLEActivity extends AppCompatActivity {
         rightAxis.setEnabled(false);
 
         // 警戒线
-        LimitLine ll = new LimitLine(40f, "警戒线");
+        LimitLine ll = new LimitLine(70f, "警戒线");
         ll.setLineColor(Color.RED);
         ll.setLineWidth(2f);
         ll.setTextColor(Color.BLACK);
@@ -374,7 +374,7 @@ public class BLEActivity extends AppCompatActivity {
     }
 
 
-    // 为高温线和低温线添加一个坐标点
+    // 为曲线添加一个坐标点
     private void addChartEntry( float dataview) {
         // 获取图表数据
         LineData lineData = mChart.getData();
@@ -754,12 +754,12 @@ public class BLEActivity extends AppCompatActivity {
             dataview = Float.parseFloat(datautf8);
 
             // 电压取绝对值
-            dataview = Math.abs(dataview);
+           // dataview = Math.abs(dataview);
 
             try {
                 Log.e(TAG, "onCharacteristicChanged: 哈哈哈哈零零落落" );
                 // 如果要更改往数据库内传入的参数的话，务必在 Products.java 里面重写构造函数
-                Log.e(TAG, "onCharacteristicChanged: 哈哈哈哈" );
+               // Log.e(TAG, "onCharacteristicChanged: 哈哈哈哈" );
                 Products product = new Products(dataview, currentLongittude, currentLatitude,currentAddressStr);
                 Log.e(TAG, "addButtonClicked: 哈哈哈哈哈哈哈" + product);
                 dbHandler.addItem(product);
