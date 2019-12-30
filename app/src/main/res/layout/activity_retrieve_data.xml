@@ -12,7 +12,7 @@
 
 
     <Button
-        android:id="@+id/button_retrieve"
+        android:id="@+id/button_analysis"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="生成分析报告" />

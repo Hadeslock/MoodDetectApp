@@ -41,12 +41,12 @@ import static com.github.mikephil.charting.components.Legend.LegendPosition.RIGH
 public class RetrieveData extends AppCompatActivity {
 
     public static final String TAG = "RetrieveData.this";
-
+    private int count[] = new int[24]; /*开辟了一个长度为24的数组*/
     private LineChart mChart;
     private boolean isRunning;
     private Thread thread;
     private TextView textView;
-
+    private Button anylysis;//用于跳转到生成分析报告
 
     // 在 onCreate 里取消了 handler 转而直接调用 onClick，由于这个过程耗时不长，没有必要用handler
     private Handler handler;
@@ -65,7 +65,15 @@ public class RetrieveData extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_retrieve_data);
-
+        //button 跳转生成报告
+        anylysis = findViewById(R.id.button_analysis);
+        anylysis.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                passDate();
+            }
+        });
+        //
         // 实例化 dbHandler。
         try {
             dbHandler = new MyDBHandler(this, null, null, 1);
@@ -119,7 +127,7 @@ public class RetrieveData extends AppCompatActivity {
         String date = intent.getStringExtra("file_to_read").substring(0,8);
         Vector<Double> todayData = GetTodayData(date);
    //     getLineData(todayData);
-        Log.e(TAG, "onCreate: " + todayData );
+        //Log.e(TAG, "onCreate: " + todayData );
 
         // 得到所要日期的数据
         Log.e(TAG, "onClick: 数据从vector读取结束");
@@ -251,12 +259,16 @@ public class RetrieveData extends AppCompatActivity {
         // 一天内所有数据点
         for (int i=0; i<(int)86400/TIME_INTERVAL; i++){    //获取电压数据
             String a = dbHandler.getDataOfOneCertainTime(date, i); //将一天变成86400/60个点，获取那个点对应的电压值
+           // count[i/TIME_INTERVAL]++;//用于测试
             Log.e(TAG, "GetTodayData: 哈哈哈哈 + a " +i + "  "+ a );
             if (a == "none") {
                 // 如果数据库里没有记录，默认是 0.0
                 doubleVector.add(0.0);
             } else {
                 doubleVector.add(Double.parseDouble(a));
+                if(Double.parseDouble(a)>=70){
+                    count[i/TIME_INTERVAL]++;  //增加count，记录某个小时内超过70的点数
+                }
             }
             // 获取每个整点时刻的地理位置
             // 注：此处的60是基于TIME_INTERVAL = 60 而来的，如果修改了TIME_INTERVAL，须对此60作出修改
@@ -292,7 +304,16 @@ public class RetrieveData extends AppCompatActivity {
         //  }
     }
 
+    //传递数据函数
+    public void passDate(){
+        Intent intent = new Intent(this,AnalysisReportActivity.class);//利用bundle传输count数组，count数组包含了每个小时内超过70的点数
+        Bundle bundle = new Bundle() ;
+        bundle.putSerializable("DATA", count) ;
 
+        intent.putExtras(bundle);
+        startActivity(intent);
+        //finish();
+    }
 
 
 

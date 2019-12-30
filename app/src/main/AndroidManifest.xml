@@ -24,7 +24,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activities.TestActivity"></activity>
+        <activity android:name=".Activities.AnalysisReportActivity"></activity>
+        <activity android:name=".Activities.TestActivity" />
 
         <service
             android:name=".BLEReadService"
@@ -58,11 +59,7 @@
 
         <activity
             android:name=".Activities.BLEActivity"
-            android:launchMode="singleInstance">
-
-        </activity>
-
-
+            android:launchMode="singleInstance"></activity>
         <activity android:name=".Activities.LocationActivity" />
         <activity android:name=".Activities.Location2Activity" />
     </application>
