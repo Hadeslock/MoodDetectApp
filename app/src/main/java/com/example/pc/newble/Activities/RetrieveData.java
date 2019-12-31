@@ -41,7 +41,7 @@ import static com.github.mikephil.charting.components.Legend.LegendPosition.RIGH
 public class RetrieveData extends AppCompatActivity {
 
     public static final String TAG = "RetrieveData.this";
-    private int count[] = new int[24]; /*开辟了一个长度为24的数组*/
+
     private LineChart mChart;
     private boolean isRunning;
     private Thread thread;
@@ -54,6 +54,12 @@ public class RetrieveData extends AppCompatActivity {
 
     //
     private String file;
+
+//定义一些用于传输到生成分析报告这个活动的数组变量
+    private int count70[] = new int[24]; /*开辟了一个长度为24的数组count70数组用于统计大于70的个数*/
+    private int count30[] = new int[24]; /*count30数组用于统计每小时小于30的个数*/
+    private int countall[] = new int[24];
+    private String address[]= new String[24];//用于统计每小时的地址进行传递
 
     /**
     * 对./bletest/目录下的假设
@@ -266,8 +272,12 @@ public class RetrieveData extends AppCompatActivity {
                 doubleVector.add(0.0);
             } else {
                 doubleVector.add(Double.parseDouble(a));
+                    countall[i/TIME_INTERVAL]++;
                 if(Double.parseDouble(a)>=70){
-                    count[i/TIME_INTERVAL]++;  //增加count，记录某个小时内超过70的点数
+                    count70[i/TIME_INTERVAL]++;  //增加count，记录某个小时内超过70的点数
+                }
+                if(Double.parseDouble(a)<=30){
+                    count30[i/TIME_INTERVAL]++;//增加小于30的count
                 }
             }
             // 获取每个整点时刻的地理位置
@@ -281,6 +291,7 @@ public class RetrieveData extends AppCompatActivity {
                     j = dbHandler.getaddrOfOneCertainTime(date, h);
                     Log.e(TAG, "GetTodayData:  " +h );
                 }
+                address[i/TIME_INTERVAL]=j; //将改时间的地址给这个存地址数组
                 j = Integer.toString(i/TIME_INTERVAL)+"点：" + j;
                 Log.e(TAG, "GetTodayData:  " +j);
                 addText(textView, j);
@@ -307,10 +318,19 @@ public class RetrieveData extends AppCompatActivity {
     //传递数据函数
     public void passDate(){
         Intent intent = new Intent(this,AnalysisReportActivity.class);//利用bundle传输count数组，count数组包含了每个小时内超过70的点数
-        Bundle bundle = new Bundle() ;
-        bundle.putSerializable("DATA", count) ;
+        Bundle bundle70 = new Bundle() ;
+        Bundle bundle30 = new Bundle() ;
+        Bundle bundleall = new Bundle() ;
+        Bundle bundleaddr = new Bundle() ;
+        bundle70.putSerializable("count70", count70) ;
+        bundle30.putSerializable("count30", count30) ;
+        bundleall.putSerializable("countall", countall) ;
+        bundleaddr.putSerializable("address", address) ;
+        intent.putExtras(bundle70);
+        intent.putExtras(bundle30);
+        intent.putExtras(bundleall);
+        intent.putExtras(bundleaddr);
 
-        intent.putExtras(bundle);
         startActivity(intent);
         //finish();
     }
