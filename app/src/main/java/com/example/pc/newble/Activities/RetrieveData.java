@@ -286,8 +286,8 @@ public class RetrieveData extends AppCompatActivity {
             if (h % TIME_INTERVAL == 0){
                 String j = dbHandler.getaddrOfOneCertainTime(date, h);
                // String j = Integer.toString(h/TIME_INTERVAL)+"点：" + dbHandler.getaddrOfOneCertainTime(date, h);
-                while (j == "none" && i-h<= 60){
-                    h--;
+                while (j == "none" && h-i<= 60){
+                    h++;
                     j = dbHandler.getaddrOfOneCertainTime(date, h);
                     Log.e(TAG, "GetTodayData:  " +h );
                 }
