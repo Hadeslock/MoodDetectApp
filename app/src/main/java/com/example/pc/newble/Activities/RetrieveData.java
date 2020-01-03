@@ -282,7 +282,7 @@ public class RetrieveData extends AppCompatActivity {
             }
             // 获取每个整点时刻的地理位置
             // 注：此处的60是基于TIME_INTERVAL = 60 而来的，如果修改了TIME_INTERVAL，须对此60作出修改
-            int h=i;//作为计数，如果当前整点没有数据记录，那么就用前一个点的地址代替当前整点，以此类推，直到h小于0
+            int h=i;//作为计数，如果当前整点没有数据记录，那么就用后一个点的地址代替当前整点，以此类推，直到h-i<=60
             if (h % TIME_INTERVAL == 0){
                 String j = dbHandler.getaddrOfOneCertainTime(date, h);
                // String j = Integer.toString(h/TIME_INTERVAL)+"点：" + dbHandler.getaddrOfOneCertainTime(date, h);
