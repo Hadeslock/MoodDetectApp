@@ -33,14 +33,17 @@ public class AnalysisReportActivity extends AppCompatActivity {
         Intent intent = getIntent();//获取Intent对象
         int count70[] = intent.getIntArrayExtra("count70") ; //获取超过70的数据点构成的一个数组，
         int count30[] = intent.getIntArrayExtra("count30") ;
+        int count50[] = intent.getIntArrayExtra("count50") ;
         int countall[] = intent.getIntArrayExtra("countall") ;
         String address[] = intent.getStringArrayExtra("address") ;
         ArrayList<Integer> high = new ArrayList<>();//情绪指数高峰
         ArrayList<Integer> low = new ArrayList<>();//情绪指数高峰
+        ArrayList<Integer> mid = new ArrayList<>();//情绪紧张时刻
         //Log.e("AnalysitActivity.this", "long:  " +recvDataLength);
         String rowtext;//用于写入textview
         String lowtime = "您这一天的情绪放松的时间段位于";
-        String hightime ="您这一天的情绪不佳的时间段位于";
+        String hightime ="您这一天的情绪焦虑抑郁的时间段位于";
+        String midtime = "您这一天的情绪紧张的时间段位于";
         for(int i = 0;i < 24; i++){//输出数组的每个值到textview中
 
             if (address[i]== "none") {
@@ -59,6 +62,12 @@ public class AnalysisReportActivity extends AppCompatActivity {
                     addText(textView,rowtext);
                     high.add(i);
                 }
+                if ((double)count50[i]/countall[i] > 2.0/3){
+                    rowtext= "在" + i + "时到" + (i+1)+ "时之间，您的情绪指数大于50小于70的时间超过40分钟，该时间段您位于"+address[i]+"\n这段时间是否比较紧张，请放松您的心情";
+                    addText(textView,rowtext);
+                    high.add(i);
+                }
+
             }
 
           //  addText(textView,"1");

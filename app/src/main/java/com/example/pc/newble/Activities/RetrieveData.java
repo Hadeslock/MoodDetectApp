@@ -58,6 +58,7 @@ public class RetrieveData extends AppCompatActivity {
 //定义一些用于传输到生成分析报告这个活动的数组变量
     private int count70[] = new int[24]; /*开辟了一个长度为24的数组count70数组用于统计大于70的个数*/
     private int count30[] = new int[24]; /*count30数组用于统计每小时小于30的个数*/
+    private int count50[] = new int[24]; /*count30数组用于统计每小时大于50小于70的个数*/
     private int countall[] = new int[24];
     private String address[]= new String[24];//用于统计每小时的地址进行传递
 
@@ -279,6 +280,9 @@ public class RetrieveData extends AppCompatActivity {
                 if(Double.parseDouble(a)<=30){
                     count30[i/TIME_INTERVAL]++;//增加小于30的count
                 }
+                if(Double.parseDouble(a)>=50&&Double.parseDouble(a)<70){
+                    count50[i/TIME_INTERVAL]++;  //增加count，记录某个小时内超过50小于70的点数
+                }
             }
             // 获取每个整点时刻的地理位置
             // 注：此处的60是基于TIME_INTERVAL = 60 而来的，如果修改了TIME_INTERVAL，须对此60作出修改
@@ -320,14 +324,17 @@ public class RetrieveData extends AppCompatActivity {
         Intent intent = new Intent(this,AnalysisReportActivity.class);//利用bundle传输count数组，count数组包含了每个小时内超过70的点数
         Bundle bundle70 = new Bundle() ;
         Bundle bundle30 = new Bundle() ;
+        Bundle bundle50 = new Bundle() ;
         Bundle bundleall = new Bundle() ;
         Bundle bundleaddr = new Bundle() ;
         bundle70.putSerializable("count70", count70) ;
         bundle30.putSerializable("count30", count30) ;
+        bundle50.putSerializable("count50", count50) ;
         bundleall.putSerializable("countall", countall) ;
         bundleaddr.putSerializable("address", address) ;
         intent.putExtras(bundle70);
         intent.putExtras(bundle30);
+        intent.putExtras(bundle50);
         intent.putExtras(bundleall);
         intent.putExtras(bundleaddr);
 

@@ -402,7 +402,7 @@ public class BLEActivity extends AppCompatActivity {
         mChart.moveViewToX(lineData.getXValCount() - 12);
     }
 
-    // 初始化数据集，添加一条高温统计折线
+    // 初始化数据集，添加一条折线
     private LineDataSet getHighLineDataSet() {
         LineDataSet set = new LineDataSet(null, "电位差");
         set.setAxisDependency(YAxis.AxisDependency.LEFT);
