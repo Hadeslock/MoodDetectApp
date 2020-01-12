@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.time.Instant;
 import java.util.Vector;
 
 import static android.content.ContentValues.TAG;
@@ -27,6 +28,8 @@ public class MyDBHandler extends SQLiteOpenHelper {
     public static final String COLUMN_LATITUDE = "latitude";
     public static final String COLUMN_CHANNEL = "channel";
     public static final String COLUMN_ADDRESS = "address";
+
+    public SQLiteDatabase db = getWritableDatabase();
 
     public MyDBHandler(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, DATABASE_NAME, factory, DATABASE_VERSION);
@@ -69,20 +72,20 @@ public class MyDBHandler extends SQLiteOpenHelper {
         values.put(COLUMN_CHANNEL, product.channel);
         values.put(COLUMN_ADDRESS, product.address);
 
-        SQLiteDatabase db = getWritableDatabase();
+   //     SQLiteDatabase db = getWritableDatabase();
         db.insert(TABLE_PRODUCTS, null, values);
         db.close();
     }
 
     // 删除单个条目。
     public void removeItem(String productName) {
-        SQLiteDatabase db  = getWritableDatabase();
+   //     SQLiteDatabase db  = getWritableDatabase();
         db.execSQL("DELETE FROM " + TABLE_PRODUCTS + " WHERE " + COLUMN_PRODUCTNAME + "=\"" + productName + "\";");
     }
 
     // 删除所有条目。
     public void removeAllItems(){
-        SQLiteDatabase db = getWritableDatabase();
+   //     SQLiteDatabase db = getWritableDatabase();
         db.execSQL("DELETE FROM " + TABLE_PRODUCTS + " WHERE 1");
     }
 
@@ -90,21 +93,51 @@ public class MyDBHandler extends SQLiteOpenHelper {
      * 查询某天的某个时间点的条目。
      * */
     public String getDataOfOneCertainTime(String date, int time){  //这里的time指的是一天中的86400秒处以60后转换成的数据点，即0点0分为1，0点2分为2
+        Log.e(TAG, "T1 " + Instant.now());
+
         String retval = "none";
-        SQLiteDatabase db = getWritableDatabase();
+    //    SQLiteDatabase db = getWritableDatabase();
         String query = "SELECT * FROM " + TABLE_PRODUCTS + " WHERE " + COLUMN_DATA + "=\"" + date + "\"" + " AND " + COLUMN_PRODUCTNAME + "=\"" + Integer.toString(time) + "\";" ;
         Log.e(TAG, "GetDataOfOneCertainTime: SQL输出是  " + query );
+
+        Log.e(TAG, "T2 " + Instant.now());
+
         // Cursor point to a location in your results
         Cursor c = db.rawQuery(query, null);
-        if (c.moveToFirst()) {
+    /*    if (c.moveToFirst()) {
             do {
                 retval = c.getString(c.getColumnIndex(COLUMN_VOLTAGE));
                 Log.e(TAG, "GetDataOfOneCertainTime: 发现了 " + retval );
                 break;
             } while (c.moveToNext());
         }
+
+     */
+        // count: 范围内有效数据点的个数
+        // sum: 范围内有效数据点的数值之和
+        int count = 0;
+        int sum = 0;
+
+        while (c.moveToNext()){
+
+            // 消除大于 150 的点
+            if (Integer.parseInt(c.getString(c.getColumnIndex(COLUMN_VOLTAGE))) > 150 ){
+                continue;
+            }
+
+            count += 1;
+            sum += Integer.parseInt(c.getString(c.getColumnIndex(COLUMN_VOLTAGE)));
+        }
+        if (count >= 1){
+            retval = Integer.toString(sum / count);
+        }
+
+        Log.e(TAG, "T3 " + Instant.now());
         c.close();//关闭cursor 防止爆栈
-        db.close();
+     //   db.close();
+
+        Log.e(TAG, "T4 " + Instant.now());
+
         return retval;
     }
 
@@ -113,7 +146,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
      * */
     public String getaddrOfOneCertainTime(String date, int time){
         String retval = "none";
-        SQLiteDatabase db = getWritableDatabase();
+     //   SQLiteDatabase db = getWritableDatabase();
         String query = "SELECT * FROM " + TABLE_PRODUCTS + " WHERE " + COLUMN_DATA + "=\"" + date + "\"" + " AND " + COLUMN_PRODUCTNAME + "=\"" + Integer.toString(time) + "\";" ;
         Log.e(TAG, "GetDataOfOneCertainTime: SQL输出是  " + query );
         // Cursor point to a location in your results
@@ -126,7 +159,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
             } while (c.moveToNext());
         }
         c.close();//关闭cursor 防止爆栈
-        db.close();
+    //    db.close();
         return retval;
     }
 
@@ -137,7 +170,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
     public Vector<String> getAllDataOfOneDayFromDatabase(String date) {
         Vector<String> availableDate = new Vector<>();
 
-        SQLiteDatabase db = getWritableDatabase();
+     //   SQLiteDatabase db = getWritableDatabase();
         String query = "SELECT * FROM " + TABLE_PRODUCTS + " WHERE " + COLUMN_DATA + "=\"" + date + "\";" ;
 
         // Cursor point to a location in your results
@@ -148,7 +181,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
                 availableDate.add(c.getString(c.getColumnIndex(COLUMN_VOLTAGE)));
             } while (c.moveToNext());
         }
-        db.close();
+     //   db.close();
         return availableDate;
     }
 
@@ -157,7 +190,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
      * */
     public String getAllItemsFromDatabase() {
         StringBuilder dbString = new StringBuilder();
-        SQLiteDatabase db = getWritableDatabase();
+    //    SQLiteDatabase db = getWritableDatabase();
         String query = "SELECT * FROM " + TABLE_PRODUCTS + " WHERE 1";
 
         // Cursor point to a location in your results
@@ -174,7 +207,12 @@ public class MyDBHandler extends SQLiteOpenHelper {
             } while (c.moveToNext());
         }
 
-        db.close();
+     //   db.close();
         return dbString.toString();
+    }
+
+    // 析构函数
+    protected void finalize(){
+        db.close();
     }
 }
