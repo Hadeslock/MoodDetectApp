@@ -9,7 +9,10 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.pc.newble.R;
+import com.example.pc.newble.SQLite.MyDBHandler;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -24,7 +27,9 @@ import java.util.List;
  */
 public class AnalysisReportActivity extends AppCompatActivity {
     private TextView textView;
-    public static final String TAG = "AnalysisReportActivity.this";
+    private MyDBHandler dbHandler;
+    public static final String TAG = "AnalysisReportActivity";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,6 +101,7 @@ public class AnalysisReportActivity extends AppCompatActivity {
         }
         lowtime=lowtime+text;
         addText(textView,lowtime);
+
         text="";
         for (int i=0;i<high.size();i++){    //
             int j=i+1;
@@ -111,8 +117,30 @@ public class AnalysisReportActivity extends AppCompatActivity {
 
         }
         hightime=hightime+text;
+        hightime = hightime + "\n";
         addText(textView,hightime);
         //用于输出情绪放松时段于情绪紧张时段代码段结束
+
+
+        // 初始化数据库
+        try {
+            dbHandler = new MyDBHandler(this, null, null, 1);
+        } catch (Exception e) {
+            StringWriter errors = new StringWriter();
+            e.printStackTrace(new PrintWriter(errors));
+            Log.i(TAG, errors.toString());
+        }
+
+        // 提供统计数据
+        text = "「0：00 ～ 1：00」统计数据：\n";
+        // 获得日期以便从数据库中查询
+        String date = intent.getStringExtra("date").substring(0,8);
+
+        int a = dbHandler.getCountBiggerThanACertainValue(date, 0, 70);
+        text = text + "电位差超过 70 的占比：" + a + "% \n";
+        double b = dbHandler.getStdDivInACertainHour(date, 0);
+        text = text + "这段时间的电位的标准差：" + b + "\n";
+        addText(textView, text);
 
     }
 

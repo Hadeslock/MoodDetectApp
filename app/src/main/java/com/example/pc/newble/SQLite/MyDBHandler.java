@@ -29,6 +29,8 @@ public class MyDBHandler extends SQLiteOpenHelper {
     public static final String COLUMN_CHANNEL = "channel";
     public static final String COLUMN_ADDRESS = "address";
 
+    private final int validThreshold = 150;
+
     public SQLiteDatabase db = getWritableDatabase();
 
     public MyDBHandler(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
@@ -140,6 +142,88 @@ public class MyDBHandler extends SQLiteOpenHelper {
 
         return retval;
     }
+
+    /**
+     * 计算某个特定小时内，超过某个特定阈值的百分比。
+     * date: 日期
+     * hour: 第几小时。例如 8：00～9：00 则为 8。
+     * threshold: 阈值
+     * */
+    public int getCountBiggerThanACertainValue(String date, int hour, int threshold){
+        // time:
+        int time = hour * 60;
+        int count = 0;
+        int totalNumber = 0;
+
+        for (int i=0; i<60; i++){
+            // 对于每一分钟进行查询
+            String query = "SELECT * FROM " + TABLE_PRODUCTS + " WHERE " + COLUMN_DATA + "=\"" + date + "\"" + " AND " + COLUMN_PRODUCTNAME + "=\"" + Integer.toString(time + i) + "\";" ;
+            Log.e(TAG, "GetDataOfOneCertainTime: SQL输出是  " + query );
+
+            Cursor c = db.rawQuery(query, null);
+            while (c.moveToNext()){
+                // 如果大于阈值，count++
+                if (Integer.parseInt(c.getString(c.getColumnIndex(COLUMN_VOLTAGE))) > threshold ){
+                    count += 1;
+                }
+                totalNumber += 1;
+            }
+            c.close();
+        }
+        if (totalNumber == 0){
+            return 0;
+        } else {
+            return (int) count * 100 / totalNumber;
+        }
+
+    }
+
+    /**
+     * 计算某个特定小时内，有效数据的标准差。
+     * date: 日期
+     * hour: 第几小时。例如 8：00～9：00 则为 8。
+     * */
+    public double getStdDivInACertainHour(String date, int hour){
+        // time:
+        int time = hour * 60;
+        int sum = 0;
+        int count = 0;
+        Vector<Integer> integerVector = new Vector<>();
+
+        for (int i=0; i<60; i++){
+            String query = "SELECT * FROM " + TABLE_PRODUCTS + " WHERE " + COLUMN_DATA + "=\"" + date + "\"" + " AND " + COLUMN_PRODUCTNAME + "=\"" + Integer.toString(time + i) + "\";" ;
+            Log.e(TAG, "GetDataOfOneCertainTime: SQL输出是  " + query );
+
+            Cursor c = db.rawQuery(query, null);
+            while (c.moveToNext()){
+                // 如果大于阈值，count++
+                if (Integer.parseInt(c.getString(c.getColumnIndex(COLUMN_VOLTAGE))) > this.validThreshold ){
+                    continue;
+                }
+
+                int voltage = Integer.parseInt(c.getString(c.getColumnIndex(COLUMN_VOLTAGE)));
+                sum += voltage;
+                count += 1;
+                integerVector.add(voltage);
+            }
+            c.close();
+        }
+        if (count == 0){
+            // 如果没有有效数据点，那么直接返回 0，避免除零错误。
+            return 0;
+        }
+        double average = sum / count;
+
+        // 计算标准差
+        double dVar = 0;
+        for (int i=0; i<integerVector.size(); i++){
+            dVar += (integerVector.get(i) - average) * (integerVector.get(i) - average);
+        }
+
+        return Math.sqrt(dVar / count);
+    }
+
+
 
     /**
      * 查询某天的某个时间点的地址信息。

@@ -61,6 +61,7 @@ public class RetrieveData extends AppCompatActivity {
     private int count50[] = new int[24]; /*count30数组用于统计每小时大于50小于70的个数*/
     private int countall[] = new int[24];
     private String address[]= new String[24];//用于统计每小时的地址进行传递
+    private String dateOfAnalysisReport = new String();
 
     /**
     * 对./bletest/目录下的假设
@@ -131,10 +132,11 @@ public class RetrieveData extends AppCompatActivity {
 
         // 得到所要的日期
         Intent intent = getIntent();
-        String date = intent.getStringExtra("file_to_read").substring(0,8);
+        String date = intent.getStringExtra("file_to_read").substring(0, 8);
         Vector<Double> todayData = GetTodayData(date);
-   //     getLineData(todayData);
-        //Log.e(TAG, "onCreate: " + todayData );
+
+        //
+        dateOfAnalysisReport = date;
 
         // 得到所要日期的数据
         Log.e(TAG, "onClick: 数据从vector读取结束");
@@ -327,16 +329,19 @@ public class RetrieveData extends AppCompatActivity {
         Bundle bundle50 = new Bundle() ;
         Bundle bundleall = new Bundle() ;
         Bundle bundleaddr = new Bundle() ;
+        Bundle bundledate = new Bundle() ;
         bundle70.putSerializable("count70", count70) ;
         bundle30.putSerializable("count30", count30) ;
         bundle50.putSerializable("count50", count50) ;
         bundleall.putSerializable("countall", countall) ;
         bundleaddr.putSerializable("address", address) ;
+        bundledate.putSerializable("date", dateOfAnalysisReport) ;
         intent.putExtras(bundle70);
         intent.putExtras(bundle30);
         intent.putExtras(bundle50);
         intent.putExtras(bundleall);
         intent.putExtras(bundleaddr);
+        intent.putExtras(bundledate);
 
         startActivity(intent);
         //finish();
