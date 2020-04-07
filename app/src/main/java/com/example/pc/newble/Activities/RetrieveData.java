@@ -266,7 +266,8 @@ public class RetrieveData extends AppCompatActivity {
         Vector<Double> doubleVector = new Vector<>();
         int TIME_INTERVAL = MainActivity.TIME_INTERVAL;
         // 一天内所有数据点
-        for (int i=0; i<(int)86400/TIME_INTERVAL; i++){    //获取电压数据
+        for (int i=0; i<(int)86400/TIME_INTERVAL; i++){//获取电压数据
+            double data; //存转换成double类型的数据
             String a = dbHandler.getDataOfOneCertainTime(date, i); //将一天变成86400/60个点，获取那个点对应的电压值
            // count[i/TIME_INTERVAL]++;//用于测试
             Log.e(TAG, "GetTodayData: 哈哈哈哈 + a " +i + "  "+ a );
@@ -274,15 +275,16 @@ public class RetrieveData extends AppCompatActivity {
                 // 如果数据库里没有记录，默认是 0.0
                 doubleVector.add(0.0);
             } else {
-                doubleVector.add(Double.parseDouble(a));
+                data=Double.parseDouble(a);
+                doubleVector.add(data);
                     countall[i/TIME_INTERVAL]++;
-                if(Double.parseDouble(a)>=70){
+                if(data>=70){
                     count70[i/TIME_INTERVAL]++;  //增加count，记录某个小时内超过70的点数
                 }
-                if(Double.parseDouble(a)<=30){
+                if(data<=30){
                     count30[i/TIME_INTERVAL]++;//增加小于30的count
                 }
-                if(Double.parseDouble(a)>=50&&Double.parseDouble(a)<70){
+                if(data>=50&&data<70){
                     count50[i/TIME_INTERVAL]++;  //增加count，记录某个小时内超过50小于70的点数
                 }
             }
