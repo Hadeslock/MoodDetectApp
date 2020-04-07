@@ -1,21 +1,31 @@
 package com.example.pc.newble.Activities;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.pc.newble.R;
 import com.example.pc.newble.SQLite.MyDBHandler;
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.formatter.PercentFormatter;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Hashtable;
 import java.util.List;
 
 /**
@@ -29,7 +39,16 @@ public class AnalysisReportActivity extends AppCompatActivity {
     private TextView textView;
     private MyDBHandler dbHandler;
     public static final String TAG = "AnalysisReportActivity";
+    private PieChart mChart;
 
+    private ArrayList<Integer> high = new ArrayList<>();//情绪指数高峰
+    private ArrayList<Integer> low = new ArrayList<>();//情绪指数高峰
+    private ArrayList<Integer> mid = new ArrayList<>();//情绪紧张时刻
+    //Log.e("AnalysitActivity.this", "long:  " +recvDataLength);
+    private String rowtext;//用于写入textview
+    private String lowtime = "您这一天的情绪放松的时间段位于";
+    private String hightime ="您这一天的情绪焦虑抑郁的时间段位于";
+    private String midtime = "您这一天的情绪紧张的时间段位于";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,14 +61,10 @@ public class AnalysisReportActivity extends AppCompatActivity {
         int countall[] = intent.getIntArrayExtra("countall") ;
         String address[] = intent.getStringArrayExtra("address") ;
         String date = intent.getStringExtra("date").substring(0,8);
-        ArrayList<Integer> high = new ArrayList<>();//情绪指数高峰
-        ArrayList<Integer> low = new ArrayList<>();//情绪指数高峰
-        ArrayList<Integer> mid = new ArrayList<>();//情绪紧张时刻
-        //Log.e("AnalysitActivity.this", "long:  " +recvDataLength);
-        String rowtext;//用于写入textview
-        String lowtime = "您这一天的情绪放松的时间段位于";
-        String hightime ="您这一天的情绪焦虑抑郁的时间段位于";
-        String midtime = "您这一天的情绪紧张的时间段位于";
+       //做饼状图
+        mChart = (PieChart) findViewById(R.id.chart);
+        showChart(getPieData());
+
 
 
         // 初始化数据库
@@ -193,4 +208,82 @@ public class AnalysisReportActivity extends AppCompatActivity {
         //      textView.scrollTo(0, offset - textView.getHeight());
         //  }
     }
+    //饼状图函数
+    private void showChart(PieData pieData) {
+
+        mChart.setHoleColorTransparent(true);
+        mChart.setHoleRadius(60f);  //内环半径
+        mChart.setTransparentCircleRadius(64f); // 半透明圈半径
+        // mChart.setHoleRadius(0);  // 实心圆
+        mChart.setDescription("不同情绪占比饼状图");
+        mChart.setDrawCenterText(true);  //饼状图中间可以添加文字
+        mChart.setCenterText("今日情绪指数汇总");  //饼状图中间的文字
+        mChart.setDrawHoleEnabled(true);
+        mChart.setRotationAngle(90); // 初始旋转角度
+        mChart.setRotationEnabled(true); // 可以手动旋转
+        mChart.setUsePercentValues(true);  //显示成百分比
+        mChart.setCenterTextSize(16f);
+
+        //mChart.setDrawSliceText(false);设置隐藏饼图上文字，只显示百分比
+        // 设置可触摸
+        mChart.setTouchEnabled(true);
+        // 设置数据
+        mChart.setData(pieData);
+        // 取消高亮显示
+        mChart.highlightValues(null);
+        mChart.invalidate();
+        Legend mLegend = mChart.getLegend();  //设置比例图
+        mLegend.setPosition(Legend.LegendPosition.RIGHT_OF_CHART);  //最右边显示
+        mLegend.setForm(Legend.LegendForm.LINE);  //设置比例图的形状，默认是方形
+        mLegend.setXEntrySpace(7f);
+        mLegend.setYEntrySpace(5f);         //设置动画
+        mLegend.setFormSize(16f);//比例块字体大小
+        mChart.animateXY(1000, 1000);    }
+     private PieData getPieData() {
+        // xVals用来表示每个饼块上的文字
+         ArrayList<String> xValues = new ArrayList<String>();
+         xValues.add(("情绪放松"));
+         xValues.add(("情绪正常"));
+         xValues.add(("情绪紧张"));
+         xValues.add(("情绪焦虑"));
+         // yVals用来表示封装每个饼块的实际数据
+         ArrayList<Entry> yValues = new ArrayList<Entry>();
+         // 饼图数据
+         low.clear();
+         Collections.addAll(low,3,5,6,7,8,10,11,15);
+         high.clear();
+         Collections.addAll(high,4,16,17,18,22,23);
+         mid.clear();
+         Collections.addAll(mid,9,12,13,20,21);
+         float quarterly1 = low.size();
+         float quarterly2 = 24-low.size()-high.size()-mid.size();
+         float quarterly3 = mid.size();
+         float quarterly4 = high.size();
+         yValues.add(new Entry(quarterly1, 0));
+         yValues.add(new Entry(quarterly2, 1));
+         yValues.add(new Entry(quarterly3, 2));
+         yValues.add(new Entry(quarterly4, 3));
+         // y轴集合
+          PieDataSet pieDataSet = new PieDataSet(yValues, "今日情绪");
+          pieDataSet.setSliceSpace(2f); //设置个饼状图之间的距离
+          pieDataSet.setValueTextSize(12f);//设置字体大小
+
+          ArrayList<Integer> colors = new ArrayList<Integer>();
+          //饼图颜色
+          colors.add(Color.rgb(0, 205, 0));
+          colors.add(Color.rgb(0, 205, 205));
+          colors.add(Color.rgb(0, 100, 205));
+          colors.add(Color.rgb(205, 0, 0));
+          //设置饼图颜色
+          pieDataSet.setColors(colors);
+          //设置选中态多出的长度
+          DisplayMetrics metrics = getResources().getDisplayMetrics();
+          float px = 5 * (((DisplayMetrics) metrics).densityDpi / 160f);
+          pieDataSet.setSelectionShift(px);
+          //创建饼图数据
+          PieData pieData = new PieData(xValues, pieDataSet);
+          pieData.setValueFormatter(new PercentFormatter()); //设置饼状图百分数显示
+          return pieData;
+          }
+
 }
