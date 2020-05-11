@@ -76,19 +76,19 @@ public class AnalysisReportActivity extends AppCompatActivity {
             Log.i(TAG, errors.toString());
         }
         //构造数据用于测试
-/*        count30[1]=50;
+        count30[1]=50;
         countall[1]=60;
         count70[1]=40;
         count50[1]=50;
         count30[2]=50;
         countall[2]=60;
         count70[2]=40;
-        count50[2]=50;*/
+        count50[2]=50;
         //构造数据用于测试
 
         for(int i = 0;i < 24; i++){//输出数组的每个值到textview中
             double std;
-            if (address[i]== "none") {
+            if (countall[i]== 0) {
               //  j= count70[i]+" "+ count30[i] + " " + countall[i];
             }
             else{

@@ -106,18 +106,35 @@ public class MyDBHandler extends SQLiteOpenHelper {
 
         // Cursor point to a location in your results
         Cursor c = db.rawQuery(query, null);
-    /*    if (c.moveToFirst()) {
+        int count = 0;
+        int sum = 0;
+        if (c.moveToFirst()) {
             do {
+
                 retval = c.getString(c.getColumnIndex(COLUMN_VOLTAGE));
                 Log.e(TAG, "GetDataOfOneCertainTime: 发现了 " + retval );
                 break;
             } while (c.moveToNext());
         }
+/*        if (c.moveToFirst()) {
+            do {
 
-     */
+                // 消除大于 150 的点
+                if (Integer.parseInt(c.getString(c.getColumnIndex(COLUMN_VOLTAGE))) > 150 ){
+                    continue;
+                }
+
+                count += 1;
+                sum += Integer.parseInt(c.getString(c.getColumnIndex(COLUMN_VOLTAGE)));
+            } while (c.moveToNext());
+        }
+        if (count >= 1){
+            retval = Integer.toString(sum / count);
+        }*/
+
         // count: 范围内有效数据点的个数
         // sum: 范围内有效数据点的数值之和
-        int count = 0;
+/*        int count = 0;
         int sum = 0;
 
         while (c.moveToNext()){
@@ -132,7 +149,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
         }
         if (count >= 1){
             retval = Integer.toString(sum / count);
-        }
+        }*/
 
         Log.e(TAG, "T3 " + Instant.now());
         c.close();//关闭cursor 防止爆栈
