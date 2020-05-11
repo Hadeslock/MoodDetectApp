@@ -61,9 +61,9 @@ public class AnalysisReportActivity extends AppCompatActivity {
         int countall[] = intent.getIntArrayExtra("countall") ;
         String address[] = intent.getStringArrayExtra("address") ;
         String date = intent.getStringExtra("date").substring(0,8);
-       //做饼状图
+       //定义饼状图
         mChart = (PieChart) findViewById(R.id.chart);
-        showChart(getPieData());
+
 
 
 
@@ -76,14 +76,14 @@ public class AnalysisReportActivity extends AppCompatActivity {
             Log.i(TAG, errors.toString());
         }
         //构造数据用于测试
-        count30[1]=50;
+/*        count30[1]=50;
         countall[1]=60;
         count70[1]=40;
         count50[1]=50;
         count30[2]=50;
         countall[2]=60;
         count70[2]=40;
-        count50[2]=50;
+        count50[2]=50;*/
         //构造数据用于测试
 
         for(int i = 0;i < 24; i++){//输出数组的每个值到textview中
@@ -122,12 +122,12 @@ public class AnalysisReportActivity extends AppCompatActivity {
         addText(textView,"\n");
 
         //构造数据用于测试
-       low.clear();
+/*       low.clear();
         Collections.addAll(low,3,5,6,7,8,10,11,15);
         high.clear();
         Collections.addAll(high,4,16,17,18,22,23);
         mid.clear();
-        Collections.addAll(mid,9,12,13,20,21);
+        Collections.addAll(mid,9,12,13,20,21);*/
         //构造数据用于测试
         //用于输出情绪放松时段,情绪紧张，情绪焦虑代码段开始，双指针法
         String text="";
@@ -183,8 +183,8 @@ public class AnalysisReportActivity extends AppCompatActivity {
         addText(textView,hightime);
         //用于输出情绪放松时段，情绪紧张,情绪焦虑时段代码段结束
 
-
-
+        //展示饼状图
+        showChart(getPieData());
 
         // 提供统计数据
         /*text = "「0：00 ～ 1：00」统计数据：\n";
@@ -249,12 +249,12 @@ public class AnalysisReportActivity extends AppCompatActivity {
          // yVals用来表示封装每个饼块的实际数据
          ArrayList<Entry> yValues = new ArrayList<Entry>();
          // 饼图数据
-         low.clear();
+/*         low.clear();
          Collections.addAll(low,3,5,6,7,8,10,11,15);
          high.clear();
          Collections.addAll(high,4,16,17,18,22,23);
          mid.clear();
-         Collections.addAll(mid,9,12,13,20,21);
+         Collections.addAll(mid,9,12,13,20,21);*/
          float quarterly1 = low.size();
          float quarterly2 = 24-low.size()-high.size()-mid.size();
          float quarterly3 = mid.size();
