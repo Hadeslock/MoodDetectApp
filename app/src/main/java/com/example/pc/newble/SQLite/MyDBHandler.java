@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.text.DecimalFormat;
 import java.time.Instant;
 import java.util.Vector;
 
@@ -95,67 +96,52 @@ public class MyDBHandler extends SQLiteOpenHelper {
      * 查询某天的某个时间点的条目。
      * */
     public String getDataOfOneCertainTime(String date, int time){  //这里的time指的是一天中的86400秒处以60后转换成的数据点，即0点0分为1，0点2分为2
-        Log.e(TAG, "T1 " + Instant.now());
+    //    Log.e(TAG, "T1 " + Instant.now());
 
         String retval = "none";
     //    SQLiteDatabase db = getWritableDatabase();
         String query = "SELECT * FROM " + TABLE_PRODUCTS + " WHERE " + COLUMN_DATA + "=\"" + date + "\"" + " AND " + COLUMN_PRODUCTNAME + "=\"" + Integer.toString(time) + "\";" ;
         Log.e(TAG, "GetDataOfOneCertainTime: SQL输出是  " + query );
 
-        Log.e(TAG, "T2 " + Instant.now());
+        //Log.e(TAG, "T2 " + Instant.now());
 
         // Cursor point to a location in your results
         Cursor c = db.rawQuery(query, null);
-        int count = 0;
-        int sum = 0;
-        if (c.moveToFirst()) {
+
+/*        if (c.moveToFirst()) {
             do {
 
                 retval = c.getString(c.getColumnIndex(COLUMN_VOLTAGE));
                 Log.e(TAG, "GetDataOfOneCertainTime: 发现了 " + retval );
                 break;
             } while (c.moveToNext());
-        }
-/*        if (c.moveToFirst()) {
-            do {
-
-                // 消除大于 150 的点
-                if (Integer.parseInt(c.getString(c.getColumnIndex(COLUMN_VOLTAGE))) > 150 ){
-                    continue;
-                }
-
-                count += 1;
-                sum += Integer.parseInt(c.getString(c.getColumnIndex(COLUMN_VOLTAGE)));
-            } while (c.moveToNext());
-        }
-        if (count >= 1){
-            retval = Integer.toString(sum / count);
         }*/
+
 
         // count: 范围内有效数据点的个数
         // sum: 范围内有效数据点的数值之和
-/*        int count = 0;
-        int sum = 0;
+        int count = 0;
+        double sum = 0;
 
         while (c.moveToNext()){
 
             // 消除大于 150 的点
-            if (Integer.parseInt(c.getString(c.getColumnIndex(COLUMN_VOLTAGE))) > 150 ){
+            if (Double.parseDouble(c.getString(c.getColumnIndex(COLUMN_VOLTAGE))) > 150 ){
                 continue;
             }
 
             count += 1;
-            sum += Integer.parseInt(c.getString(c.getColumnIndex(COLUMN_VOLTAGE)));
+            sum += Double.parseDouble(c.getString(c.getColumnIndex(COLUMN_VOLTAGE)));
         }
         if (count >= 1){
-            retval = Integer.toString(sum / count);
-        }*/
+            retval = Double.toString(sum / count);
+        }
 
-        Log.e(TAG, "T3 " + Instant.now());
+       // Log.e(TAG, "T3 " + Instant.now());
         c.close();//关闭cursor 防止爆栈
      //   db.close();
 
-        Log.e(TAG, "T4 " + Instant.now());
+        //Log.e(TAG, "T4 " + Instant.now());
 
         return retval;
     }
@@ -203,9 +189,10 @@ public class MyDBHandler extends SQLiteOpenHelper {
     public double getStdDivInACertainHour(String date, int hour){
         // time:
         int time = hour * 60;
-        int sum = 0;
+        double sum = 0;
         int count = 0;
-        Vector<Integer> integerVector = new Vector<>();
+        DecimalFormat df = new DecimalFormat("0.00");
+        Vector<Double> doubleVector = new Vector<>();
 
         for (int i=0; i<60; i++){
             String query = "SELECT * FROM " + TABLE_PRODUCTS + " WHERE " + COLUMN_DATA + "=\"" + date + "\"" + " AND " + COLUMN_PRODUCTNAME + "=\"" + Integer.toString(time + i) + "\";" ;
@@ -214,14 +201,14 @@ public class MyDBHandler extends SQLiteOpenHelper {
             Cursor c = db.rawQuery(query, null);
             while (c.moveToNext()){
                 // 如果大于阈值，count++
-                if (Integer.parseInt(c.getString(c.getColumnIndex(COLUMN_VOLTAGE))) > this.validThreshold ){
+                if (Double.parseDouble(c.getString(c.getColumnIndex(COLUMN_VOLTAGE))) > this.validThreshold ){
                     continue;
                 }
 
-                int voltage = Integer.parseInt(c.getString(c.getColumnIndex(COLUMN_VOLTAGE)));
+                double voltage = Double.parseDouble(c.getString(c.getColumnIndex(COLUMN_VOLTAGE)));
                 sum += voltage;
                 count += 1;
-                integerVector.add(voltage);
+                doubleVector.add(voltage);
             }
             c.close();
         }
@@ -233,11 +220,12 @@ public class MyDBHandler extends SQLiteOpenHelper {
 
         // 计算标准差
         double dVar = 0;
-        for (int i=0; i<integerVector.size(); i++){
-            dVar += (integerVector.get(i) - average) * (integerVector.get(i) - average);
+        for (int i=0; i<doubleVector.size(); i++){
+            dVar += (doubleVector.get(i) - average) * (doubleVector.get(i) - average);
         }
-
-        return Math.sqrt(dVar / count);
+        double  result;
+        result = Double.parseDouble(df.format(Math.sqrt(dVar / count)));
+        return result;
     }
 
 
