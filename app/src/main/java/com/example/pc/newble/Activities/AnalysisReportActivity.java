@@ -223,8 +223,7 @@ public class AnalysisReportActivity extends AppCompatActivity {
         mChart.setRotationEnabled(true); // 可以手动旋转
         mChart.setUsePercentValues(true);  //显示成百分比
         mChart.setCenterTextSize(16f);
-
-        //mChart.setDrawSliceText(false);设置隐藏饼图上文字，只显示百分比
+        mChart.setDrawSliceText(false);//设置隐藏饼图上文字，只显示百分比
         // 设置可触摸
         mChart.setTouchEnabled(true);
         // 设置数据
@@ -235,9 +234,10 @@ public class AnalysisReportActivity extends AppCompatActivity {
         Legend mLegend = mChart.getLegend();  //设置比例图
         mLegend.setPosition(Legend.LegendPosition.RIGHT_OF_CHART);  //最右边显示
         mLegend.setForm(Legend.LegendForm.LINE);  //设置比例图的形状，默认是方形
-        mLegend.setXEntrySpace(7f);
-        mLegend.setYEntrySpace(5f);         //设置动画
+        mLegend.setXEntrySpace(2f);
+        mLegend.setYEntrySpace(2f);         //设置动画
         mLegend.setFormSize(16f);//比例块字体大小
+        mLegend.setForm(Legend.LegendForm.SQUARE);
         mChart.animateXY(1000, 1000);    }
      private PieData getPieData() {
         // xVals用来表示每个饼块上的文字
@@ -280,9 +280,12 @@ public class AnalysisReportActivity extends AppCompatActivity {
           DisplayMetrics metrics = getResources().getDisplayMetrics();
           float px = 5 * (((DisplayMetrics) metrics).densityDpi / 160f);
           pieDataSet.setSelectionShift(px);
+          //取消饼图上的数据表示
+          //pieDataSet.setDrawValues(false);
           //创建饼图数据
           PieData pieData = new PieData(xValues, pieDataSet);
           pieData.setValueFormatter(new PercentFormatter()); //设置饼状图百分数显示
+
           return pieData;
           }
 
