@@ -207,6 +207,7 @@ public class BLEActivity extends AppCompatActivity {
             requestLocation();
         }
 
+
     }
 
 
@@ -574,7 +575,11 @@ public class BLEActivity extends AppCompatActivity {
                     Intent intent=new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);//判断蓝牙是否打开没打开的话，隐式调用打开系统开启蓝牙
                     startActivityForResult(intent,0);
                 }
+               // mBluetoothGatt.disconnect();
                 mBluetoothGatt.close();
+
+
+
                 bleListView.setVisibility(View.VISIBLE);//设备列表消失
                 operaView.setVisibility(View.GONE);//读取数据的列表出现
                 ivSerBleStatus.setVisibility(View.VISIBLE);
@@ -600,10 +605,10 @@ public class BLEActivity extends AppCompatActivity {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {//判断了一下手机系统，6.0及以上连接设备的方法
                         // 是bluetoothDevice.connectGatt(MainActivity.this,true, gattCallback, TRANSPORT_LE)。
                         mBluetoothGatt = bluetoothDevice.connectGatt(BLEActivity.this,
-                                true, gattCallback, TRANSPORT_LE);
+                                false, gattCallback, TRANSPORT_LE);
                     } else {
                         mBluetoothGatt = bluetoothDevice.connectGatt(BLEActivity.this,
-                                true, gattCallback);
+                                false, gattCallback);
                     }
                 }
 
