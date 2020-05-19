@@ -16,6 +16,7 @@ import com.example.pc.newble.TheUtils.FileUtils;
 import com.example.pc.newble.SQLite.*;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.LimitLine;
+import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
@@ -28,6 +29,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 
 import android.os.Handler;
@@ -97,7 +99,7 @@ public class RetrieveData extends AppCompatActivity {
         mChart =  (LineChart) findViewById(R.id.chart);
 
         // 设置描述
-        mChart.setDescription("5号（红色）的电压");
+        mChart.setDescription("今日情绪指数回顾");
         //是否展示网格线
         mChart.setDrawGridBackground(false);
         //是否显示边界
@@ -114,12 +116,18 @@ public class RetrieveData extends AppCompatActivity {
         YAxis yAxisLeft = mChart.getAxisLeft();
         yAxisLeft.setStartAtZero(true);
         yAxisLeft.setAxisMaxValue(100f);
+        yAxisLeft.setTextSize(12f);
         // 右边的坐标轴。未来可以拓展为健康百分比之类的东西
         YAxis yAxisRight = mChart.getAxisRight();
         yAxisRight.setStartAtZero(true);
         yAxisRight.setAxisMaxValue(100f);
         yAxisRight.setEnabled(false);
 
+        //
+        //设置X轴位置
+        XAxis xAxis = mChart.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setTextSize(12f);
         // 警戒线
         LimitLine ll = new LimitLine(70f, "警戒线");//修改警戒线为70
         ll.setLineColor(Color.RED);
@@ -223,7 +231,7 @@ public class RetrieveData extends AppCompatActivity {
 
 
         // 创建数据集
-        LineDataSet set = new LineDataSet(yVals, "数据集");
+        LineDataSet set = new LineDataSet(yVals, "情绪指数");
         set.setAxisDependency(YAxis.AxisDependency.LEFT);
         set.setColor(ColorTemplate.getHoloBlue());
         set.setCircleColor(Color.YELLOW);
@@ -300,7 +308,13 @@ public class RetrieveData extends AppCompatActivity {
                     Log.e(TAG, "GetTodayData:  " +h );
                 }
                 address[i/TIME_INTERVAL]=j; //将改时间的地址给这个存地址数组
-                j = Integer.toString(i/TIME_INTERVAL)+"点：" + j;
+                if(j.equals("none")){
+                    j = Integer.toString(i/TIME_INTERVAL)+"点：" + "无数据";
+                }
+                else{
+                    j = Integer.toString(i/TIME_INTERVAL)+"点：" + j;
+                }
+
                 Log.e(TAG, "GetTodayData:  " +j);
                 addText(textView, j);
             }
