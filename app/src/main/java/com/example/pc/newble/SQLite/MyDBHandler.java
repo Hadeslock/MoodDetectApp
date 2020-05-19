@@ -77,7 +77,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
 
    //     SQLiteDatabase db = getWritableDatabase();
         db.insert(TABLE_PRODUCTS, null, values);
-        db.close();
+    //    db.close();
     }
 
     // 删除单个条目。
