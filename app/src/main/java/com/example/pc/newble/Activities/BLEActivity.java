@@ -482,9 +482,9 @@ public class BLEActivity extends AppCompatActivity {
         operaView=findViewById(R.id.opera_view);
         // btnWrite=findViewById(R.id.btnWrite);
         // btnRead=findViewById(R.id.btnRead);
-        startService=findViewById(R.id.start_service);
+      /*  startService=findViewById(R.id.start_service);
         stopService=findViewById(R.id.stop_service);
-        saveImage=findViewById(R.id.save_image);
+        saveImage=findViewById(R.id.save_image);*/
         // etWriteContent=findViewById(R.id.et_write);
         tvResponse=findViewById(R.id.tv_response);
         tvResponse.setMovementMethod(ScrollingMovementMethod.getInstance());//滚动
@@ -507,13 +507,13 @@ public class BLEActivity extends AppCompatActivity {
                 writeData();
             }
         });*/
-        startService.setOnClickListener(new View.OnClickListener() {
+/*        startService.setOnClickListener(new View.OnClickListener() {
 
 
 
             @Override
             public void onClick(View view) {
-               /* if(ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)!=PackageManager.PERMISSION_GRANTED){
+               *//* if(ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)!=PackageManager.PERMISSION_GRANTED){
                     ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},1);
                 }else{
                 i++;
@@ -523,10 +523,10 @@ public class BLEActivity extends AppCompatActivity {
                 Log.d(TAG, "savedata ");
                 if(i>1000){
                     i=0;
-                }}*/
-               /* i++;
+                }}*//*
+               *//* i++;
                 j=String.valueOf( i);
-                j="/h"+j+".txt";*/
+                j="/h"+j+".txt";*//*
 
                 String   str   = "/"+ DateUtil.getNowDateTime()+".txt"; //文件名
 
@@ -537,8 +537,8 @@ public class BLEActivity extends AppCompatActivity {
                 Log.d(TAG, "savedata ");
 
             }
-        });
-        saveImage.setOnClickListener(new View.OnClickListener() {
+        });*/
+/*        saveImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String   str   = DateUtil.getNowDateTime();
@@ -546,13 +546,13 @@ public class BLEActivity extends AppCompatActivity {
                 mChart.saveToPath("title" + System.currentTimeMillis(), "/bletest");
 
             }
-        });
-        stopService.setOnClickListener(new View.OnClickListener() {
+        });*/
+/*        stopService.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 tvResponse.setText(null);
             }
-        });
+        });*/
 
 
         ivSerBleStatus.setOnClickListener(new View.OnClickListener() {//这里可改为button

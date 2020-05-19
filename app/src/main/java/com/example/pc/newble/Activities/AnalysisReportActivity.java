@@ -44,6 +44,7 @@ public class AnalysisReportActivity extends AppCompatActivity {
     private ArrayList<Integer> high = new ArrayList<>();//情绪指数高峰
     private ArrayList<Integer> low = new ArrayList<>();//情绪指数高峰
     private ArrayList<Integer> mid = new ArrayList<>();//情绪紧张时刻
+    private ArrayList<Integer> normal = new ArrayList<>();//情绪正常时刻
     //Log.e("AnalysitActivity.this", "long:  " +recvDataLength);
     private String rowtext;//用于写入textview
     private String lowtime = "您这一天的情绪放松的时间段位于";
@@ -95,23 +96,29 @@ public class AnalysisReportActivity extends AppCompatActivity {
               //  j= count70[i]+" "+ count30[i] + " " + countall[i] +  " " +address[i];
                 if ((double)count30[i]/countall[i] > 2.0/3){
                     std = dbHandler.getStdDivInACertainHour(date, i);
-                    rowtext = "在" + i + "时到" + (i+1)+ "时之间，您的情绪指数小于30的时间超过40分钟，该时间段您位于" + address[i] +  ",标准差为" + std +"\n请继续保持";
+                    rowtext = "在" + i + "时到" + (i+1)+ "时之间，您的情绪指数小于30的时间超过三分之二，该时间段您位于" + address[i] +  "，标准差为" + std +"，请继续保持。";
                     addText(textView,rowtext);
                     low.add(i);
 
                 }
                 if ((double)count70[i]/countall[i] > 1.0/2){
                     std = dbHandler.getStdDivInACertainHour(date, i);
-                    rowtext= "在" + i + "时到" + (i+1)+ "时之间，您的情绪指数大于70的时间超过30分钟，该时间段您位于"+address[i]+ ",标准差为" + std + "\n这段时间是否遇到了什么令您不悦的事情，请放松您的心情";
+                    rowtext= "在" + i + "时到" + (i+1)+ "时之间，您的情绪指数大于70的时间超过二分之一，该时间段您位于"+address[i]+ "，标准差为" + std + "，这段时间是否遇到了什么令您不悦的事情，请放松您的心情。";
                     addText(textView,rowtext);
                     high.add(i);
                 }
                 if ((double)count50[i]/countall[i] > 2.0/3){
                     std = dbHandler.getStdDivInACertainHour(date, i);
-                    rowtext= "在" + i + "时到" + (i+1)+ "时之间，您的情绪指数大于50小于70的时间超过40分钟，该时间段您位于"+address[i]+ ",标准差为" + std + "\n这段时间是否比较紧张，请放松您的心情";
+                    rowtext= "在" + i + "时到" + (i+1)+ "时之间，您的情绪指数大于50小于70的时间超过三分之二，该时间段您位于"+address[i]+ "，标准差为" + std + "，这段时间是否比较紧张，请放松您的心情。";
                     addText(textView,rowtext);
                     mid.add(i);
                 }
+                else {
+
+
+                    normal.add(i);
+                }
+
 
             }
 
@@ -143,6 +150,13 @@ public class AnalysisReportActivity extends AppCompatActivity {
             }
 
         }
+        if(text.equals("")){
+            lowtime = "您这一天无放松情绪";
+        }
+        else{
+            text = text.substring(0,text.length()-1); //利用截取功能删掉最后一个逗号
+            text = text + "。";
+        }
         lowtime=lowtime+text;
         addText(textView,lowtime);
 
@@ -159,6 +173,13 @@ public class AnalysisReportActivity extends AppCompatActivity {
                 text=text+mid.get(i)+"时到"+(mid.get(j-1)+1)+"时，";
             }
 
+        }
+        if(text.equals("")){
+            midtime = "您这一天无紧张情绪";
+        }
+        else{
+            text = text.substring(0,text.length()-1); //利用截取功能删掉最后一个逗号
+            text = text + "。";
         }
         midtime=midtime+text;
         addText(textView,midtime);
@@ -177,6 +198,13 @@ public class AnalysisReportActivity extends AppCompatActivity {
             }
             i = j-1;
 
+        }
+        if(text.equals("")){
+            hightime = "您这一天无焦虑抑郁情绪";
+        }
+        else{
+            text = text.substring(0,text.length()-1); //利用截取功能删掉最后一个逗号
+            text = text + "。";
         }
         hightime=hightime+text;
         hightime = hightime + "\n";
@@ -215,7 +243,7 @@ public class AnalysisReportActivity extends AppCompatActivity {
         mChart.setHoleRadius(60f);  //内环半径
         mChart.setTransparentCircleRadius(64f); // 半透明圈半径
         // mChart.setHoleRadius(0);  // 实心圆
-        mChart.setDescription("不同情绪占比饼状图");
+        mChart.setDescription("情绪占比饼状图");
         mChart.setDrawCenterText(true);  //饼状图中间可以添加文字
         mChart.setCenterText("今日情绪指数汇总");  //饼状图中间的文字
         mChart.setDrawHoleEnabled(true);
@@ -232,7 +260,8 @@ public class AnalysisReportActivity extends AppCompatActivity {
         mChart.highlightValues(null);
         mChart.invalidate();
         Legend mLegend = mChart.getLegend();  //设置比例图
-        mLegend.setPosition(Legend.LegendPosition.RIGHT_OF_CHART);  //最右边显示
+        //mLegend.setPosition(Legend.LegendPosition.RIGHT_OF_CHART);  //最右边显示
+        mLegend.setPosition(Legend.LegendPosition.BELOW_CHART_LEFT);//左下显示
         mLegend.setForm(Legend.LegendForm.LINE);  //设置比例图的形状，默认是方形
         mLegend.setXEntrySpace(2f);
         mLegend.setYEntrySpace(2f);         //设置动画
@@ -246,6 +275,7 @@ public class AnalysisReportActivity extends AppCompatActivity {
          xValues.add(("情绪正常"));
          xValues.add(("情绪紧张"));
          xValues.add(("情绪焦虑"));
+         xValues.add(("未测时间段"));
          // yVals用来表示封装每个饼块的实际数据
          ArrayList<Entry> yValues = new ArrayList<Entry>();
          // 饼图数据
@@ -256,15 +286,17 @@ public class AnalysisReportActivity extends AppCompatActivity {
          mid.clear();
          Collections.addAll(mid,9,12,13,20,21);*/
          float quarterly1 = low.size();
-         float quarterly2 = 24-low.size()-high.size()-mid.size();
+         float quarterly2 = normal.size();
          float quarterly3 = mid.size();
          float quarterly4 = high.size();
+         float quarterly5 = 24-low.size()-high.size()-mid.size()-normal.size();
          yValues.add(new Entry(quarterly1, 0));
          yValues.add(new Entry(quarterly2, 1));
          yValues.add(new Entry(quarterly3, 2));
          yValues.add(new Entry(quarterly4, 3));
+         yValues.add(new Entry(quarterly5, 4));
          // y轴集合
-          PieDataSet pieDataSet = new PieDataSet(yValues, "今日情绪");
+          PieDataSet pieDataSet = new PieDataSet(yValues,"");
           pieDataSet.setSliceSpace(2f); //设置个饼状图之间的距离
           pieDataSet.setValueTextSize(12f);//设置字体大小
 
@@ -274,6 +306,7 @@ public class AnalysisReportActivity extends AppCompatActivity {
           colors.add(Color.rgb(0, 205, 205));
           colors.add(Color.rgb(0, 100, 205));
           colors.add(Color.rgb(205, 0, 0));
+          colors.add(Color.rgb(125, 125, 125));
           //设置饼图颜色
           pieDataSet.setColors(colors);
           //设置选中态多出的长度
