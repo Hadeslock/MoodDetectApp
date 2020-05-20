@@ -44,7 +44,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".Activities.ChooseHistActivity" />
-        <activity android:name=".Activities.RetrieveData">
+        <activity android:name=".Activities.RetrieveData"
+                  android:configChanges="orientation|screenSize|keyboardHidden">
             <intent-filter>
                 <action android:name="android.intent.action.GET_CONTENT" />
 
@@ -59,7 +60,10 @@
 
         <activity
             android:name=".Activities.BLEActivity"
-            android:launchMode="singleInstance"></activity>
+            android:launchMode="singleInstance"
+            android:screenOrientation= "fullSensor"
+            android:configChanges="orientation|screenSize|keyboardHidden">
+        </activity>
         <activity android:name=".Activities.LocationActivity" />
         <activity android:name=".Activities.Location2Activity" />
     </application>
