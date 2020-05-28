@@ -349,7 +349,7 @@ public class BLEActivity extends AppCompatActivity {
         xl.setAvoidFirstLastClipping(true);
 
         // 几个x坐标轴之间才绘制
-        xl.setSpaceBetweenLabels(5);
+        xl.setSpaceBetweenLabels(1);
         // 如果false，那么x坐标轴将不可见
         xl.setEnabled(true);
         // 将X坐标轴放置在底部，默认是在顶部。
