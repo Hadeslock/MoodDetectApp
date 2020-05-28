@@ -215,7 +215,7 @@ public class AnalysisReportActivity extends AppCompatActivity {
             text = text + "。";
         }
         hightime=hightime+text;
-       
+
         addText(textView,hightime);
 
         text="";

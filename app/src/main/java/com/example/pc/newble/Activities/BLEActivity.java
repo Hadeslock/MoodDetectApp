@@ -20,6 +20,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.text.format.DateFormat;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.Gravity;
@@ -61,8 +62,11 @@ import com.tbruyelle.rxpermissions2.RxPermissions;
 import java.io.File;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.sql.Time;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.Vector;
@@ -350,6 +354,9 @@ public class BLEActivity extends AppCompatActivity {
         xl.setEnabled(true);
         // 将X坐标轴放置在底部，默认是在顶部。
         xl.setPosition(XAxis.XAxisPosition.BOTTOM);
+        //设置x轴坐标为时间
+
+
         // 图表左边的y坐标轴线
         YAxis leftAxis = mChart.getAxisLeft();
         leftAxis.setTextColor(0xff37474f);
@@ -380,7 +387,13 @@ public class BLEActivity extends AppCompatActivity {
         // 获取图表数据
         LineData lineData = mChart.getData();
         // 添加横坐标值
-        lineData.addXValue((lineData.getXValCount()) + "");
+
+        Date date = new Date();
+       // String time = date.toLocaleString();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss ");
+        String sim = dateFormat.format(date);
+        lineData.addXValue(sim + "");
+      //  lineData.addXValue((lineData.getXValCount()) + "");
 
         // 增加高温
         LineDataSet highLineDataSet = lineData.getDataSetByIndex(HIGH);//?
