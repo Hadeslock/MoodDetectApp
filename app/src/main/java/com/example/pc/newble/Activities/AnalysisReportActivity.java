@@ -45,11 +45,13 @@ public class AnalysisReportActivity extends AppCompatActivity {
     private ArrayList<Integer> low = new ArrayList<>();//情绪指数高峰
     private ArrayList<Integer> mid = new ArrayList<>();//情绪紧张时刻
     private ArrayList<Integer> normal = new ArrayList<>();//情绪正常时刻
+    private ArrayList<Integer> wave = new ArrayList<>();//情绪波动大的时刻，该时刻将是上述几个时间段中的子集，即不论是紧张，放松，焦虑，都可能存在情绪波动大的时刻
     //Log.e("AnalysitActivity.this", "long:  " +recvDataLength);
     private String rowtext;//用于写入textview
     private String lowtime = "您这一天的情绪放松的时间段位于";
     private String hightime ="您这一天的情绪焦虑抑郁的时间段位于";
     private String midtime = "您这一天的情绪紧张的时间段位于";
+    private String wavetime = "您这一天的情绪波动大的时间段位于";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,6 +95,7 @@ public class AnalysisReportActivity extends AppCompatActivity {
               //  j= count70[i]+" "+ count30[i] + " " + countall[i];
             }
             else{
+                std = dbHandler.getStdDivInACertainHour(date, i);
               //  j= count70[i]+" "+ count30[i] + " " + countall[i] +  " " +address[i];
                 if ((double)count30[i]/countall[i] > 2.0/3){
                     std = dbHandler.getStdDivInACertainHour(date, i);
@@ -117,6 +120,11 @@ public class AnalysisReportActivity extends AppCompatActivity {
 
 
                     normal.add(i);
+                }
+                if(std>10){
+                    rowtext= "在" + i + "时到" + (i+1)+ "时之间，您的情绪指数标准差大于10，该时间段您位于"+address[i]+ "，标准差为" + std + "，这段时间是否情绪波动比较大，请平稳您的心情。";
+                    addText(textView,rowtext);
+                    wave.add(i);
                 }
 
 
@@ -151,7 +159,7 @@ public class AnalysisReportActivity extends AppCompatActivity {
 
         }
         if(text.equals("")){
-            lowtime = "您这一天无放松情绪";
+            lowtime = "您这一天无放松情绪的时刻";
         }
         else{
             text = text.substring(0,text.length()-1); //利用截取功能删掉最后一个逗号
@@ -175,7 +183,7 @@ public class AnalysisReportActivity extends AppCompatActivity {
 
         }
         if(text.equals("")){
-            midtime = "您这一天无紧张情绪";
+            midtime = "您这一天无紧张情绪的时刻";
         }
         else{
             text = text.substring(0,text.length()-1); //利用截取功能删掉最后一个逗号
@@ -200,15 +208,40 @@ public class AnalysisReportActivity extends AppCompatActivity {
 
         }
         if(text.equals("")){
-            hightime = "您这一天无焦虑抑郁情绪";
+            hightime = "您这一天无焦虑抑郁情绪的时刻";
         }
         else{
             text = text.substring(0,text.length()-1); //利用截取功能删掉最后一个逗号
             text = text + "。";
         }
         hightime=hightime+text;
-        hightime = hightime + "\n";
+       
         addText(textView,hightime);
+
+        text="";
+        for (int i=0;i<wave.size();i++){    //
+            int j=i+1;
+            while(j<wave.size()&&wave.get(j)-wave.get(j-1)==1){
+                ++j;
+            }
+            if( j-1 == i ){
+                text=text+wave.get(i)+"时到"+(wave.get(i)+1)+"时，";
+            }else{
+                text=text+wave.get(i)+"时到"+(wave.get(j-1)+1)+"时，";
+            }
+            i = j-1;
+
+        }
+        if(text.equals("")){
+            wavetime = "您这一天无情绪波动大的时刻";
+        }
+        else{
+            text = text.substring(0,text.length()-1); //利用截取功能删掉最后一个逗号
+            text = text + "。";
+        }
+        wavetime = wavetime+text;
+        wavetime = wavetime + "\n";
+        addText(textView,wavetime);
         //用于输出情绪放松时段，情绪紧张,情绪焦虑时段代码段结束
 
         //展示饼状图
