@@ -66,14 +66,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/button_start_service"
-                android:text="开启前台服务"/>
+                android:text="开前台"/>
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/button_stop_service"
-                android:text="关闭前台服务"/>
-
+                android:text="关前台"/>
 
 
             <Button
@@ -81,6 +80,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="重连蓝牙"
+                />
+            <Button
+                android:id="@+id/clear_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="清图像"
                 />
         </LinearLayout>
 

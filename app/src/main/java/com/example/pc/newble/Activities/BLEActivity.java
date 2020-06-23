@@ -98,7 +98,7 @@ public class BLEActivity extends AppCompatActivity {
 
     private Button startForegroundService;
     private Button stopForegroundService ;
-
+    private Button clearImage;
     private EditText etWriteContent;
     private TextView tvResponse;      //写出数据
     private List<BluetoothDevice> mDatas;
@@ -504,6 +504,7 @@ public class BLEActivity extends AppCompatActivity {
         tvResponse.setMovementMethod(ScrollingMovementMethod.getInstance());//滚动
         tvResponse.setGravity(Gravity.BOTTOM);//滚到最后一行
         reconnect= findViewById(R.id.reconnect_ble);
+        clearImage = findViewById(R.id.clear_image);//清除图像
 
 
 
@@ -602,6 +603,14 @@ public class BLEActivity extends AppCompatActivity {
 
                 // 关闭前台服务
                 stopBLEForegroundService();
+            }
+        });
+        clearImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mChart.fitScreen();
+                showChart(getLineData());
+
             }
         });
         bleListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {//？？？？
