@@ -133,11 +133,16 @@ public class BLEActivity extends AppCompatActivity {
     private String hex="7B46363941373237323532443741397D";
 
     //引入作图所需的代码
-    // 高温线下标
-    private final int HIGH = 0;
-    // 低温线下标
-    private final int LOW = 1;
-
+    // 一通道下标
+    private final int channel1 = 0;
+    // 二通道下标
+    private final int channel2 = 1;
+    // 三通道下标
+    private final int channel3 = 2;
+    // 四通道下标
+    private final int channel4 = 3;
+    private final int channel5 = 4;
+    private final int channel6 = 5;
     private LineChart mChart;
 
     //引入定位所需要的代码
@@ -317,7 +322,7 @@ public class BLEActivity extends AppCompatActivity {
         LineData lineData = new LineData();
         // 添加数据集
         lineData.addDataSet(getHighLineDataSet());
-        //  lineData.addDataSet(getLowLineDataSet());
+        lineData.addDataSet(getLowLineDataSet());
         // 返回折线数据
         return lineData;
     }
@@ -388,7 +393,10 @@ public class BLEActivity extends AppCompatActivity {
 
 
     // 为曲线添加一个坐标点
-    private void addChartEntry( float dataview) {
+    private void addChartEntry( String[] dataVector) {
+        //计算有几个通道的值传了进来
+        int len = dataVector.length;
+
         // 获取图表数据
         LineData lineData = mChart.getData();
         // 添加横坐标值
@@ -400,25 +408,38 @@ public class BLEActivity extends AppCompatActivity {
         lineData.addXValue(sim + "");
       //  lineData.addXValue((lineData.getXValCount()) + "");
 
-        // 增加高温
-        LineDataSet highLineDataSet = lineData.getDataSetByIndex(HIGH);//?
-        float high = dataview;//将high改为 dataview
-        Entry entryHigh = new Entry(high, highLineDataSet.getEntryCount());
-        lineData.addEntry(entryHigh, HIGH);
+        // 增加channel1数据
+        if(len>=1) {
+            LineDataSet channel1LineDataSet = lineData.getDataSetByIndex(channel1);//?
+            float channel1Data = Float.parseFloat(dataVector[0]);//将high改为 dataview
+            Entry entryChannel1 = new Entry(channel1Data, channel1LineDataSet.getEntryCount());
+            lineData.addEntry(entryChannel1, channel1);
+            // 使用新数据刷新图表
+            mChart.notifyDataSetChanged();
+            // 当前统计图表中最多在x轴坐标线上显示的总量
+            mChart.setVisibleXRangeMaximum(12);
+            mChart.moveViewToX(lineData.getXValCount() - 12);
+        }
 
-        // 增加低温
+        // 增加channel2数据
+        if(len>=2){
+            LineDataSet channel2LineDataSet = lineData.getDataSetByIndex(channel2);//?
+            //float channel2Data = Float.parseFloat(dataVector[1]);//将high改为 dataview
+            float channel2Data = 20;
+            Entry entryChannel2 = new Entry(channel2Data, channel2LineDataSet.getEntryCount());
+            lineData.addEntry(entryChannel2, channel2);
+            // 使用新数据刷新图表
+            mChart.notifyDataSetChanged();
+            // 当前统计图表中最多在x轴坐标线上显示的总量
+            mChart.setVisibleXRangeMaximum(12);
+            mChart.moveViewToX(lineData.getXValCount() - 12);
+        }
       /*  LineDataSet lowLineDataSet = lineData.getDataSetByIndex(LOW);
         float low = (float) ((Math.random()) * 10);
         Entry entryLow = new Entry(low, lowLineDataSet.getEntryCount());
         lineData.addEntry(entryLow, LOW);*/
 
-        // 使用新数据刷新图表
-        mChart.notifyDataSetChanged();
 
-        // 当前统计图表中最多在x轴坐标线上显示的总量
-        mChart.setVisibleXRangeMaximum(12);
-
-        mChart.moveViewToX(lineData.getXValCount() - 12);
     }
 
     // 初始化数据集，添加一条折线
@@ -471,6 +492,55 @@ public class BLEActivity extends AppCompatActivity {
 
         return set;
     }
+    private LineDataSet getLowLineDataSet() {
+        LineDataSet set = new LineDataSet(null, "通道2电位差");
+        set.setAxisDependency(YAxis.AxisDependency.LEFT);
+        // 折线的颜色
+        set.setColor(Color.RED);
+        set.setCircleColor(Color.YELLOW);
+        set.setLineWidth(2f);
+        set.setCircleSize(8f);
+        set.setFillAlpha(128);
+        set.setCircleColorHole(Color.BLUE);
+        set.setHighLightColor(Color.GREEN);
+        set.setValueTextColor(Color.RED);
+        set.setValueTextSize(10f);
+        //   set.setDrawValues(true);
+
+
+
+        set.setAxisDependency(YAxis.AxisDependency.LEFT);
+        set.setColor(ColorTemplate.getHoloBlue());
+        set.setCircleColor(Color.YELLOW);
+        set.setLineWidth(0f);
+        set.setCircleSize(0f);
+        set.setFillAlpha(45);
+
+
+        //设置曲线值的圆点是实心还是空心
+        set.setDrawCircleHole(false);
+        set.setValueTextSize(10f);
+        //设置折线图填充
+        set.setDrawFilled(true);
+        set.setFillColor(ColorTemplate.getHoloBlue());
+        set.setHighLightColor(Color.rgb(244, 117, 117));
+        set.setDrawCircleHole(false);
+
+
+
+
+        set.setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, Entry entry, int dataSetIndex,
+                                            ViewPortHandler viewPortHandler) {
+                DecimalFormat decimalFormat = new DecimalFormat(".0");
+                String s =  decimalFormat.format(value);
+                return s;
+            }
+        });
+        return set;
+    }
+
 
 
 
@@ -781,10 +851,16 @@ public class BLEActivity extends AppCompatActivity {
             final byte[] data = characteristic.getValue();
             datautf8 = toStringHex1(bytes2hex(data));
             // 清除蓝牙传回数据前面的修饰符
-            datautf8 = datautf8.substring(9);
+           // datautf8 = datautf8.substring(9);
             datautf8 = datautf8.replaceAll("[a-zA-Z]","" );  //^[0-9]+ [+-*\] [0-9]
             //dataview = Float.parseFloat(datautf8);
-            String[] dataVector = datautf8.split(",");
+            dataview = 0;
+            dataview2 = 0;
+            dataview3 = 0;
+            dataview4 = 0;
+            dataview5 = 0;
+            dataview6 = 0;
+            final String[] dataVector = datautf8.split(",");
 
             int l = dataVector.length;
             if(l>=1) {
@@ -794,17 +870,20 @@ public class BLEActivity extends AppCompatActivity {
                 dataview = Float.parseFloat(dataVector[0]);
                 dataview2 = Float.parseFloat(dataVector[1]);
 
+
             }
             if (l>=3){
                 dataview = Float.parseFloat(dataVector[0]);
                 dataview2 = Float.parseFloat(dataVector[1]);
                 dataview3 = Float.parseFloat(dataVector[2]);
+
             }
             if (l>=4){
                 dataview = Float.parseFloat(dataVector[0]);
                 dataview2 = Float.parseFloat(dataVector[1]);
                 dataview3 = Float.parseFloat(dataVector[2]);
                 dataview4 = Float.parseFloat(dataVector[3]);
+                
             }
             if (l>=5){
                 dataview = Float.parseFloat(dataVector[0]);
@@ -865,8 +944,9 @@ public class BLEActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     // addText(tvResponse,bytes2hex(data));//转成16进制
-                    addText(tvResponse,datautf8);//转成16进制
-                    addChartEntry(dataview);
+                    addText(tvResponse,String.valueOf(dataview));//转成16进制
+                    //addChartEntry(dataview);
+                    addChartEntry(dataVector);
                     // 存储入数据库
 
                 }
