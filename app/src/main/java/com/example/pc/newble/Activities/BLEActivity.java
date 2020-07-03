@@ -323,6 +323,7 @@ public class BLEActivity extends AppCompatActivity {
         // 添加数据集
         lineData.addDataSet(getHighLineDataSet());
         lineData.addDataSet(getLowLineDataSet());
+        lineData.addDataSet(getThirdLineDataSet());
         // 返回折线数据
         return lineData;
     }
@@ -414,11 +415,7 @@ public class BLEActivity extends AppCompatActivity {
             float channel1Data = Float.parseFloat(dataVector[0]);//将high改为 dataview
             Entry entryChannel1 = new Entry(channel1Data, channel1LineDataSet.getEntryCount());
             lineData.addEntry(entryChannel1, channel1);
-            // 使用新数据刷新图表
-            mChart.notifyDataSetChanged();
-            // 当前统计图表中最多在x轴坐标线上显示的总量
-            mChart.setVisibleXRangeMaximum(12);
-            mChart.moveViewToX(lineData.getXValCount() - 12);
+
         }
 
         // 增加channel2数据
@@ -428,12 +425,22 @@ public class BLEActivity extends AppCompatActivity {
             float channel2Data = 20;
             Entry entryChannel2 = new Entry(channel2Data, channel2LineDataSet.getEntryCount());
             lineData.addEntry(entryChannel2, channel2);
-            // 使用新数据刷新图表
-            mChart.notifyDataSetChanged();
-            // 当前统计图表中最多在x轴坐标线上显示的总量
-            mChart.setVisibleXRangeMaximum(12);
-            mChart.moveViewToX(lineData.getXValCount() - 12);
+
         }
+        if(len>=3){
+            LineDataSet channel3LineDataSet = lineData.getDataSetByIndex(channel3);//?
+            //float channel2Data = Float.parseFloat(dataVector[1]);//将high改为 dataview
+            float channel3Data = 30;
+            Entry entryChannel3 = new Entry(channel3Data, channel3LineDataSet.getEntryCount());
+            lineData.addEntry(entryChannel3, channel3);
+
+
+        }
+        // 使用新数据刷新图表
+        mChart.notifyDataSetChanged();
+        // 当前统计图表中最多在x轴坐标线上显示的总量
+        mChart.setVisibleXRangeMaximum(12);
+        mChart.moveViewToX(lineData.getXValCount() - 12);
       /*  LineDataSet lowLineDataSet = lineData.getDataSetByIndex(LOW);
         float low = (float) ((Math.random()) * 10);
         Entry entryLow = new Entry(low, lowLineDataSet.getEntryCount());
@@ -447,24 +454,24 @@ public class BLEActivity extends AppCompatActivity {
         LineDataSet set = new LineDataSet(null, "电位差");
         set.setAxisDependency(YAxis.AxisDependency.LEFT);
         // 折线的颜色
-        set.setColor(Color.RED);
-        set.setCircleColor(Color.YELLOW);
-        set.setLineWidth(2f);
-        set.setCircleSize(8f);
-        set.setFillAlpha(128);
-        set.setCircleColorHole(Color.BLUE);
-        set.setHighLightColor(Color.GREEN);
-        set.setValueTextColor(Color.RED);
-        set.setValueTextSize(10f);
-     //   set.setDrawValues(true);
+//        set.setColor(Color.RED);
+//        set.setCircleColor(Color.YELLOW);
+//        set.setLineWidth(2f);
+//        set.setCircleSize(8f);
+//        set.setFillAlpha(128);
+//        set.setCircleColorHole(Color.BLUE);
+//        set.setHighLightColor(Color.GREEN);
+//        set.setValueTextColor(Color.RED);
+//        set.setValueTextSize(10f);
+//        set.setDrawValues(true);
 
 
 
         set.setAxisDependency(YAxis.AxisDependency.LEFT);
-        set.setColor(ColorTemplate.getHoloBlue());
-        set.setCircleColor(Color.YELLOW);
-        set.setLineWidth(0f);
-        set.setCircleSize(0f);
+        set.setColor(Color.RED);
+        set.setCircleColor(Color.rgb(125,0,0));
+        set.setLineWidth(2f);
+        set.setCircleSize(2f);
         set.setFillAlpha(45);
 
 
@@ -472,7 +479,7 @@ public class BLEActivity extends AppCompatActivity {
         set.setDrawCircleHole(false);
         set.setValueTextSize(10f);
         //设置折线图填充
-        set.setDrawFilled(true);
+        set.setDrawFilled(false);
         set.setFillColor(ColorTemplate.getHoloBlue());
         set.setHighLightColor(Color.rgb(244, 117, 117));
         set.setDrawCircleHole(false);
@@ -492,36 +499,87 @@ public class BLEActivity extends AppCompatActivity {
 
         return set;
     }
+    // 初始化数据集，添加第二条折线
     private LineDataSet getLowLineDataSet() {
         LineDataSet set = new LineDataSet(null, "通道2电位差");
         set.setAxisDependency(YAxis.AxisDependency.LEFT);
         // 折线的颜色
-        set.setColor(Color.RED);
-        set.setCircleColor(Color.YELLOW);
+//        set.setColor(Color.RED);
+//        set.setCircleColor(Color.YELLOW);
+//        set.setLineWidth(2f);
+//        set.setCircleSize(8f);
+//        set.setFillAlpha(128);
+//        set.setCircleColorHole(Color.BLUE);
+//        set.setHighLightColor(Color.GREEN);
+//        set.setValueTextColor(Color.RED);
+//        set.setValueTextSize(10f);
+       // set.setDrawValues(true);
+
+
+
+        set.setAxisDependency(YAxis.AxisDependency.LEFT);
+        set.setColor(Color.GREEN);
+        set.setCircleColor(Color.rgb(0,125,0));
         set.setLineWidth(2f);
-        set.setCircleSize(8f);
-        set.setFillAlpha(128);
-        set.setCircleColorHole(Color.BLUE);
-        set.setHighLightColor(Color.GREEN);
-        set.setValueTextColor(Color.RED);
+        set.setCircleSize(2f);
+        set.setFillAlpha(45);
+
+
+        //设置曲线值的圆点是实心还是空心
+        set.setDrawCircleHole(false);
         set.setValueTextSize(10f);
+        //设置折线图填充
+        set.setDrawFilled(false);
+        set.setFillColor(ColorTemplate.getHoloBlue());
+        set.setHighLightColor(Color.rgb(244, 117, 117));
+        set.setDrawCircleHole(false);
+
+
+
+
+        set.setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, Entry entry, int dataSetIndex,
+                                            ViewPortHandler viewPortHandler) {
+                DecimalFormat decimalFormat = new DecimalFormat(".0");
+                String s =  decimalFormat.format(value);
+                return s;
+            }
+        });
+        return set;
+    }
+    // 初始化数据集，添加第三条折线
+    private LineDataSet getThirdLineDataSet() {
+        LineDataSet set = new LineDataSet(null, "通道3电位差");
+        set.setAxisDependency(YAxis.AxisDependency.LEFT);
+        // 折线的颜色
+//        set.setColor(Color.RED);
+//        set.setCircleColor(Color.YELLOW);
+//        set.setLineWidth(2f);
+//        set.setCircleSize(8f);
+//        set.setFillAlpha(128);
+//        set.setCircleColorHole(Color.BLUE);
+//        set.setHighLightColor(Color.GREEN);
+//        set.setValueTextColor(Color.RED);
+//        set.setValueTextSize(10f);
         //   set.setDrawValues(true);
 
 
 
         set.setAxisDependency(YAxis.AxisDependency.LEFT);
-        set.setColor(ColorTemplate.getHoloBlue());
-        set.setCircleColor(Color.YELLOW);
-        set.setLineWidth(0f);
-        set.setCircleSize(0f);
+        set.setColor(Color.BLUE);
+        set.setCircleColor(Color.rgb(0,0,125));
+        set.setLineWidth(2f);
+        set.setCircleSize(2f);
         set.setFillAlpha(45);
+
 
 
         //设置曲线值的圆点是实心还是空心
         set.setDrawCircleHole(false);
         set.setValueTextSize(10f);
         //设置折线图填充
-        set.setDrawFilled(true);
+        set.setDrawFilled(false);
         set.setFillColor(ColorTemplate.getHoloBlue());
         set.setHighLightColor(Color.rgb(244, 117, 117));
         set.setDrawCircleHole(false);
@@ -540,7 +598,6 @@ public class BLEActivity extends AppCompatActivity {
         });
         return set;
     }
-
 
 
 
@@ -867,37 +924,27 @@ public class BLEActivity extends AppCompatActivity {
                 dataview = Float.parseFloat(dataVector[0]);
             }
             if(l>=2) {
-                dataview = Float.parseFloat(dataVector[0]);
+
                 dataview2 = Float.parseFloat(dataVector[1]);
 
 
             }
             if (l>=3){
-                dataview = Float.parseFloat(dataVector[0]);
-                dataview2 = Float.parseFloat(dataVector[1]);
+
                 dataview3 = Float.parseFloat(dataVector[2]);
 
             }
             if (l>=4){
-                dataview = Float.parseFloat(dataVector[0]);
-                dataview2 = Float.parseFloat(dataVector[1]);
-                dataview3 = Float.parseFloat(dataVector[2]);
+
                 dataview4 = Float.parseFloat(dataVector[3]);
-                
+
             }
             if (l>=5){
-                dataview = Float.parseFloat(dataVector[0]);
-                dataview2 = Float.parseFloat(dataVector[1]);
-                dataview3 = Float.parseFloat(dataVector[2]);
-                dataview4 = Float.parseFloat(dataVector[3]);
+
                 dataview5 = Float.parseFloat(dataVector[4]);
             }
             if (l>=6){
-                dataview = Float.parseFloat(dataVector[0]);
-                dataview2 = Float.parseFloat(dataVector[1]);
-                dataview3 = Float.parseFloat(dataVector[2]);
-                dataview4 = Float.parseFloat(dataVector[3]);
-                dataview5 = Float.parseFloat(dataVector[4]);
+
                 dataview6 = Float.parseFloat(dataVector[5]);
             }
 
