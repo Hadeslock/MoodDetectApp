@@ -89,6 +89,20 @@
                 />
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/button_choose_channel"
+                android:text="选通道"/>
+        </LinearLayout>
+
+
 
         <TextView
             android:id="@+id/tv_response"

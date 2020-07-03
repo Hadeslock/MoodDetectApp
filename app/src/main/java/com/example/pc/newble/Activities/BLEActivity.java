@@ -95,7 +95,7 @@ public class BLEActivity extends AppCompatActivity {
     private Button startService;
     private Button stopService;
     private Button saveImage;
-
+    private Button chooseChannel;  //用于选择显示几路通道数据
     private Button startForegroundService;
     private Button stopForegroundService ;
     private Button clearImage;
@@ -116,6 +116,7 @@ public class BLEActivity extends AppCompatActivity {
     private float  dataview4;//用于画图
     private float  dataview5;//用于画图
     private float  dataview6;//用于画图
+    private int channelChoose = 1;
     private String j;
     private Button reconnect;//用于发现蓝牙断开后重连
 
@@ -410,7 +411,7 @@ public class BLEActivity extends AppCompatActivity {
       //  lineData.addXValue((lineData.getXValCount()) + "");
 
         // 增加channel1数据
-        if(len>=1) {
+        if(len>=1&&channelChoose>=1) {
             LineDataSet channel1LineDataSet = lineData.getDataSetByIndex(channel1);//?
             float channel1Data = Float.parseFloat(dataVector[0]);//将high改为 dataview
             Entry entryChannel1 = new Entry(channel1Data, channel1LineDataSet.getEntryCount());
@@ -419,7 +420,7 @@ public class BLEActivity extends AppCompatActivity {
         }
 
         // 增加channel2数据
-        if(len>=2){
+        if(len>=2&&channelChoose>=2){
             LineDataSet channel2LineDataSet = lineData.getDataSetByIndex(channel2);//?
             //float channel2Data = Float.parseFloat(dataVector[1]);//将high改为 dataview
             float channel2Data = 20;
@@ -427,7 +428,7 @@ public class BLEActivity extends AppCompatActivity {
             lineData.addEntry(entryChannel2, channel2);
 
         }
-        if(len>=3){
+        if(len>=3&&channelChoose>=3){
             LineDataSet channel3LineDataSet = lineData.getDataSetByIndex(channel3);//?
             //float channel2Data = Float.parseFloat(dataVector[1]);//将high改为 dataview
             float channel3Data = 30;
@@ -637,10 +638,11 @@ public class BLEActivity extends AppCompatActivity {
         tvResponse.setGravity(Gravity.BOTTOM);//滚到最后一行
         reconnect= findViewById(R.id.reconnect_ble);
         clearImage = findViewById(R.id.clear_image);//清除图像
+        chooseChannel = findViewById(R.id.button_choose_channel);//选择通道
 
 
 
-      /*  btnRead.setOnClickListener(new View.OnClickListener() {
+      /*  chooseChannel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 readData();
@@ -743,6 +745,17 @@ public class BLEActivity extends AppCompatActivity {
                 mChart.fitScreen();
                 showChart(getLineData());
 
+            }
+        });
+        chooseChannel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(channelChoose <= 3){
+                    channelChoose++;
+                }
+                if (channelChoose == 4){
+                    channelChoose = 1;
+                }
             }
         });
         bleListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {//？？？？
