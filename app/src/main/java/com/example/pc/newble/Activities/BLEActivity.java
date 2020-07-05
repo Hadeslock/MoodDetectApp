@@ -422,16 +422,16 @@ public class BLEActivity extends AppCompatActivity {
         // 增加channel2数据
         if(len>=2&&channelChoose>=2){
             LineDataSet channel2LineDataSet = lineData.getDataSetByIndex(channel2);//?
-            //float channel2Data = Float.parseFloat(dataVector[1]);//将high改为 dataview
-            float channel2Data = 20;
+            float channel2Data = Float.parseFloat(dataVector[1]);//将high改为 dataview
+            //float channel2Data = 20;
             Entry entryChannel2 = new Entry(channel2Data, channel2LineDataSet.getEntryCount());
             lineData.addEntry(entryChannel2, channel2);
 
         }
         if(len>=3&&channelChoose>=3){
             LineDataSet channel3LineDataSet = lineData.getDataSetByIndex(channel3);//?
-            //float channel2Data = Float.parseFloat(dataVector[1]);//将high改为 dataview
-            float channel3Data = 30;
+            float channel3Data = Float.parseFloat(dataVector[2]);//将high改为 dataview
+            //float channel3Data = 30;
             Entry entryChannel3 = new Entry(channel3Data, channel3LineDataSet.getEntryCount());
             lineData.addEntry(entryChannel3, channel3);
 
