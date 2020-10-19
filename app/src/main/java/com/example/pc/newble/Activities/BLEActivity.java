@@ -922,96 +922,98 @@ public class BLEActivity extends AppCompatActivity {
             datautf8 = toStringHex1(bytes2hex(data));
             // 清除蓝牙传回数据前面的修饰符
            // datautf8 = datautf8.substring(9);
-            datautf8 = datautf8.replaceAll("[a-zA-Z]","" );  //^[0-9]+ [+-*\] [0-9]
+//            datautf8 = datautf8.replaceAll("[a-zA-Z]","" );  //^[0-9]+ [+-*\] [0-9]
             //dataview = Float.parseFloat(datautf8);
-            dataview = 0;
-            dataview2 = 0;
-            dataview3 = 0;
-            dataview4 = 0;
-            dataview5 = 0;
-            dataview6 = 0;
-            final String[] dataVector = datautf8.split(",");
+            if(datautf8.startsWith("b") && datautf8.endsWith("a")) {
+                datautf8 = datautf8.substring(1,datautf8.length() - 1);
+                dataview = 0;
+                dataview2 = 0;
+                dataview3 = 0;
+                dataview4 = 0;
+                dataview5 = 0;
+                dataview6 = 0;
+                final String[] dataVector = datautf8.split(",");
 
-            int l = dataVector.length;
-            if(l>=1) {
-                dataview = Float.parseFloat(dataVector[0]);
-            }
-            if(l>=2) {
+                int l = dataVector.length;
+                if (l >= 1) {
+                    dataview = Float.parseFloat(dataVector[0]);
+                }
+                if (l >= 2) {
 
-                dataview2 = Float.parseFloat(dataVector[1]);
+                    dataview2 = Float.parseFloat(dataVector[1]);
 
-
-            }
-            if (l>=3){
-
-                dataview3 = Float.parseFloat(dataVector[2]);
-
-            }
-            if (l>=4){
-
-                dataview4 = Float.parseFloat(dataVector[3]);
-
-            }
-            if (l>=5){
-
-                dataview5 = Float.parseFloat(dataVector[4]);
-            }
-            if (l>=6){
-
-                dataview6 = Float.parseFloat(dataVector[5]);
-            }
-
-            // 电压取绝对值
-           // dataview = Math.abs(dataview);
-
-            try {
-                Log.e(TAG, "onCharacteristicChanged: 哈哈哈哈零零落落" );
-                // 如果要更改往数据库内传入的参数的话，务必在 Products.java 里面重写构造函数
-               // Log.e(TAG, "onCharacteristicChanged: 哈哈哈哈" );
-                Products product = new Products(dataview, currentLongittude, currentLatitude,currentAddressStr);
-                Log.e(TAG, "addButtonClicked: 哈哈哈哈哈哈哈" + product);
-                dbHandler.addItem(product);
-                Log.i(TAG, "Invoked: Add Item To Database. ");
-
-                // 创建 csv 文件
-                // 每次对csv读写前都要检查。makeFilePath 在文件已存在时不会报错，类似 python open 的w模式
-                FileUtils.makeFilePath(FileUtils.getSDCardPath() + "/bletest/",
-                        DateUtil.getNowDateTime().substring(0, 8) + ".csv");
-
-                // 保存到 csv 文件
-                Vector<String> string = new Vector<>();
-                string.add(product.data);
-                string.add(product.time);
-                string.add(product.voltage);
-                string.add(String.valueOf(dataview2));
-                string.add(String.valueOf(dataview3));
-                string.add(String.valueOf(dataview4));
-                string.add(String.valueOf(dataview5));
-                string.add(String.valueOf(dataview6));
-//                string.add(product.longitude);
-//                string.add(product.latitude);
-//                string.add(product.address);
-//                string.add(product.channel);
-
-                FileUtils.addLineToCsvFile(getSDCardPath() + "/bletest/" + DateUtil.getNowDateTime().substring(0, 8) + ".csv", string);
-
-            } catch (Exception e){
-                e.printStackTrace();
-            }
-
-
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    // addText(tvResponse,bytes2hex(data));//转成16进制
-                    addText(tvResponse,String.valueOf(dataview));//转成16进制
-                    //addChartEntry(dataview);
-                    addChartEntry(dataVector);
-                    // 存储入数据库
 
                 }
-            });
+                if (l >= 3) {
 
+                    dataview3 = Float.parseFloat(dataVector[2]);
+
+                }
+                if (l >= 4) {
+
+                    dataview4 = Float.parseFloat(dataVector[3]);
+
+                }
+                if (l >= 5) {
+
+                    dataview5 = Float.parseFloat(dataVector[4]);
+                }
+                if (l >= 6) {
+
+                    dataview6 = Float.parseFloat(dataVector[5]);
+                }
+
+                // 电压取绝对值
+                // dataview = Math.abs(dataview);
+
+                try {
+                    Log.e(TAG, "onCharacteristicChanged: 哈哈哈哈零零落落");
+                    // 如果要更改往数据库内传入的参数的话，务必在 Products.java 里面重写构造函数
+                    // Log.e(TAG, "onCharacteristicChanged: 哈哈哈哈" );
+                    Products product = new Products(dataview, currentLongittude, currentLatitude, currentAddressStr);
+                    Log.e(TAG, "addButtonClicked: 哈哈哈哈哈哈哈" + product);
+                    dbHandler.addItem(product);
+                    Log.i(TAG, "Invoked: Add Item To Database. ");
+
+                    // 创建 csv 文件
+                    // 每次对csv读写前都要检查。makeFilePath 在文件已存在时不会报错，类似 python open 的w模式
+                    FileUtils.makeFilePath(FileUtils.getSDCardPath() + "/bletest/",
+                            DateUtil.getNowDateTime().substring(0, 8) + ".csv");
+
+                    // 保存到 csv 文件
+                    Vector<String> string = new Vector<>();
+                    string.add(product.data);
+                    string.add(product.time);
+                    string.add(product.voltage);
+                    string.add(String.valueOf(dataview2));
+                    string.add(String.valueOf(dataview3));
+                    string.add(String.valueOf(dataview4));
+                    string.add(String.valueOf(dataview5));
+                    string.add(String.valueOf(dataview6));
+                    //                string.add(product.longitude);
+                    //                string.add(product.latitude);
+                    //                string.add(product.address);
+                    //                string.add(product.channel);
+
+                    FileUtils.addLineToCsvFile(getSDCardPath() + "/bletest/" + DateUtil.getNowDateTime().substring(0, 8) + ".csv", string);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        // addText(tvResponse,bytes2hex(data));//转成16进制
+                        addText(tvResponse, String.valueOf(dataview));//转成16进制
+                        //addChartEntry(dataview);
+                        addChartEntry(dataVector);
+                        // 存储入数据库
+
+                    }
+                });
+            }
         }
     };
 
