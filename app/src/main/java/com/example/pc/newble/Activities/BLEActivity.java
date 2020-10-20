@@ -440,8 +440,10 @@ public class BLEActivity extends AppCompatActivity {
         // 使用新数据刷新图表
         mChart.notifyDataSetChanged();
         // 当前统计图表中最多在x轴坐标线上显示的总量
-        mChart.setVisibleXRangeMaximum(12);
-        mChart.moveViewToX(lineData.getXValCount() - 12);
+        
+        mChart.setVisibleXRangeMaximum(300);
+        mChart.moveViewToX(lineData.getXValCount() - 300);
+
       /*  LineDataSet lowLineDataSet = lineData.getDataSetByIndex(LOW);
         float low = (float) ((Math.random()) * 10);
         Entry entryLow = new Entry(low, lowLineDataSet.getEntryCount());
@@ -611,7 +613,7 @@ public class BLEActivity extends AppCompatActivity {
 
     //作图需要方法结束
     //蓝牙方法开始
-
+    //
     private void initData() {
         mDatas=new ArrayList<>();
         mRssis=new ArrayList<>();
