@@ -110,6 +110,11 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/button_end_test"
                 android:text="结束测试"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/button_clear_time"
+                android:text="清除时间"/>
         </LinearLayout>
 
 

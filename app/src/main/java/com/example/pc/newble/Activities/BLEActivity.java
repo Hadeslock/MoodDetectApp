@@ -101,6 +101,7 @@ public class BLEActivity extends AppCompatActivity {
     private Button clearImage;
     private Button startTest; //用于记录开始测试与结束测试的时间
     private Button endTest;
+    private Button clearTime;
     private TextView startTime;
     private TextView endTime;
     private EditText etWriteContent;
@@ -648,8 +649,11 @@ public class BLEActivity extends AppCompatActivity {
 //增加开始时间和结束时间，需要两个button和两个个textview
         startTest = findViewById((R.id.button_start_test));
         endTest = findViewById((R.id.button_end_test));
+        clearTime = findViewById(R.id.button_clear_time);
         startTime = findViewById((R.id.start_time));
+        //startTime.setMovementMethod(ScrollingMovementMethod.getInstance());
         endTime = findViewById((R.id.end_time));
+        //endTime.setMovementMethod(ScrollingMovementMethod.getInstance());
 
       /*  chooseChannel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -774,8 +778,10 @@ public class BLEActivity extends AppCompatActivity {
                 // String time = date.toLocaleString();
                 SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss ");
                 String start = dateFormat.format(date);
+
                 start = "开始时间: " + start;
-                addText(startTime, start);//转成16进制
+                addText(startTime, start);
+
             }
         });
         endTest.setOnClickListener(new View.OnClickListener() {
@@ -785,8 +791,18 @@ public class BLEActivity extends AppCompatActivity {
                 // String time = date.toLocaleString();
                 SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss ");
                 String end = dateFormat.format(date);
-                end = "开始时间: " + end;
-                addText(endTime, end);//转成16进制
+
+                end = "结束时间: " + end;
+                addText(endTime, end);
+
+            }
+        });
+        clearTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startTime.setText("");
+                endTime.setText("");
+
             }
         });
         bleListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {//？？？？
