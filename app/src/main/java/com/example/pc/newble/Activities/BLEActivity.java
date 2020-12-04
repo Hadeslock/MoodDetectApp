@@ -99,6 +99,10 @@ public class BLEActivity extends AppCompatActivity {
     private Button startForegroundService;
     private Button stopForegroundService ;
     private Button clearImage;
+    private Button startTest; //用于记录开始测试与结束测试的时间
+    private Button endTest;
+    private TextView startTime;
+    private TextView endTime;
     private EditText etWriteContent;
     private TextView tvResponse;      //写出数据
     private List<BluetoothDevice> mDatas;
@@ -440,7 +444,7 @@ public class BLEActivity extends AppCompatActivity {
         // 使用新数据刷新图表
         mChart.notifyDataSetChanged();
         // 当前统计图表中最多在x轴坐标线上显示的总量
-        
+
         mChart.setVisibleXRangeMaximum(300);
         mChart.moveViewToX(lineData.getXValCount() - 300);
 
@@ -641,8 +645,11 @@ public class BLEActivity extends AppCompatActivity {
         reconnect= findViewById(R.id.reconnect_ble);
         clearImage = findViewById(R.id.clear_image);//清除图像
         chooseChannel = findViewById(R.id.button_choose_channel);//选择通道
-
-
+//增加开始时间和结束时间，需要两个button和两个个textview
+        startTest = findViewById((R.id.button_start_test));
+        endTest = findViewById((R.id.button_end_test));
+        startTime = findViewById((R.id.start_time));
+        endTime = findViewById((R.id.end_time));
 
       /*  chooseChannel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -758,6 +765,28 @@ public class BLEActivity extends AppCompatActivity {
                 if (channelChoose == 4){
                     channelChoose = 1;
                 }
+            }
+        });
+        startTest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Date date = new Date();
+                // String time = date.toLocaleString();
+                SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss ");
+                String start = dateFormat.format(date);
+                start = "开始时间: " + start;
+                addText(startTime, start);//转成16进制
+            }
+        });
+        endTest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Date date = new Date();
+                // String time = date.toLocaleString();
+                SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss ");
+                String end = dateFormat.format(date);
+                end = "开始时间: " + end;
+                addText(endTime, end);//转成16进制
             }
         });
         bleListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {//？？？？
