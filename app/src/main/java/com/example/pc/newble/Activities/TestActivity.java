@@ -1,5 +1,8 @@
 package com.example.pc.newble.Activities;
 
+import android.graphics.Color;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,6 +14,10 @@ import android.widget.Toast;
 import com.example.pc.newble.R;
 import com.example.pc.newble.SQLite.*;
 import com.example.pc.newble.TheUtils.FileUtils;
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.LimitLine;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
 
 //import junit.framework.Test;
 
@@ -18,7 +25,8 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.Vector;
+import java.util.*;
+
 
 /**
  * 此 Activity 仅作为 Debug 用途。
@@ -30,97 +38,87 @@ public class TestActivity extends AppCompatActivity {
 
     private MyDBHandler dbHandler;
     private TextView textViewOutput;
-
+    private LineChart mChart;
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
         textViewOutput = findViewById(R.id.text_test_activity);
-
-        try {
-            dbHandler = new MyDBHandler(this, null, null, 1);
-        } catch (Exception e) {
-            StringWriter errors = new StringWriter();
-            e.printStackTrace(new PrintWriter(errors));
-            Log.i(TAG, errors.toString());
-        }
-
-   //
-
-
-        listItems();
-
         Button button = findViewById(R.id.button_test_delete);
+        Button button1 = findViewById(R.id.button_get_data_from_csv);
+        mChart =  (LineChart) findViewById(R.id.chart);
+        List<String> xval = new ArrayList<>();
+        List<Double> yval =  new ArrayList<>();
+        String path = FileUtils.getSDCardPath() + "/bletest/" + "20210524.csv";
+        getdata(xval,yval,path);
+        final List<String> finalXval = xval;
+        final List<Double> finalYval = yval;
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dbHandler.removeAllItems();
-                listItems();
+                textViewOutput.append(finalXval.get(0)+" "+ finalXval.get(1)
+                +" \n" + finalYval.get(0) +" " +finalYval.get(1));
             }
         });
-
-        Button button1 = findViewById(R.id.button_get_data_from_csv);
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(TestActivity.this, "正在从csv文件恢复数据......", Toast.LENGTH_SHORT).show();
-                // 读取所有文件名
-                Vector<String> filesAllName = FileUtils.getFilesAllName(FileUtils.getSDCardPath() + "/bletest/");
-                // 将每个文件读出，存入数据库
-                for (int i=0; i<filesAllName.size(); i++) {
-                    String file = filesAllName.get(i);
-
-                    try {
-                        BufferedReader in = new BufferedReader(new FileReader(file));
-                        String str = new String();
-
-                        while ((str = in.readLine()) != null) {
-                            if (str.isEmpty() == true) {
-                                // 本行是空行，直接跳过
-                                continue;
-                            } else {
-                                try {
-                                    // 读取这一行的数据
-                                    String items[] = str.split(",");
-                                    String date = items[1];
-                                    String time = items[2];
-                                    String voltage = (items[3]);
-                                    String longitude = (items[4]);
-                                    String latitude = (items[5]);
-                                    String addressStr = items[6];
-                                    String channel = items[7];
-                                    Products product = new Products(date, time, voltage, longitude, latitude, addressStr, channel);
-
-                                    dbHandler.addItem(product);
-                                } catch (Exception e) {
-                                    Log.e(TAG, "readFromCsvAndSaveToSQLite: Something wrong in retrieving data from the csv file. " +
-                                            "It might be helpful to get the csv file checked.");
-                                    e.printStackTrace();
-                                }
-
-                            }
-                        }
-
-                    } catch (java.io.IOException e) {
-                        Log.e(TAG, "readVoltageFromFile: 读取出现了错误！！！");
-                    }
-                }
+                textViewOutput.append("hello ");
             }
         });
+        // 设置描述
+        mChart.setDescription("今日情绪指数回顾");
+        //是否展示网格线
+        mChart.setDrawGridBackground(false);
+        //是否显示边界
+        mChart.setDrawBorders(true);
+        //是否可以拖动
+        mChart.setDragEnabled(true);
+        // 设置触摸模式
+        mChart.setTouchEnabled(true);
+        //设置XY轴动画效果
+        mChart.animateY(600);
+        mChart.animateX(1500);
+        //
+        // y坐标轴的设定。需要改y轴最大值的话可以在这里改
+        YAxis yAxisLeft = mChart.getAxisLeft();
+        yAxisLeft.setStartAtZero(true);
+        yAxisLeft.setAxisMaxValue(100f);
+        yAxisLeft.setTextSize(12f);
+        // 右边的坐标轴。未来可以拓展为健康百分比之类的东西
+        YAxis yAxisRight = mChart.getAxisRight();
+        yAxisRight.setStartAtZero(true);
+        yAxisRight.setAxisMaxValue(100f);
+        yAxisRight.setEnabled(false);
 
+        //
+        //设置X轴位置
+        XAxis xAxis = mChart.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setTextSize(12f);
+        // 警戒线
+        LimitLine ll = new LimitLine(70f, "警戒线");//修改警戒线为70
+        ll.setLineColor(Color.RED);
+        ll.setLineWidth(2f);
+        ll.setTextColor(Color.BLACK);
+        ll.setTextSize(12f);
+        yAxisLeft.addLimitLine(ll);
 
     }
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    public void getdata(List<String> xval,List<Double> yval,String path){
+        String line;
 
-    public void listItems() {
-        try {
-            Log.e(TAG, "listItems: 进入try过程……");
-            String dbString = dbHandler.getAllItemsFromDatabase();
-            textViewOutput.setText(dbString);
-
-            Log.i(TAG, "Invoked: List Items Method. ");
-        } catch (Exception e){
-            Log.e(TAG, "listItems: 出错了！！出错了！！" );
+        try(BufferedReader br = new BufferedReader(new FileReader(path))){
+            while((line = br.readLine())!=null){
+                List<String> column = Arrays.asList(line.split(","));
+                xval.add(column.get(2));
+                yval.add(Double.parseDouble(column.get(3)));
+            }
+        }catch(Exception e){
             e.printStackTrace();
         }
+
     }
 }

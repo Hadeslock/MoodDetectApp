@@ -137,9 +137,9 @@ public class MainActivity extends AppCompatActivity {
                     case 2:    // 连续定位示例
                         TargetClass = Location2Activity.class;
                         break;
-                   /* case 3:    // test activity
+                    case 3:    // test activity
                         TargetClass = TestActivity.class;
-                        break;*/
+                        break;
                     case 5:
 
                     default:
@@ -161,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
         data.add("跳转查看记录");
      //   data.add("自定义回调示例");
         data.add("连续定位示例");
-     //   data.add("从csv文件中读取");
+        data.add("从csv文件中读取");
      //   data.add("室内定位功能");
      //   data.add("判断移动热点");
      //   data.add("android 8.0后台定位示例");
