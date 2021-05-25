@@ -129,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
 
                     case 1:   // 跳转查看记录
-                        TargetClass = ChooseHistActivity.class;
+                        TargetClass = TestActivity.class;
                         break;
                     /*case 2:    // 自定义回调示例  （有时无效）
                         TargetClass = LocationActivity.class;
@@ -137,9 +137,9 @@ public class MainActivity extends AppCompatActivity {
                     case 2:    // 连续定位示例
                         TargetClass = Location2Activity.class;
                         break;
-                    case 3:    // test activity
-                        TargetClass = TestActivity.class;
-                        break;
+//                    case 3:    // test activity
+//                        TargetClass = TestActivity.class;
+//                        break;
                     case 5:
 
                     default:
@@ -158,10 +158,10 @@ public class MainActivity extends AppCompatActivity {
 
         List<String> data = new ArrayList<String>();
         data.add("跳转蓝牙连接");
-        data.add("跳转查看记录");
+        data.add("查看记录并获取结果");
      //   data.add("自定义回调示例");
         data.add("连续定位示例");
-        data.add("从csv文件中读取");
+//        data.add("从csv文件中读取");
      //   data.add("室内定位功能");
      //   data.add("判断移动热点");
      //   data.add("android 8.0后台定位示例");

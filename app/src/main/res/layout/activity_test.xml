@@ -7,28 +7,122 @@
     android:orientation="vertical"
     tools:context="com.example.pc.newble.Activities.TestActivity">
 
-    <Button
+    <LinearLayout
+        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="读取文件"
-        android:id="@+id/button_test_delete"/>
+        android:orientation="horizontal"
+        >
+        <Button
+            android:layout_width="0dp"
+            android:layout_weight="1.0"
+            android:layout_height="wrap_content"
+            android:text="输入完毕开始作图"
+            android:id="@+id/button_plot"/>
 
-    <Button
+        <Button
+            android:layout_width="0dp"
+            android:layout_weight="1.0"
+            android:layout_height="wrap_content"
+            android:text="获取诊断结果"
+            android:id="@+id/button_getResult"/>
+    </LinearLayout>
+
+
+    <LinearLayout
+    android:layout_marginTop="10dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+        >
+        <EditText
+            android:id="@+id/year_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLength="10"
+            android:hint="输入年例如2020"
+            />
+        <EditText
+            android:id="@+id/month_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLength="10"
+            android:hint="月例如05"
+            />
+        <EditText
+            android:id="@+id/day_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLength="10"
+            android:hint="日例如22"
+            />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="从csv文件读取数据"
-        android:id="@+id/button_get_data_from_csv"/>
+        android:orientation="horizontal"
+        >
+        <EditText
+            android:id="@+id/hour_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLength="10"
+            android:hint="输入开始小时例如15"
+            />
+        <EditText
+            android:id="@+id/minute_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLength="10"
+            android:hint="分例如08"
+            />
+        <EditText
+            android:id="@+id/second_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLength="10"
+            android:hint="秒例如17"
+            />
+    </LinearLayout>
 
+    <LinearLayout
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        <EditText
+            android:id="@+id/ehour_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLength="10"
+            android:hint="输入结束小时例如16"
+            />
+        <EditText
+            android:id="@+id/eminute_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLength="10"
+            android:hint="分例如08"
+            />
+        <EditText
+            android:id="@+id/esecond_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLength="10"
+            android:hint="秒例如17"
+            />
+    </LinearLayout>
 
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/chart"
+        android:layout_width="match_parent"
+        android:layout_height="400dp" />
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/text_test_activity"
         android:text=""/>
-    <com.github.mikephil.charting.charts.LineChart
-        android:id="@+id/chart"
-        android:layout_width="match_parent"
-        android:layout_height="400dp" />
-
 
 </LinearLayout>

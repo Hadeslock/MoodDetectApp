@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,28 +47,48 @@ public class TestActivity extends AppCompatActivity {
     private MyDBHandler dbHandler;
     private TextView textViewOutput;
     private LineChart mChart;
+    private List<String> xval = new ArrayList<>();
+    private List<Double> yval =  new ArrayList<>();
+    private String path ;
+    private String startTime = "";
+    private String endTime = "";
+    private LineData lineData;
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
         textViewOutput = findViewById(R.id.text_test_activity);
-        Button button = findViewById(R.id.button_test_delete);
-        Button button1 = findViewById(R.id.button_get_data_from_csv);
+        Button button = findViewById(R.id.button_plot);
+        Button button1 = findViewById(R.id.button_getResult);
         mChart =  (LineChart) findViewById(R.id.chart);
-        List<String> xval = new ArrayList<>();
-        List<Double> yval =  new ArrayList<>();
-        String path = FileUtils.getSDCardPath() + "/bletest/" + "20210522.csv";
-        String startTime = "14:55:13";
-        String endTime = "15:11:13";
-        getdata(xval,yval,path,startTime,endTime);
-        final List<String> finalXval = xval;
-        final List<Double> finalYval = yval;
+
+        final EditText year_text = findViewById(R.id.year_text);
+        final EditText month_text = findViewById(R.id.month_text);
+        final EditText day_text = findViewById(R.id.day_text);
+        final EditText hour_text = findViewById(R.id.hour_text);
+        final EditText minute_text = findViewById(R.id.minute_text);
+        final EditText second_text = findViewById(R.id.second_text);
+        final EditText ehour_text = findViewById(R.id.ehour_text);
+        final EditText eminute_text = findViewById(R.id.eminute_text);
+        final EditText esecond_text = findViewById(R.id.esecond_text);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                textViewOutput.append(finalXval.get(0)+" "+ finalXval.get(1)
-                +" \n" + finalYval.get(0) +" " +finalYval.get(1));
+                path = FileUtils.getSDCardPath() + "/bletest/";
+                path = path + year_text.getText().toString() + month_text.getText().toString()
+                         + day_text.getText().toString() + ".csv";
+                startTime = hour_text.getText().toString() + ":" + minute_text.getText().toString() + ":" + second_text.getText().toString();
+                endTime = ehour_text.getText().toString() + ":" + eminute_text.getText().toString() + ":" + esecond_text.getText().toString();
+                xval.clear();
+                yval.clear();
+                getdata(xval,yval,path,startTime,endTime);
+                initChart(mChart);
+                lineData = getLineData(xval,yval);
+                mChart.clear();
+                Log.e(TAG, "onClick: 清理完毕");
+                showChart(lineData);
+               // Log.e(TAG,xval.size()+"");
             }
         });
         button1.setOnClickListener(new View.OnClickListener() {
@@ -76,14 +97,7 @@ public class TestActivity extends AppCompatActivity {
                 textViewOutput.append("hello ");
             }
         });
-        initChart(mChart);
-        LineData lineData = getLineData(xval,yval);
 
-        mChart.clear();
-
-        Log.e(TAG, "onClick: 清理完毕");
-        showChart(lineData);
-        Log.e(TAG,xval.size()+"");
 
     }
     private void initChart(LineChart mChart){
