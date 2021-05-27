@@ -94,7 +94,35 @@ public class TestActivity extends AppCompatActivity {
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                textViewOutput.append("hello ");
+                double sum,mean,std,var,median,rms,diff1Mean,
+                        diff1Median,diff1Std,diff2Mean,
+                        diff2Median,diff2Std,minRatio,maxRatio;
+                List<Double> diff1 = new ArrayList<>();
+                List<Double> diff2 = new ArrayList<>();
+                sum = getSum(yval);
+                mean = getMean(yval,sum);
+                var = getVar(yval,mean);
+                std = getStd(yval,mean);
+                median = getMedian(yval);
+                rms = getRms(yval);
+                diff1 = getDiff(yval);
+                diff2 = getDiff(diff1);
+                diff1Mean = getMean(diff1,getSum(diff1));
+                diff1Median = getMedian(diff1);
+                diff1Std = getStd(diff1,diff1Mean);
+                diff2Mean = getMean(diff2,getSum(diff2));
+                diff2Median = getMedian(diff2);
+                diff2Std = getStd(diff2,diff2Mean);
+                String str = "均值: "+ String.format("%.2f",mean) +" 方差: "+String.format("%.2f",var)+
+                        " 标准差: "+String.format("%.2f",std)+" 中值: "+String.format("%.2f",median)+" 均方根:"+String.format("%.2f",rms)
+                        +"\n一阶微分的均值: "+ String.format("%.2f",diff1Mean) +
+                        " 一阶微分的中值 " +String.format("%.2f",diff1Median)  +
+                        "\n一阶微分的方差: "+String.format("%.2f",diff1Std)
+                        +"\n二阶微分的均值: "+ String.format("%.2f",diff2Mean)  +
+                        " 二阶微分的中值 " +String.format("%.2f",diff2Median)  +
+                        "\n二阶微分的方差: "+String.format("%.2f",diff2Std) ;
+                textViewOutput.setText(str);
+
             }
         });
 
@@ -215,4 +243,66 @@ public class TestActivity extends AppCompatActivity {
 
         return lineData;
     }
+    public double getSum(List<Double> y){
+        double sum= 0;
+        for(int i = 0;i<y.size();i++){
+            sum += y.get(i);
+        }
+        return sum;
+    }
+    public double getMean(List<Double> y,double sum){
+        if(y.size()==0){
+            return -1;
+        }
+        return sum/y.size();
+    }
+    public double getVar(List<Double> y,double mean){
+        if(y.size()==0){
+            return -1;
+        }
+        double res = 0;
+        for(double i:y){
+            res += (i-mean)*(i-mean);
+        }
+        return res/y.size();
+    }
+    public double getStd(List<Double> y,double mean){
+        if(y.size()==0){
+            return -1;
+        }
+        return Math.sqrt(getVar(y,mean));
+    }
+    public double getMedian(List<Double> y){
+        if(y.size()==0){
+            return -1;
+        }
+        List<Double> res = new ArrayList<>(y);
+        Collections.sort(res);
+        if(res.size()%2==0){
+            return (res.get(res.size()/2)+res.get(res.size()/2-1))/2;
+        }
+        return res.get(res.size()/2);
+    }
+    public double getRms(List<Double> y){
+        if(y.size()==0){
+            return -1;
+        }
+        double sum = 0;
+        for(double i:y){
+            sum+=i*i;
+        }
+        sum = Math.sqrt(sum/y.size());
+        return sum;
+    }
+    public List<Double> getDiff(List<Double> y){
+        List<Double> diff = new ArrayList<>();
+        if(y.size()==0||y.size()==1){
+            return y;
+        }
+        for(int i = 1;i<y.size();i++){
+            diff.add(y.get(i)-y.get(i-1));
+        }
+        return diff;
+    }
+
 }
