@@ -5,6 +5,7 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -34,7 +35,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-
+import com.example.pc.newble.TheUtils.Complex;
 
 /**
  * 此 Activity 作为绘图显示数据功能
@@ -49,6 +50,7 @@ public class TestActivity extends AppCompatActivity {
     private LineChart mChart;
     private List<String> xval = new ArrayList<>();
     private List<Double> yval =  new ArrayList<>();
+    private List<Double> yfft =  new ArrayList<>();
     private String path ;
     private String startTime = "";
     private String endTime = "";
@@ -59,6 +61,7 @@ public class TestActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
         textViewOutput = findViewById(R.id.text_test_activity);
+        textViewOutput.setMovementMethod(ScrollingMovementMethod.getInstance());
         Button button = findViewById(R.id.button_plot);
         Button button1 = findViewById(R.id.button_getResult);
         mChart =  (LineChart) findViewById(R.id.chart);
@@ -113,6 +116,28 @@ public class TestActivity extends AppCompatActivity {
                 diff2Mean = getMean(diff2,getSum(diff2));
                 diff2Median = getMedian(diff2);
                 diff2Std = getStd(diff2,diff2Mean);
+                double[] minmax = getMinMax(yval);
+                double min_ratio =minmax[0]/yval.size();
+                double max_ratio = minmax[1]/yval.size();
+
+                yfft = getYfft(yval);
+                double sumf = getSum(yfft);
+                double meanf= getMean(yfft,sum);
+                double medianf = getMedian(yfft);
+                double stdf = getStd(yfft,mean);
+                double varf = getVar(yfft,mean);
+                double rmsf = getRms(yfft);
+                List<Double> diff1f = getDiff(yfft);
+                List<Double> diff2f = getDiff(diff1);
+                double diff1Meanf = getMean(diff1,getSum(diff1));
+                double diff1Medianf = getMedian(diff1);
+                double diff1Stdf = getStd(diff1,diff1Mean);
+                double diff2Meanf = getMean(diff2,getSum(diff2));
+                double diff2Medianf = getMedian(diff2);
+                double diff2Stdf = getStd(diff2,diff2Mean);
+                double[] minmaxf = getMinMax(yfft);
+                double min_ratiof =minmaxf[0]/yfft.size();
+                double max_ratiof = minmaxf[1]/yfft.size();
                 String str = "均值: "+ String.format("%.2f",mean) +" 方差: "+String.format("%.2f",var)+
                         " 标准差: "+String.format("%.2f",std)+" 中值: "+String.format("%.2f",median)+" 均方根:"+String.format("%.2f",rms)
                         +"\n一阶微分的均值: "+ String.format("%.2f",diff1Mean) +
@@ -120,7 +145,14 @@ public class TestActivity extends AppCompatActivity {
                         "\n一阶微分的方差: "+String.format("%.2f",diff1Std)
                         +"\n二阶微分的均值: "+ String.format("%.2f",diff2Mean)  +
                         " 二阶微分的中值 " +String.format("%.2f",diff2Median)  +
-                        "\n二阶微分的方差: "+String.format("%.2f",diff2Std) ;
+                        "\n二阶微分的方差: "+String.format("%.2f",diff2Std) +
+                        "\n最大值比: " + String.format("%.2f",max_ratio) + " 最小值比: " + String.format("%.2f",min_ratio)
+                        +"\n" +String.format("%.2f",meanf) + " " + String.format("%.2f",medianf) + " "+ String.format("%.2f",stdf) + " "
+                        +"\n" +String.format("%.2f",varf) + " " + String.format("%.2f",rmsf) + " "
+                        +"\n" +String.format("%.2f",diff1Meanf) + " " + String.format("%.2f",diff1Median) + " "+ String.format("%.2f",diff1Stdf) + " "
+                        +"\n" +String.format("%.2f",diff2Meanf) + " " + String.format("%.2f",diff2Median) + " "+ String.format("%.2f",diff2Stdf) + " "
+                        +"\n" +String.format("%.2f",min_ratiof) + " " + String.format("%.2f",min_ratiof) + " "
+                        ;
                 textViewOutput.setText(str);
 
             }
@@ -242,6 +274,44 @@ public class TestActivity extends AppCompatActivity {
         lineData.setValueTextSize(9f);
 
         return lineData;
+    }
+    public List<Double> getYfft(List<Double> y ){
+        if(y.size()==0){
+            return new  ArrayList<Double>();
+        }
+        Complex[] num = new Complex[y.size()];
+        for(int i = 0;i<y.size();i++) {
+            num[i]= new Complex(y.get(i),0);
+            //System.out.println(num[i]);
+        }
+        //System.out.println("After fft");
+        Complex[] res = Complex.fft(num);
+        List<Double> normalizeY = new ArrayList<>();//单边频谱只取一半
+        double N = res.length/2.0;
+        for(int i = 0;i<(int)N;i++) {
+            if(i==0) {
+                normalizeY.add(res[i].abs()/(N*2));
+                continue;
+            }
+            normalizeY.add(res[i].abs()/N);
+        }
+        return normalizeY;
+    }
+    public  double[] getMinMax(List<Double> y) {
+        if(y.size()==0) {
+            return new double[] {-1,-1};
+        }
+        double[] res = new double[2];
+        res[0] = y.get(0);
+        res[1] = res[0];
+        for(int i = 0;i<y.size();i++) {
+            if(y.get(i)<res[0]) {
+                res[0] = y.get(i);
+            }else if(y.get(i)>res[1]) {
+                res[1] = y.get(i);
+            }
+        }
+        return res;
     }
     public double getSum(List<Double> y){
         double sum= 0;
