@@ -63,7 +63,7 @@ public class TestActivity extends AppCompatActivity {
         textViewOutput = findViewById(R.id.text_test_activity);
         textViewOutput.setMovementMethod(ScrollingMovementMethod.getInstance());
         Button button = findViewById(R.id.button_plot);
-        Button button1 = findViewById(R.id.button_getResult);
+        final Button button1 = findViewById(R.id.button_getResult);
         mChart =  (LineChart) findViewById(R.id.chart);
 
         final EditText year_text = findViewById(R.id.year_text);
@@ -75,9 +75,11 @@ public class TestActivity extends AppCompatActivity {
         final EditText ehour_text = findViewById(R.id.ehour_text);
         final EditText eminute_text = findViewById(R.id.eminute_text);
         final EditText esecond_text = findViewById(R.id.esecond_text);
+        button1.setEnabled(false);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                button1.setEnabled(true);
                 path = FileUtils.getSDCardPath() + "/bletest/";
                 path = path + year_text.getText().toString() + month_text.getText().toString()
                          + day_text.getText().toString() + ".csv";
@@ -154,7 +156,7 @@ public class TestActivity extends AppCompatActivity {
                         +"\n" +String.format("%.2f",min_ratiof) + " " + String.format("%.2f",min_ratiof) + " "
                         ;
                 textViewOutput.setText(str);
-
+                button1.setEnabled(false);
             }
         });
 
