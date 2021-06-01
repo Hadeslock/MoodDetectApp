@@ -41,7 +41,7 @@ import java.util.*;
 import com.example.pc.newble.TheUtils.Complex;
 
 /**
- * 此 Activity 作为绘图显示数据功能
+ * 此 Activity 作为绘图显示数据并提供特征计算和分析功能
  * */
 
 public class TestActivity extends AppCompatActivity {
@@ -51,14 +51,15 @@ public class TestActivity extends AppCompatActivity {
     private MyDBHandler dbHandler;
     private TextView textViewOutput;
     private LineChart mChart;
-    private List<String> xval = new ArrayList<>();
-    private List<Double> yval =  new ArrayList<>();
-    private List<Double> yfft =  new ArrayList<>();
+    private List<String> xval = new ArrayList<>();//x轴数据
+    private List<Double> yval =  new ArrayList<>();//y轴数据
+    private List<Double> yfft =  new ArrayList<>();//fft后的数据
     private String path ;
     private String startTime = "";
     private String endTime = "";
-    private LineData lineData;
-    private ProgressDialog pd;
+    private LineData lineData;//保存mchart的作图数据
+    private ProgressDialog pd;//运算费时间时弹出的进度框
+    private String str; //记录结果的字符串
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,15 +80,11 @@ public class TestActivity extends AppCompatActivity {
         final EditText ehour_text = findViewById(R.id.ehour_text);
         final EditText eminute_text = findViewById(R.id.eminute_text);
         final EditText esecond_text = findViewById(R.id.esecond_text);
-
-
-
-
-        button1.setEnabled(false);
+        button1.setEnabled(false);//保证button1只能在button后点一次
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                button1.setEnabled(true);
+                button1.setEnabled(true);//保证button1只能在button后点一次
                 path = FileUtils.getSDCardPath() + "/bletest/";
                 path = path + year_text.getText().toString() + month_text.getText().toString()
                          + day_text.getText().toString() + ".csv";
@@ -108,92 +105,90 @@ public class TestActivity extends AppCompatActivity {
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                pd = ProgressDialog.show(TestActivity.this, "hello", "数据分析中，请稍后……");
-                runOnUiThread(new Runnable() {
+                pd = ProgressDialog.show(TestActivity.this, "hello", "数据分析中，请稍后……");//开启弹窗
+                new Thread(){//开启新线程做计算
+
                     @Override
                     public void run() {
-                        try
-                        {
+                        //需要花时间计算的方法
+                        double sum,mean,std,var,median,rms,diff1Mean,
+                                diff1Median,diff1Std,diff2Mean,
+                                diff2Median,diff2Std,minRatio,maxRatio;
 
-                            double sum,mean,std,var,median,rms,diff1Mean,
-                                    diff1Median,diff1Std,diff2Mean,
-                                    diff2Median,diff2Std,minRatio,maxRatio;
+                        List<Double> diff1 = new ArrayList<>();
+                        List<Double> diff2 = new ArrayList<>();
+                        sum = getSum(yval);
+                        mean = getMean(yval,sum);
+                        var = getVar(yval,mean);
+                        std = getStd(yval,mean);
+                        median = getMedian(yval);
+                        rms = getRms(yval);
+                        diff1 = getDiff(yval);
+                        diff2 = getDiff(diff1);
+                        diff1Mean = getMean(diff1,getSum(diff1));
+                        diff1Median = getMedian(diff1);
+                        diff1Std = getStd(diff1,diff1Mean);
+                        diff2Mean = getMean(diff2,getSum(diff2));
+                        diff2Median = getMedian(diff2);
+                        diff2Std = getStd(diff2,diff2Mean);
+                        double[] minmax = getMinMax(yval);
+                        double min_ratio =minmax[0]/yval.size();
+                        double max_ratio = minmax[1]/yval.size();
 
-                            List<Double> diff1 = new ArrayList<>();
-                            List<Double> diff2 = new ArrayList<>();
-                            sum = getSum(yval);
-                            mean = getMean(yval,sum);
-                            var = getVar(yval,mean);
-                            std = getStd(yval,mean);
-                            median = getMedian(yval);
-                            rms = getRms(yval);
-                            diff1 = getDiff(yval);
-                            diff2 = getDiff(diff1);
-                            diff1Mean = getMean(diff1,getSum(diff1));
-                            diff1Median = getMedian(diff1);
-                            diff1Std = getStd(diff1,diff1Mean);
-                            diff2Mean = getMean(diff2,getSum(diff2));
-                            diff2Median = getMedian(diff2);
-                            diff2Std = getStd(diff2,diff2Mean);
-                            double[] minmax = getMinMax(yval);
-                            double min_ratio =minmax[0]/yval.size();
-                            double max_ratio = minmax[1]/yval.size();
+                        yfft = getYfft(yval);
+                        double sumf = getSum(yfft);
+                        double meanf= getMean(yfft,sum);
+                        double medianf = getMedian(yfft);
+                        double stdf = getStd(yfft,mean);
+                        double varf = getVar(yfft,mean);
+                        double rmsf = getRms(yfft);
+                        List<Double> diff1f = getDiff(yfft);
+                        List<Double> diff2f = getDiff(diff1);
+                        double diff1Meanf = getMean(diff1,getSum(diff1));
+                        double diff1Medianf = getMedian(diff1);
+                        double diff1Stdf = getStd(diff1,diff1Mean);
+                        double diff2Meanf = getMean(diff2,getSum(diff2));
+                        double diff2Medianf = getMedian(diff2);
+                        double diff2Stdf = getStd(diff2,diff2Mean);
+                        double[] minmaxf = getMinMax(yfft);
+                        double min_ratiof =minmaxf[0]/yfft.size();
+                        double max_ratiof = minmaxf[1]/yfft.size();
+                        str = "均值: "+ String.format("%.2f",mean) +" 方差: "+String.format("%.2f",var)+
+                                " 标准差: "+String.format("%.2f",std)+" 中值: "+String.format("%.2f",median)+" 均方根:"+String.format("%.2f",rms)
+                                +"\n一阶微分的均值: "+ String.format("%.2f",diff1Mean) +
+                                " 一阶微分的中值 " +String.format("%.2f",diff1Median)  +
+                                "\n一阶微分的方差: "+String.format("%.2f",diff1Std)
+                                +"\n二阶微分的均值: "+ String.format("%.2f",diff2Mean)  +
+                                " 二阶微分的中值 " +String.format("%.2f",diff2Median)  +
+                                "\n二阶微分的方差: "+String.format("%.2f",diff2Std) +
+                                "\n最大值比: " + String.format("%.2f",max_ratio) + " 最小值比: " + String.format("%.2f",min_ratio)
+                                +"\n" +String.format("%.2f",meanf) + " " + String.format("%.2f",medianf) + " "+ String.format("%.2f",stdf) + " "
+                                +"\n" +String.format("%.2f",varf) + " " + String.format("%.2f",rmsf) + " "
+                                +"\n" +String.format("%.2f",diff1Meanf) + " " + String.format("%.2f",diff1Median) + " "+ String.format("%.2f",diff1Stdf) + " "
+                                +"\n" +String.format("%.2f",diff2Meanf) + " " + String.format("%.2f",diff2Median) + " "+ String.format("%.2f",diff2Stdf) + " "
+                                +"\n" +String.format("%.2f",min_ratiof) + " " + String.format("%.2f",min_ratiof) + " "
+                        ;
 
-                            yfft = getYfft(yval);
-                            double sumf = getSum(yfft);
-                            double meanf= getMean(yfft,sum);
-                            double medianf = getMedian(yfft);
-                            double stdf = getStd(yfft,mean);
-                            double varf = getVar(yfft,mean);
-                            double rmsf = getRms(yfft);
-                            List<Double> diff1f = getDiff(yfft);
-                            List<Double> diff2f = getDiff(diff1);
-                            double diff1Meanf = getMean(diff1,getSum(diff1));
-                            double diff1Medianf = getMedian(diff1);
-                            double diff1Stdf = getStd(diff1,diff1Mean);
-                            double diff2Meanf = getMean(diff2,getSum(diff2));
-                            double diff2Medianf = getMedian(diff2);
-                            double diff2Stdf = getStd(diff2,diff2Mean);
-                            double[] minmaxf = getMinMax(yfft);
-                            double min_ratiof =minmaxf[0]/yfft.size();
-                            double max_ratiof = minmaxf[1]/yfft.size();
-                            String str = "均值: "+ String.format("%.2f",mean) +" 方差: "+String.format("%.2f",var)+
-                                    " 标准差: "+String.format("%.2f",std)+" 中值: "+String.format("%.2f",median)+" 均方根:"+String.format("%.2f",rms)
-                                    +"\n一阶微分的均值: "+ String.format("%.2f",diff1Mean) +
-                                    " 一阶微分的中值 " +String.format("%.2f",diff1Median)  +
-                                    "\n一阶微分的方差: "+String.format("%.2f",diff1Std)
-                                    +"\n二阶微分的均值: "+ String.format("%.2f",diff2Mean)  +
-                                    " 二阶微分的中值 " +String.format("%.2f",diff2Median)  +
-                                    "\n二阶微分的方差: "+String.format("%.2f",diff2Std) +
-                                    "\n最大值比: " + String.format("%.2f",max_ratio) + " 最小值比: " + String.format("%.2f",min_ratio)
-                                    +"\n" +String.format("%.2f",meanf) + " " + String.format("%.2f",medianf) + " "+ String.format("%.2f",stdf) + " "
-                                    +"\n" +String.format("%.2f",varf) + " " + String.format("%.2f",rmsf) + " "
-                                    +"\n" +String.format("%.2f",diff1Meanf) + " " + String.format("%.2f",diff1Median) + " "+ String.format("%.2f",diff1Stdf) + " "
-                                    +"\n" +String.format("%.2f",diff2Meanf) + " " + String.format("%.2f",diff2Median) + " "+ String.format("%.2f",diff2Stdf) + " "
-                                    +"\n" +String.format("%.2f",min_ratiof) + " " + String.format("%.2f",min_ratiof) + " "
-                                    ;
-                            textViewOutput.setText(str);
-                        }
-                        catch(Exception e)
-                        {
-                            e.printStackTrace();
-                        }
-                        finally
-                        {
-                            pd.dismiss();
-
-                        }
-
-                    }
-                });
-
-                button1.setEnabled(false);
-
+                        //结束计算向handler发消息
+                        handler.sendEmptyMessage(0);
+                    }}.start();
+                button1.setEnabled(false);//保证button1只能在button后点一次
             }
         });
 
 
     }
+    private Handler handler = new Handler(){
+
+        @Override
+        public void handleMessage(Message msg) {
+
+            //关闭ProgressDialog
+            pd.dismiss();
+
+            //更新UI
+            textViewOutput.setText(str);
+        }};
     private void initChart(LineChart mChart){
         // 设置描述
         mChart.setDescription("今日情绪指数回顾");
@@ -214,6 +209,7 @@ public class TestActivity extends AppCompatActivity {
         yAxisLeft.setStartAtZero(true);
         //yAxisLeft.setAxisMaxValue(100f);
         yAxisLeft.setTextSize(12f);
+
         // 右边的坐标轴。未来可以拓展为健康百分比之类的东西
         YAxis yAxisRight = mChart.getAxisRight();
         yAxisRight.setStartAtZero(true);
