@@ -623,8 +623,10 @@ public class BLEActivity extends AppCompatActivity {
         mDatas=new ArrayList<>();
         mRssis=new ArrayList<>();
         mAdapter=new com.example.pc.newble.adapter.BleAdapter(BLEActivity.this,mDatas,mRssis);
+        Log.e(TAG, "size: "+mAdapter.getCount());
         bleListView.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
+
     }
 
     private void initView(){     //引用控件资源
@@ -720,6 +722,7 @@ public class BLEActivity extends AppCompatActivity {
         ivSerBleStatus.setOnClickListener(new View.OnClickListener() {//这里可改为button
             @Override
             public void onClick(View v) {
+
                 if (isScaning){
                     tvSerBindStatus.setText("停止搜索");
                     stopScanDevice();
@@ -741,8 +744,8 @@ public class BLEActivity extends AppCompatActivity {
 
 
 
-                bleListView.setVisibility(View.VISIBLE);//设备列表消失
-                operaView.setVisibility(View.GONE);//读取数据的列表出现
+                bleListView.setVisibility(View.VISIBLE);//设备列表出现
+                operaView.setVisibility(View.GONE);//读取数据的列表消失
                 ivSerBleStatus.setVisibility(View.VISIBLE);
 
                 tvSerBindStatus.setVisibility(View.VISIBLE);
