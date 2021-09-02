@@ -1020,9 +1020,9 @@ public class BLEActivity extends AppCompatActivity {
                     Log.e(TAG, "onCharacteristicChanged: 哈哈哈哈零零落落");
                     // 如果要更改往数据库内传入的参数的话，务必在 Products.java 里面重写构造函数
                     // Log.e(TAG, "onCharacteristicChanged: 哈哈哈哈" );
-                    Products product = new Products(dataview, currentLongittude, currentLatitude, currentAddressStr);
-                    Log.e(TAG, "addButtonClicked: 哈哈哈哈哈哈哈" + product);
-                    dbHandler.addItem(product);
+                    //Products product = new Products(dataview, currentLongittude, currentLatitude, currentAddressStr);
+                    //Log.e(TAG, "addButtonClicked: 哈哈哈哈哈哈哈" + product);
+                    //dbHandler.addItem(product);
                     Log.i(TAG, "Invoked: Add Item To Database. ");
 
                     // 创建 csv 文件
@@ -1031,10 +1031,10 @@ public class BLEActivity extends AppCompatActivity {
                             DateUtil.getNowDateTime().substring(0, 8) + ".csv");
 
                     // 保存到 csv 文件
-                    Vector<String> string = new Vector<>();
-                    string.add(product.data);
-                    string.add(product.time);
-                    string.add(product.voltage);
+                    List<String> string = new ArrayList<>();
+                    string.add(DateUtil.getNowDateTime().substring(0, 8));
+                    string.add(DateUtil.getNowTime());
+                    string.add(String.valueOf(dataview));
                     string.add(String.valueOf(dataview2));
                     string.add(String.valueOf(dataview3));
                     string.add(String.valueOf(dataview4));

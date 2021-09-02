@@ -8,6 +8,7 @@ import android.util.Log;
 import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.List;
 import java.util.Vector;
 
 import java.io.BufferedReader;
@@ -239,7 +240,7 @@ public class FileUtils {
     /**
      * 向 csv 文件写入的函数。
      * */
-    public static void addLineToCsvFile(String path, Vector<String> inputs) {
+    public static void addLineToCsvFile(String path, List<String> inputs) {
         String string = new String();
         for (int i=0; i<inputs.size(); i++) {
             string = string + "," + inputs.get(i);
