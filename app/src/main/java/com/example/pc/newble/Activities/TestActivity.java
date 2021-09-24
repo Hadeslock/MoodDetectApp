@@ -54,6 +54,7 @@ public class TestActivity extends AppCompatActivity {
     private List<String> xval = new ArrayList<>();//x轴数据
     private List<Double> yval =  new ArrayList<>();//y轴数据
     private List<Double> yfft =  new ArrayList<>();//fft后的数据
+    private List<Double> yNormal;//归一化后的y轴数据
     private String path ;
     private String startTime = "";
     private String endTime = "";
@@ -114,7 +115,10 @@ public class TestActivity extends AppCompatActivity {
                         double sum,mean,std,var,median,rms,diff1Mean,
                                 diff1Median,diff1Std,diff2Mean,
                                 diff2Median,diff2Std,minRatio,maxRatio;
-
+                        int peakNumbers;
+                        yNormal = normalLize(yval);
+                        List<Integer> indMax = new ArrayList<>();
+                        peakNumbers = findPeaks(yNormal,indMax,new ArrayList<Integer>(),0.1);//计算峰数
                         List<Double> diff1 = new ArrayList<>();
                         List<Double> diff2 = new ArrayList<>();
                         sum = getSum(yval);
@@ -153,10 +157,10 @@ public class TestActivity extends AppCompatActivity {
                         double[] minmaxf = getMinMax(yfft);
                         double min_ratiof =minmaxf[0]/yfft.size();
                         double max_ratiof = minmaxf[1]/yfft.size();
-                        str = "均值: "+ String.format("%.2f",mean) +" 方差: "+String.format("%.2f",var)+
+                        str = "峰数: "+peakNumbers+"均值: "+ String.format("%.2f",mean) +" 方差: "+String.format("%.2f",var)+
                                 " 标准差: "+String.format("%.2f",std)+" 中值: "+String.format("%.2f",median)+" 均方根:"+String.format("%.2f",rms)
                                 +"\n一阶微分的均值: "+ String.format("%.2f",diff1Mean) +
-                                " 一阶微分的中值 " +String.format("%.2f",diff1Median)  +
+                                "一阶微分的均值 " +String.format("%.2f",diff1Median)  +
                                 "\n一阶微分的方差: "+String.format("%.2f",diff1Std)
                                 +"\n二阶微分的均值: "+ String.format("%.2f",diff2Mean)  +
                                 " 二阶微分的中值 " +String.format("%.2f",diff2Median)  +
@@ -404,5 +408,91 @@ public class TestActivity extends AppCompatActivity {
         }
         return diff;
     }
+    public boolean equalsDouble(double a,double b){
+        return Math.abs(a-b)<1e-6;
+    }
+    public int findPeaks(List<Double> src, List<Integer> indMax,List<Integer> indMin,double minPeakProminence){ //MinPeakProminence最小突出度
+        if(src.size()==0){
+            return 0;
+        }
+        int[]sign = new int[src.size()];
+        for(int i=1;i<src.size();i++){
+            if(equalsDouble(src.get(i),src.get(i-1))){
+                sign[i-1]=0;
+            }else if(src.get(i)>src.get(i-1)){
+                sign[i-1]=1;
+            }else{
+                sign[i-1]=-1;
+            }
+        }
+        for(int j = 1;j<src.size()-1;j++){
+            int diff = sign[j]-sign[j-1];
+            if(diff<0){
+                indMax.add(j);
+            }else if(diff>0){
+                indMin.add(j);
+            }
+        }
+        List<Integer> indMaxx = new ArrayList<>();
+        for(int i= 0;i<indMax.size();i++){
+            double leftend = src.get(0);
+            double rightend = src.get(src.size()-1);
+            double temp = src.get(indMax.get(i));
+            int left = 0;
+            int right = src.size()-1;
+            for(int j = i-1;j>=0;j--){
+                if(src.get(indMax.get(j))>temp){
+                    left = indMax.get(j);
+                    break;
+                }
+            }
+            for(int j = i+1;j<indMax.size();j++){
+                if(src.get(indMax.get(j))>temp){
+                    right = indMax.get(j);
+                    break;
+                }
+            }
 
+            leftend = src.get(indMax.get(i));
+            for(int j = left;j<indMax.get(i);j++){
+                leftend = Math.min(leftend,src.get(j));
+            }
+
+
+            rightend = src.get(indMax.get(i));
+            for(int j = indMax.get(i);j<=right;j++){
+                rightend = Math.min(rightend,src.get(j));
+            }
+
+            if(temp - leftend>=minPeakProminence && temp - rightend>=minPeakProminence){
+                //System.out.println("in the func: " + leftend + " "+ rightend + " " +temp + " " + indMax.get(i));
+                indMaxx.add(indMax.get(i));
+            }
+        }
+        indMax.clear();
+        indMax.add(indMaxx.get(0));
+        for(int i = 1;i<indMaxx.size();i++){
+            if(Math.abs(indMaxx.get(i)-indMaxx.get(i-1))<3){
+                continue;
+            }
+            if(equalsDouble(src.get(indMaxx.get(i)),src.get(indMaxx.get(i-1)))&&Math.abs(indMaxx.get(i)-indMaxx.get(i-1))<3){
+                continue;
+            }
+            indMax.add(indMaxx.get(i));
+        }
+        return indMax.size();
+
+    }
+    public List<Double> normalLize(List<Double> src){
+        if(src.size()==0){
+            return src;
+        }
+        List<Double> res = new ArrayList<>();
+        double max = Collections.max(src);
+        double min = Collections.min(src);
+        for(double d:src){
+            res.add((d-min)/(max-min));
+        }
+        return res;
+    }
 }
