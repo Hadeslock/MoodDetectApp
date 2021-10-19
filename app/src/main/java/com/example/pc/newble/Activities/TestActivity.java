@@ -1,5 +1,6 @@
 package com.example.pc.newble.Activities;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.os.Build;
@@ -61,6 +62,8 @@ public class TestActivity extends AppCompatActivity {
     private LineData lineData;//保存mchart的作图数据
     private ProgressDialog pd;//运算费时间时弹出的进度框
     private String str; //记录结果的字符串
+    private int peakNumbers; //记录峰数作为评判依据之一
+    private double mean; //记录平均值作为评判依据之一
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,16 +109,16 @@ public class TestActivity extends AppCompatActivity {
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                pd = ProgressDialog.show(TestActivity.this, "hello", "数据分析中，请稍后……");//开启弹窗
+                pd = ProgressDialog.show(TestActivity.this, "计算特征", "数据分析中，请稍后……");//开启弹窗
                 new Thread(){//开启新线程做计算
 
                     @Override
                     public void run() {
                         //需要花时间计算的方法
-                        double sum,mean,std,var,median,rms,diff1Mean,
+                        double sum,std,var,median,rms,diff1Mean,
                                 diff1Median,diff1Std,diff2Mean,
                                 diff2Median,diff2Std,minRatio,maxRatio;
-                        int peakNumbers;
+
                         yNormal = normalLize(yval);
                         List<Integer> indMax = new ArrayList<>();
                         peakNumbers = findPeaks(yNormal,indMax,new ArrayList<Integer>(),0.1);//计算峰数
@@ -157,7 +160,7 @@ public class TestActivity extends AppCompatActivity {
                         double[] minmaxf = getMinMax(yfft);
                         double min_ratiof =minmaxf[0]/yfft.size();
                         double max_ratiof = minmaxf[1]/yfft.size();
-                        str = "峰数: "+peakNumbers+"均值: "+ String.format("%.2f",mean) +" 方差: "+String.format("%.2f",var)+
+                        str = "峰数: "+peakNumbers+" 均值: "+ String.format("%.2f",mean) +" 方差: "+String.format("%.2f",var)+
                                 " 标准差: "+String.format("%.2f",std)+" 中值: "+String.format("%.2f",median)+" 均方根:"+String.format("%.2f",rms)
                                 +"\n一阶微分的均值: "+ String.format("%.2f",diff1Mean) +
                                 "一阶微分的均值 " +String.format("%.2f",diff1Median)  +
@@ -175,12 +178,28 @@ public class TestActivity extends AppCompatActivity {
 
                         //结束计算向handler发消息
                         handler.sendEmptyMessage(0);
+
                     }}.start();
+
                 button1.setEnabled(false);//保证button1只能在button后点一次
+
             }
         });
 
 
+    }
+    private void showDialog(){
+        AlertDialog.Builder dialog =  new AlertDialog.Builder(this);
+        dialog.setTitle("初诊结果");
+        if(mean>70||peakNumbers>30){
+            dialog.setMessage("请深入检查");
+        }else if(peakNumbers >22){
+            dialog.setMessage("疑似");
+        }else{
+            dialog.setMessage("正常");
+        }
+        dialog.setPositiveButton("确定",null);
+        dialog.show();
     }
     private Handler handler = new Handler(){
 
@@ -192,6 +211,7 @@ public class TestActivity extends AppCompatActivity {
 
             //更新UI
             textViewOutput.setText(str);
+            showDialog();
         }};
     private void initChart(LineChart mChart){
         // 设置描述
@@ -425,16 +445,17 @@ public class TestActivity extends AppCompatActivity {
                 sign[i-1]=-1;
             }
         }
-        for(int j = 1;j<src.size()-1;j++){
-            int diff = sign[j]-sign[j-1];
-            if(diff<0){
+        for(int j = 1;j<src.size()-1;j++){  //寻找所有峰
+            if(sign[j]<0&&sign[j-1]>0){
                 indMax.add(j);
-            }else if(diff>0){
-                indMin.add(j);
+            }else if(sign[j]==0){
+                if(sign[j+1]<0){
+                    indMax.add(j);
+                }
             }
         }
         List<Integer> indMaxx = new ArrayList<>();
-        for(int i= 0;i<indMax.size();i++){
+        for(int i= 0;i<indMax.size();i++){  //寻找突出度符合条件的峰
             double leftend = src.get(0);
             double rightend = src.get(src.size()-1);
             double temp = src.get(indMax.get(i));
@@ -472,12 +493,12 @@ public class TestActivity extends AppCompatActivity {
         indMax.clear();
         indMax.add(indMaxx.get(0));
         for(int i = 1;i<indMaxx.size();i++){
-            if(Math.abs(indMaxx.get(i)-indMaxx.get(i-1))<3){
-                continue;
-            }
-            if(equalsDouble(src.get(indMaxx.get(i)),src.get(indMaxx.get(i-1)))&&Math.abs(indMaxx.get(i)-indMaxx.get(i-1))<3){
-                continue;
-            }
+//            if(Math.abs(indMaxx.get(i)-indMaxx.get(i-1))<3){
+//                continue;
+//            }
+//            if(equalsDouble(src.get(indMaxx.get(i)),src.get(indMaxx.get(i-1)))&&Math.abs(indMaxx.get(i)-indMaxx.get(i-1))<3){
+//                continue;
+//            }
             indMax.add(indMaxx.get(i));
         }
         return indMax.size();
