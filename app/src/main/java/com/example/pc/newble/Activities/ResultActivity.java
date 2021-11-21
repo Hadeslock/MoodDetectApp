@@ -29,7 +29,7 @@ public class ResultActivity extends AppCompatActivity {
         int peakNumbers = intent.getIntExtra("peakNumbers",0);
         Button button = findViewById(R.id.button_plot);
         Colorstr colorstr = new Colorstr();
-        
+
         getResult(colorstr,mean,peakNumbers);
 
         button.setBackgroundColor(colorstr.color);

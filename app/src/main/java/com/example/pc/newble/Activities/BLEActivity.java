@@ -344,8 +344,11 @@ public class BLEActivity extends AppCompatActivity {
         mChart.setTouchEnabled(true);
         // 可拖曳
         mChart.setDragEnabled(true);
+
+        //mChart.setDragDecelerationFrictionCoef(0);
         // 可缩放
         mChart.setScaleEnabled(true);
+        //mChart.setAutoScaleMinMaxEnabled(false);
         // 设置绘制网格背景
         mChart.setDrawGridBackground(true);
         mChart.setPinchZoom(true);
@@ -378,11 +381,11 @@ public class BLEActivity extends AppCompatActivity {
         YAxis leftAxis = mChart.getAxisLeft();
         leftAxis.setTextColor(0xff37474f);
         // 最大值
-        leftAxis.setAxisMaxValue(100f);  //改为100
+       // leftAxis.setAxisMaxValue(100f);  //改为100
         // 最小值
      //   leftAxis.setAxisMinValue(-140f);
         // 不一定要从0开始
-        leftAxis.setStartAtZero(true);
+       // leftAxis.setStartAtZero(true);
         leftAxis.setDrawGridLines(true);
         YAxis rightAxis = mChart.getAxisRight();
         // 不显示图表的右边y坐标轴线
@@ -395,7 +398,8 @@ public class BLEActivity extends AppCompatActivity {
         ll.setTextColor(Color.BLACK);
         ll.setTextSize(12f);
         leftAxis.addLimitLine(ll);
-
+        //mChart.setVisibleXRangeMaximum(2);
+        mChart.setVisibleXRangeMaximum(10);
     }
 
 
@@ -443,12 +447,17 @@ public class BLEActivity extends AppCompatActivity {
 
         }
         // 使用新数据刷新图表
+        lineData.notifyDataChanged();
         mChart.notifyDataSetChanged();
         // 当前统计图表中最多在x轴坐标线上显示的总量
+        //mChart.setVisibleXRangeMaximum(300);
 
-        mChart.setVisibleXRangeMaximum(300);
-        mChart.moveViewToX(lineData.getXValCount() - 300);
-
+        //mChart.setVisibleXRangeMaximum(2000);
+        //mChart.moveViewToY(Float.parseFloat(dataVector[0]),YAxis.AxisDependency.RIGHT);
+        //mChart.moveViewToX(lineData.getXValCount() - 2000);
+        mChart.moveViewTo(lineData.getXValCount() - 9,Float.parseFloat(dataVector[0]),YAxis.AxisDependency.LEFT);
+        //将坐标移到最新的y的位置
+        //mChart.invalidate();
       /*  LineDataSet lowLineDataSet = lineData.getDataSetByIndex(LOW);
         float low = (float) ((Math.random()) * 10);
         Entry entryLow = new Entry(low, lowLineDataSet.getEntryCount());
