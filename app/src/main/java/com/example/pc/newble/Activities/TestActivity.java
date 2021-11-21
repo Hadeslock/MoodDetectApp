@@ -2,6 +2,7 @@ package com.example.pc.newble.Activities;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Handler;
@@ -211,7 +212,20 @@ public class TestActivity extends AppCompatActivity {
 
             //更新UI
             textViewOutput.setText(str);
-            showDialog();
+            //showDialog();
+            Intent intent = new Intent();
+            intent.setClass(TestActivity.this,ResultActivity.class);
+            Bundle bundle1 = new Bundle() ;
+            Bundle bundle2 = new Bundle() ;
+
+            bundle1.putSerializable("mean", mean) ;
+            bundle2.putSerializable("peakNumbers", peakNumbers) ;
+
+            intent.putExtras(bundle1);
+            intent.putExtras(bundle2);
+
+            startActivity(intent);
+
         }};
     private void initChart(LineChart mChart){
         // 设置描述
