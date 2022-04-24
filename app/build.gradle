@@ -4,11 +4,18 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.example.pc.lbs"
-        minSdkVersion 18
+        minSdkVersion 21
+        //noinspection ExpiredTargetSdkVersion
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        //百度地图设置
+        ndk {
+            // 设置支持的SO库架构（开发者可以根据需要，选择一个或多个平台的so）
+            abiFilters "armeabi", "armeabi-v7a", "arm64-v8a"
+        }
     }
     buildTypes {
         release {
@@ -16,12 +23,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
-    }
-
-    sourceSets {
-        main {
-            jniLibs.srcDirs = ['libs']
-        }
     }
 }
 
@@ -46,5 +47,8 @@ dependencies {
     implementation 'com.prolificinteractive:material-calendarview:1.4.3'
     implementation 'android.arch.navigation:navigation-fragment:1.0.0'
     implementation 'android.arch.navigation:navigation-ui:1.0.0'
+
+    //百度地图
+    implementation 'com.baidu.lbsyun:BaiduMapSDK_Location_All:9.1.8'
 
 }
