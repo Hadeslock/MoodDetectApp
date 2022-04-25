@@ -22,6 +22,9 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        debug {
+            buildConfigField("String", "baseUrl", '"http://114.55.252.222:8081/"')
+        }
 
     }
 }
@@ -50,5 +53,20 @@ dependencies {
 
     //百度地图
     implementation 'com.baidu.lbsyun:BaiduMapSDK_Location_All:9.1.8'
+    //okhttp,用于和服务器通信
+    implementation("com.squareup.okhttp3:okhttp:4.9.0")
+    //gson,用于解析json
+    implementation('com.google.code.gson:gson:2.8.2')
+    //glide，用于下载网络图片并解析到imageview
+    // 请勿升级到4.9.0以上，否则需要将app整体迁移到androidx
+    implementation("com.github.bumptech.glide:glide:4.9.0")
+    implementation("com.github.bumptech.glide:okhttp3-integration:4.9.0") {
+        transitive = false
+    } //切换为okhttp3
+    implementation('com.github.bumptech.glide:annotations:4.9.0')
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
+    //lombok
+    implementation('org.projectlombok:lombok:1.18.8')
+    annotationProcessor('org.projectlombok:lombok:1.18.8')
 
 }
