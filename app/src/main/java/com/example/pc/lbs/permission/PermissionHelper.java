@@ -2,7 +2,7 @@ package com.example.pc.lbs.permission;
 
 import android.app.Activity;
 import android.content.pm.PackageManager;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 /**
  * Author: Hadeslock

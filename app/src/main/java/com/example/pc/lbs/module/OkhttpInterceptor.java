@@ -2,7 +2,7 @@ package com.example.pc.lbs.module;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.util.Log;
 import com.blankj.utilcode.util.StringUtils;
 import com.example.pc.lbs.MyApplication;

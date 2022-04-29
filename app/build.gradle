@@ -9,7 +9,7 @@ android {
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
 
         //百度地图设置
         ndk {
@@ -49,24 +49,20 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.android.support:appcompat-v7:28.0.0'
-    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    implementation 'androidx.appcompat:appcompat:1.0.0'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     implementation 'com.github.PhilJay:MPAndroidChart:v2.1.5'
-    implementation 'com.android.support:design:28.0.0'
+    implementation 'com.google.android.material:material:1.0.0'
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.1'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     implementation 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.5@aar'
     implementation "io.reactivex.rxjava2:rxjava:2.0.6"
     implementation "io.reactivex.rxjava2:rxandroid:2.0.1"
     implementation "com.blankj:utilcode:1.9.6"
-    implementation 'com.android.support:support-v4:28.0.0'
-    implementation "android.arch.persistence.room:runtime:1.1.1"
-    annotationProcessor "android.arch.persistence.room:compiler:1.1.1"
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.room:room-runtime:2.0.0'
+    annotationProcessor 'androidx.room:room-compiler:2.0.0'
 
     implementation 'com.prolificinteractive:material-calendarview:1.4.3'
-    implementation 'android.arch.navigation:navigation-fragment:1.0.0'
-    implementation 'android.arch.navigation:navigation-ui:1.0.0'
 
     //百度地图
     implementation 'com.baidu.lbsyun:BaiduMapSDK_Location_All:9.1.8'
@@ -75,7 +71,6 @@ dependencies {
     //gson,用于解析json
     implementation('com.google.code.gson:gson:2.8.2')
     //glide，用于下载网络图片并解析到imageview
-    // 请勿升级到4.9.0以上，否则需要将app整体迁移到androidx
     implementation("com.github.bumptech.glide:glide:4.9.0")
     implementation("com.github.bumptech.glide:okhttp3-integration:4.9.0") {
         transitive = false
