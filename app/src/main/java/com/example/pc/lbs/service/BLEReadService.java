@@ -14,6 +14,12 @@ import android.os.IBinder;
 import android.util.Log;
 import com.example.pc.lbs.R;
 
+/**
+ * Author: Hadeslock
+ * Created on 2022/4/29 16:15
+ * Email: hadeslock@126.com
+ * Desc: 蓝牙记录的前台提醒服务
+ */
 public class BLEReadService extends Service {
 
 

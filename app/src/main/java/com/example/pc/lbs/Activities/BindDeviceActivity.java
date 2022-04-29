@@ -25,6 +25,12 @@ import okhttp3.Response;
 
 import java.io.IOException;
 
+/**
+ * Author: Hadeslock
+ * Created on 2022/4/28 12:26
+ * Email: hadeslock@126.com
+ * Desc: 绑定设备界面
+ */
 public class BindDeviceActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = BindDeviceActivity.class.getSimpleName();
 

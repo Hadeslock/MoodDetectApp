@@ -22,6 +22,12 @@ import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+/**
+ * Author: Hadeslock
+ * Created on 2022/4/29 16:14
+ * Email: hadeslock@126.com
+ * Desc: 查看所有未上传的测试记录的活动
+ */
 public class ViewUnuploadRecordActivity extends AppCompatActivity {
 
     //消息码

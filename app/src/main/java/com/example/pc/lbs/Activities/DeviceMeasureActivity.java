@@ -45,6 +45,12 @@ import java.util.Locale;
 import static com.example.pc.lbs.TheUtils.FileUtils.baseDirPath;
 import static com.example.pc.lbs.TheUtils.FileUtils.getSDCardPath;
 
+/**
+ * Author: Hadeslock
+ * Created on 2022/4/29 16:14
+ * Email: hadeslock@126.com
+ * Desc: 设备测量的活动
+ */
 public class DeviceMeasureActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = DeviceMeasureActivity.class.getSimpleName();
 

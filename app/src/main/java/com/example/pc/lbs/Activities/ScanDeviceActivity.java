@@ -32,6 +32,12 @@ import okhttp3.Response;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Author: Hadeslock
+ * Created on 2022/4/27 21:29
+ * Email: hadeslock@126.com
+ * Desc: 扫描设备的活动
+ */
 public class ScanDeviceActivity extends AppCompatActivity implements Handler.Callback {
     private static final String TAG = ScanDeviceActivity.class.getSimpleName();
 

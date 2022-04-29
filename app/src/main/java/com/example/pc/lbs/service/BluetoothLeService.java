@@ -14,6 +14,14 @@ import java.util.UUID;
 
 import static android.bluetooth.BluetoothDevice.TRANSPORT_LE;
 
+/**
+ * Author: Hadeslock
+ * Created on 2022/4/29 16:15
+ * Email: hadeslock@126.com
+ * Desc: 低功耗蓝牙服务类，参考开发者指南和官方示例
+ * 开发者指南：<a href="https://developer.android.google.cn/guide/topics/connectivity/bluetooth-le">蓝牙低功耗概览</a>
+ * 官方示例：<a href="https://github.com/android/connectivity-samples/tree/main/BluetoothLeGatt/">蓝牙连接服务示例</a>
+ */
 public class BluetoothLeService extends Service {
     private final static String TAG = BluetoothLeService.class.getSimpleName();
 

@@ -19,6 +19,12 @@ import com.example.pc.lbs.permission.PermissionInterface;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Author: Hadeslock
+ * Created on 2022/4/29 16:14
+ * Email: hadeslock@126.com
+ * Desc: 主功能菜单界面
+ */
 public class MainActivity extends AppCompatActivity implements PermissionInterface {
     private static final String TAG = MainActivity.class.getSimpleName();
 
