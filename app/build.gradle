@@ -36,10 +36,11 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.debug
+            buildConfigField("String", "baseUrl", '"http://114.55.252.222:8081/"')
+            signingConfig signingConfigs.release
         }
         debug {
-            buildConfigField("String", "baseUrl", '"http://114.55.252.222:8081/"')
+            buildConfigField("String", "baseUrl", '"http://localhost:8081/"')
             signingConfig signingConfigs.debug
         }
     }
