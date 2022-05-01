@@ -10,7 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import androidx.fragment.app.Fragment;
-import com.example.pc.lbs.Activities.LoginActivity;
+import com.example.pc.lbs.activity.LoginActivity;
 import com.example.pc.lbs.R;
 
 import java.util.ArrayList;

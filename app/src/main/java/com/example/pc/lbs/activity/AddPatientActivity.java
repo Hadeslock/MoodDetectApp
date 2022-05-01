@@ -1,4 +1,4 @@
-package com.example.pc.lbs.Activities;
+package com.example.pc.lbs.activity;
 
 import android.Manifest;
 import android.os.Bundle;
@@ -15,8 +15,8 @@ import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.example.pc.lbs.BuildConfig;
 import com.example.pc.lbs.R;
-import com.example.pc.lbs.TheUtils.GsonUtil;
-import com.example.pc.lbs.TheUtils.HttpUtil;
+import com.example.pc.lbs.utils.GsonUtil;
+import com.example.pc.lbs.utils.HttpUtil;
 import com.example.pc.lbs.permission.PermissionHelper;
 import com.example.pc.lbs.permission.PermissionInterface;
 import com.example.pc.lbs.pojo.Patient;

@@ -1,4 +1,4 @@
-package com.example.pc.lbs.Activities;
+package com.example.pc.lbs.activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -17,9 +17,9 @@ import com.blankj.utilcode.util.StringUtils;
 import com.bumptech.glide.Glide;
 import com.example.pc.lbs.BuildConfig;
 import com.example.pc.lbs.R;
-import com.example.pc.lbs.TheUtils.DateUtil;
-import com.example.pc.lbs.TheUtils.GsonUtil;
-import com.example.pc.lbs.TheUtils.HttpUtil;
+import com.example.pc.lbs.utils.DateUtil;
+import com.example.pc.lbs.utils.GsonUtil;
+import com.example.pc.lbs.utils.HttpUtil;
 import com.example.pc.lbs.pojo.LoginParam;
 import com.example.pc.lbs.pojo.RespBean;
 import com.google.gson.Gson;

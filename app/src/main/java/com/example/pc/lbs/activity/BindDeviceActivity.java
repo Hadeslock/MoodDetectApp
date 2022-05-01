@@ -1,4 +1,4 @@
-package com.example.pc.lbs.Activities;
+package com.example.pc.lbs.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,8 +14,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.example.pc.lbs.BuildConfig;
 import com.example.pc.lbs.R;
-import com.example.pc.lbs.TheUtils.GsonUtil;
-import com.example.pc.lbs.TheUtils.HttpUtil;
+import com.example.pc.lbs.utils.GsonUtil;
+import com.example.pc.lbs.utils.HttpUtil;
 import com.example.pc.lbs.pojo.Device;
 import com.example.pc.lbs.pojo.RespBean;
 import okhttp3.Call;

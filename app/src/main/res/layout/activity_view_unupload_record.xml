@@ -5,7 +5,7 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical"
-              tools:context=".Activities.ViewUnuploadRecordActivity">
+              tools:context=".activity.ViewUnuploadRecordActivity">
 
     <TextView
             android:id="@+id/unupload_title"
@@ -18,7 +18,7 @@
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"/>
 
 
     <ListView
@@ -27,7 +27,7 @@
             android:layout_height="611dp"
             android:layout_marginBottom="10dp"
             android:choiceMode="multipleChoice"
-            tools:layout_editor_absoluteX="1dp" />
+            tools:layout_editor_absoluteX="1dp"/>
 
     <Button
             android:id="@+id/unupload_upload_btn"

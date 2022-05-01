@@ -1,4 +1,4 @@
-package com.example.pc.lbs.Activities;
+package com.example.pc.lbs.activity;
 
 import android.content.Intent;
 import android.os.Bundle;

@@ -9,8 +9,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import androidx.fragment.app.Fragment;
-import com.example.pc.lbs.Activities.TestActivity;
-import com.example.pc.lbs.Activities.ViewUnuploadRecordActivity;
+import com.example.pc.lbs.activity.TestActivity;
+import com.example.pc.lbs.activity.ViewUnuploadRecordActivity;
 import com.example.pc.lbs.R;
 
 import java.util.ArrayList;

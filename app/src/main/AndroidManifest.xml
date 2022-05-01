@@ -30,35 +30,35 @@
 
         <!--设备测量界面-->
         <activity
-                android:name="com.example.pc.lbs.Activities.DeviceMeasureActivity"
+                android:name="com.example.pc.lbs.activity.DeviceMeasureActivity"
                 android:exported="true"/>
         <!--添加病人页面-->
         <activity
-                android:name="com.example.pc.lbs.Activities.AddPatientActivity"
+                android:name="com.example.pc.lbs.activity.AddPatientActivity"
                 android:exported="true"/>
         <!--选择病人页面-->
         <activity
-                android:name="com.example.pc.lbs.Activities.SelectPatientActivity"
+                android:name="com.example.pc.lbs.activity.SelectPatientActivity"
                 android:exported="true"/>
         <!--查看未上传页面-->
         <activity
-                android:name="com.example.pc.lbs.Activities.ViewUnuploadRecordActivity"
+                android:name="com.example.pc.lbs.activity.ViewUnuploadRecordActivity"
                 android:exported="true"/>
         <!--扫描设备页面-->
         <activity
-                android:name="com.example.pc.lbs.Activities.ScanDeviceActivity"
+                android:name="com.example.pc.lbs.activity.ScanDeviceActivity"
                 android:exported="true"/>
         <!--绑定设备页面-->
         <activity
-                android:name="com.example.pc.lbs.Activities.BindDeviceActivity"
+                android:name="com.example.pc.lbs.activity.BindDeviceActivity"
                 android:exported="true"/>
         <!--注册页面-->
         <activity
-                android:name="com.example.pc.lbs.Activities.RegisterActivity"
+                android:name="com.example.pc.lbs.activity.RegisterActivity"
                 android:exported="false"/>
         <!--登录页面-->
         <activity
-                android:name="com.example.pc.lbs.Activities.LoginActivity"
+                android:name="com.example.pc.lbs.activity.LoginActivity"
                 android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -67,12 +67,12 @@
             </intent-filter>
         </activity>
         <activity
-                android:name="com.example.pc.lbs.Activities.ResultActivity"
+                android:name="com.example.pc.lbs.activity.ResultActivity"
                 android:label="@string/title_activity_result"
                 android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name="com.example.pc.lbs.Activities.TestActivity"/>
+        <activity android:name="com.example.pc.lbs.activity.TestActivity"/>
         <!--主功能菜单-->
-        <activity android:name="com.example.pc.lbs.Activities.MainActivity"/>
+        <activity android:name="com.example.pc.lbs.activity.MainActivity"/>
 
 
         <!-- 百度地图定位service，每个App拥有自己单独的定位service -->

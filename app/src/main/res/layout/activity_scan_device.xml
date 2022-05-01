@@ -4,7 +4,7 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical"
-              tools:context=".Activities.ScanDeviceActivity">
+              tools:context=".activity.ScanDeviceActivity">
 
     <!--搜索蓝牙设备界面-->
 
@@ -14,7 +14,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/icon_ble_on"
-            android:contentDescription="@string/BlueToothIcon" />
+            android:contentDescription="@string/BlueToothIcon"/>
     <!--未连接时显示未连接字样-->
     <TextView
             android:id="@+id/tv_search_status"
@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:text="@string/BlueToothSearchNotConnected"
-            android:textColor="@color/light_blue" />
+            android:textColor="@color/light_blue"/>
 
     <!--蓝牙设备列表-->
     <ListView
@@ -31,6 +31,6 @@
             android:layout_height="match_parent"
             android:layout_marginTop="10dp"
             android:divider="#cccccc"
-            android:dividerHeight="1px" />
+            android:dividerHeight="1px"/>
 
 </LinearLayout>

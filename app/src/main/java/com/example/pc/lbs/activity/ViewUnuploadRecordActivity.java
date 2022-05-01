@@ -1,4 +1,4 @@
-package com.example.pc.lbs.Activities;
+package com.example.pc.lbs.activity;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,8 +11,8 @@ import android.widget.ListView;
 import android.widget.Toast;
 import com.example.pc.lbs.BuildConfig;
 import com.example.pc.lbs.R;
-import com.example.pc.lbs.TheUtils.FileUtils;
-import com.example.pc.lbs.TheUtils.HttpUtil;
+import com.example.pc.lbs.utils.FileUtils;
+import com.example.pc.lbs.utils.HttpUtil;
 import com.example.pc.lbs.pojo.RespBean;
 import okhttp3.*;
 

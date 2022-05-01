@@ -1,4 +1,4 @@
-package com.example.pc.lbs.Activities;
+package com.example.pc.lbs.activity;
 
 import android.Manifest;
 import android.os.Bundle;
@@ -10,7 +10,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 import com.example.pc.lbs.R;
-import com.example.pc.lbs.TheUtils.FileUtils;
+import com.example.pc.lbs.utils.FileUtils;
 import com.example.pc.lbs.permission.PermissionHelper;
 import com.example.pc.lbs.permission.PermissionInterface;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements PermissionInterfa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        
+
         //设置底部导航栏控制fragment显示
         BottomNavigationView navView = findViewById(R.id.nav_view);
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);

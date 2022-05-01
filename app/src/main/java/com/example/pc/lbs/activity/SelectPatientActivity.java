@@ -1,4 +1,4 @@
-package com.example.pc.lbs.Activities;
+package com.example.pc.lbs.activity;
 
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
@@ -12,7 +12,7 @@ import android.view.View;
 import android.widget.*;
 import com.example.pc.lbs.BuildConfig;
 import com.example.pc.lbs.R;
-import com.example.pc.lbs.TheUtils.HttpUtil;
+import com.example.pc.lbs.utils.HttpUtil;
 import com.example.pc.lbs.pojo.Patient;
 import okhttp3.Call;
 import okhttp3.Response;

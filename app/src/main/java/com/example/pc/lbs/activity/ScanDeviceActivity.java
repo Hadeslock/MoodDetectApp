@@ -1,4 +1,4 @@
-package com.example.pc.lbs.Activities;
+package com.example.pc.lbs.activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -22,7 +22,7 @@ import android.view.View;
 import android.widget.*;
 import com.example.pc.lbs.BuildConfig;
 import com.example.pc.lbs.R;
-import com.example.pc.lbs.TheUtils.HttpUtil;
+import com.example.pc.lbs.utils.HttpUtil;
 import com.example.pc.lbs.adapter.BleDeviceListAdapter;
 import com.example.pc.lbs.pojo.Device;
 import okhttp3.Call;

@@ -9,12 +9,12 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import androidx.fragment.app.Fragment;
-import com.example.pc.lbs.Activities.ScanDeviceActivity;
+import com.example.pc.lbs.activity.ScanDeviceActivity;
 import com.example.pc.lbs.R;
 
 import java.util.ArrayList;
 
-import static com.example.pc.lbs.Activities.MainActivity.INTENT_SCAN_DEVICE_FOR_MEASURE;
+import static com.example.pc.lbs.activity.MainActivity.INTENT_SCAN_DEVICE_FOR_MEASURE;
 
 /**
  * Author: Hadeslock

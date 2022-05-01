@@ -1,4 +1,4 @@
-package com.example.pc.lbs.Activities;
+package com.example.pc.lbs.activity;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -19,8 +19,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import com.example.pc.lbs.R;
-import com.example.pc.lbs.TheUtils.DateUtil;
-import com.example.pc.lbs.TheUtils.FileUtils;
+import com.example.pc.lbs.utils.DateUtil;
+import com.example.pc.lbs.utils.FileUtils;
 import com.example.pc.lbs.service.BLEReadService;
 import com.example.pc.lbs.service.BluetoothLeService;
 import com.github.mikephil.charting.charts.LineChart;
@@ -42,8 +42,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import static com.example.pc.lbs.TheUtils.FileUtils.baseDirPath;
-import static com.example.pc.lbs.TheUtils.FileUtils.getSDCardPath;
+import static com.example.pc.lbs.utils.FileUtils.baseDirPath;
+import static com.example.pc.lbs.utils.FileUtils.getSDCardPath;
 
 /**
  * Author: Hadeslock

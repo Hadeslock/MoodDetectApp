@@ -1,4 +1,4 @@
-package com.example.pc.lbs.Activities;
+package com.example.pc.lbs.activity;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -17,8 +17,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import com.example.pc.lbs.R;
-import com.example.pc.lbs.TheUtils.Complex;
-import com.example.pc.lbs.TheUtils.FileUtils;
+import com.example.pc.lbs.utils.Complex;
+import com.example.pc.lbs.utils.FileUtils;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;

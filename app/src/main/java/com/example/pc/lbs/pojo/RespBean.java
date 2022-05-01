@@ -1,6 +1,6 @@
 package com.example.pc.lbs.pojo;
 
-import com.example.pc.lbs.TheUtils.GsonUtil;
+import com.example.pc.lbs.utils.GsonUtil;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

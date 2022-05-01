@@ -1,4 +1,4 @@
-package com.example.pc.lbs.TheUtils;
+package com.example.pc.lbs.utils;
 
 import com.example.pc.lbs.module.OkhttpInterceptor;
 import okhttp3.*;

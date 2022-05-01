@@ -1,6 +1,6 @@
 package com.example.pc.lbs.pojo;
 
-import com.example.pc.lbs.TheUtils.GsonUtil;
+import com.example.pc.lbs.utils.GsonUtil;
 import com.google.gson.reflect.TypeToken;
 import lombok.Data;
 import okhttp3.Response;

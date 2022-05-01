@@ -1,4 +1,4 @@
-package com.example.pc.lbs.TheUtils;
+package com.example.pc.lbs.utils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
