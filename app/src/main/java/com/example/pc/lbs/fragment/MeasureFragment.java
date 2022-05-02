@@ -9,12 +9,10 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import androidx.fragment.app.Fragment;
-import com.example.pc.lbs.activity.ScanDeviceActivity;
 import com.example.pc.lbs.R;
+import com.example.pc.lbs.activity.DeviceMeasureActivity;
 
 import java.util.ArrayList;
-
-import static com.example.pc.lbs.activity.MainActivity.INTENT_SCAN_DEVICE_FOR_MEASURE;
 
 /**
  * Author: Hadeslock
@@ -62,19 +60,16 @@ public class MeasureFragment extends Fragment {
         funcListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Class targetClass = null;
+                Class<?> targetClass = null;
                 switch (i) {
                     case 0:
-                        targetClass = ScanDeviceActivity.class;
+                        targetClass = DeviceMeasureActivity.class;
                         break;
                     default:
                         break;
                 }
                 if (targetClass != null) {
                     Intent intent = new Intent(getActivity(), targetClass);
-                    if (targetClass == ScanDeviceActivity.class) {
-                        intent.putExtra("fromActivity", INTENT_SCAN_DEVICE_FOR_MEASURE);
-                    }
                     startActivity(intent);
                 }
             }

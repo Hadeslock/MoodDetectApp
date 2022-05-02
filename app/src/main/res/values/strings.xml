@@ -94,4 +94,5 @@
     <string name="unuploadedRecord">未上传的测试记录</string>
     <string name="uploadAllRecord">一键上传</string>
     <string name="ensureSelect">确认选择</string>
+    <string name="connectDevice">连接设备</string>
 </resources>

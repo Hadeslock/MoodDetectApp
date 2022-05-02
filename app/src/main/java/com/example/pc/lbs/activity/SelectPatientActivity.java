@@ -1,19 +1,18 @@
 package com.example.pc.lbs.activity;
 
-import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.*;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import com.example.pc.lbs.BuildConfig;
 import com.example.pc.lbs.R;
-import com.example.pc.lbs.utils.HttpUtil;
 import com.example.pc.lbs.pojo.Patient;
+import com.example.pc.lbs.utils.HttpUtil;
 import okhttp3.Call;
 import okhttp3.Response;
 
@@ -34,9 +33,6 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
     private static final int MSG_NETWORK_FAILURE = 1;
     private static final int ACTION_ADD_PATIENT = 1; //跳转添加病人的请求码
 
-    //上一个活动传递过来的数据
-    private BluetoothDevice extrasDevice;
-
     //界面组件
     private Spinner patientListSpinner; //病人下拉列表
     private Button addPatientBtn; //添加病人按钮
@@ -49,10 +45,6 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_patient);
-
-        //获取上一个活动传过来的数据
-        Intent intent = getIntent();
-        extrasDevice = intent.getParcelableExtra(DeviceMeasureActivity.EXTRAS_SELECTED_DEVICE);
 
         initView(); //初始化界面引用
         initPatientList(); //初始化病人列表
@@ -68,12 +60,11 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
             startActivityForResult(intent, ACTION_ADD_PATIENT);
         } else if (R.id.select_patient_ensure_btn == id) {
             //确认选择病人，跳转到测量界面
-            Intent intent = new Intent(SelectPatientActivity.this, DeviceMeasureActivity.class);
             //传递参数
-            intent.putExtra(DeviceMeasureActivity.EXTRAS_SELECTED_DEVICE, extrasDevice);
+            Intent intent = new Intent();
             intent.putExtra(DeviceMeasureActivity.EXTRAS_SELECTED_PATIENT_ID, selectedPatient.getId());
             intent.putExtra(DeviceMeasureActivity.EXTRAS_SELECTED_PATIENT_NAME, selectedPatient.getName());
-            startActivity(intent);
+            setResult(RESULT_OK, intent);
             //结束活动
             finish();
         }

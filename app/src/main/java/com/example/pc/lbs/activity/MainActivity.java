@@ -2,7 +2,6 @@ package com.example.pc.lbs.activity;
 
 import android.Manifest;
 import android.os.Bundle;
-import android.widget.ListView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,9 +9,9 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 import com.example.pc.lbs.R;
-import com.example.pc.lbs.utils.FileUtils;
 import com.example.pc.lbs.permission.PermissionHelper;
 import com.example.pc.lbs.permission.PermissionInterface;
+import com.example.pc.lbs.utils.FileUtils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 /**
@@ -22,13 +21,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
  * Desc: 主功能菜单界面
  */
 public class MainActivity extends AppCompatActivity implements PermissionInterface {
-    private static final String TAG = MainActivity.class.getSimpleName();
-
-    //请求跳转扫描设备界面，本活动的标识码
-    public static final String INTENT_SCAN_DEVICE_FOR_MEASURE = TAG + "INTENT_SCAN_DEVICE_FOR_MEASURE";
-
-    //界面组件
-    private ListView FunctionList;
 
     //动态权限
     private PermissionHelper mPermissionHelper;

@@ -12,17 +12,20 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
-import androidx.core.app.ActivityCompat;
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import com.blankj.utilcode.util.StringUtils;
 import com.example.pc.lbs.R;
-import com.example.pc.lbs.utils.DateUtil;
-import com.example.pc.lbs.utils.FileUtils;
 import com.example.pc.lbs.service.BLEReadService;
 import com.example.pc.lbs.service.BluetoothLeService;
+import com.example.pc.lbs.utils.DateUtil;
+import com.example.pc.lbs.utils.FileUtils;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.LimitLine;
@@ -54,6 +57,13 @@ import static com.example.pc.lbs.utils.FileUtils.getSDCardPath;
 public class DeviceMeasureActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = DeviceMeasureActivity.class.getSimpleName();
 
+    //请求跳转扫描设备界面，本活动的标识码
+    public static final String INTENT_SCAN_DEVICE_FOR_MEASURE = TAG + "INTENT_SCAN_DEVICE_FOR_MEASURE";
+
+    // 请求码
+    private static final int ACTION_SELECT_DEVICE = 1; //选择设备请求码
+    private static final int ACTION_SELECT_PATIENT = 2; //选择病人请求码
+
     //活动间传递数据的key
     public static final String EXTRAS_SELECTED_DEVICE = "SelectedDevice"; //选择的设备
     public static final String EXTRAS_SELECTED_PATIENT_ID = "SelectedPatientId"; //选择的病人id
@@ -65,12 +75,9 @@ public class DeviceMeasureActivity extends AppCompatActivity implements View.OnC
     private final int MAX_VISIBLE_COUNT = 300; //图表最多显示的x范围
     private final int MAX_DRAW_COUNT = 3000; //图表最多画多少数据量
 
-    //上一个活动传递过来的数据
-    private BluetoothDevice extrasDevice;
-    private int extrasPatientId;
-    private String extrasPatientName;
-
-    //界面组件引用
+    // region 界面组件引用
+    private Button connectDeviceBtn; //连接设备按钮
+    private Button selectPatientBtn; //选择病人按钮
     private Button clearTimeBtn; //清除时间戳按钮
     private Button clearImageBtn; //清除图像按钮
     private Button startTestBtn; //用于记录开始测试时间
@@ -81,16 +88,22 @@ public class DeviceMeasureActivity extends AppCompatActivity implements View.OnC
     private LineChart mChart; //绘图区
     private TextView startTime; //开始时间时间戳
     private TextView endTime; //结束时间时间戳
+    // endregion
 
     //服务和特征值
     private BluetoothGattCharacteristic notify_characteristic;
 
     //蓝牙相关
     private BluetoothLeService mBluetoothLeService; //蓝牙ble服务
+    private BluetoothDevice selectDevice; //选择的蓝牙设备
     private String mDeviceName; //蓝牙设备名称
     private String mDeviceAddress; //蓝牙设备地址
     private ArrayList<ArrayList<BluetoothGattCharacteristic>> mGattCharacteristics;
     private BluetoothGattCharacteristic mNotifyCharacteristic;
+
+    //病人相关
+    private int selectPatientId;
+    private String selectPatientName;
 
     private boolean mConnected = false; //连接状态
     private boolean mMeasuring = false; //测量状态
@@ -101,14 +114,6 @@ public class DeviceMeasureActivity extends AppCompatActivity implements View.OnC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_device_measure);
-
-        //获取上一个活动传过来的数据
-        Intent intent = getIntent();
-        extrasDevice = intent.getParcelableExtra(EXTRAS_SELECTED_DEVICE);
-        extrasPatientId = intent.getIntExtra(EXTRAS_SELECTED_PATIENT_ID, -1);
-        extrasPatientName = intent.getStringExtra(EXTRAS_SELECTED_PATIENT_NAME);
-        mDeviceName = extrasDevice.getName();
-        mDeviceAddress = extrasDevice.getAddress();
 
         initView(); //初始化界面引用
 
@@ -202,12 +207,42 @@ public class DeviceMeasureActivity extends AppCompatActivity implements View.OnC
         } else if (R.id.button_clear_time == id) { //清除时间按钮
             startTime.setText("");
             endTime.setText("");
-        } else if (R.id.measure_upload_btn == id) {
+        } else if (R.id.measure_upload_btn == id) { //上传记录按钮
             //跳转上传测试记录页面
             Intent uploadIntent = new Intent(
                     DeviceMeasureActivity.this, ViewUnuploadRecordActivity.class);
             startActivity(uploadIntent);
             finish();
+        } else if (R.id.measure_connect_device_btn == id) { //连接设备按钮
+            //连接设备前先选择病人，不然会少信息
+            if (StringUtils.isEmpty(selectPatientName)) {
+                Toast.makeText(this, "请先选择病人", Toast.LENGTH_SHORT).show();
+            } else {
+                Intent intent = new Intent(this, ScanDeviceActivity.class);
+                intent.putExtra("fromActivity", INTENT_SCAN_DEVICE_FOR_MEASURE);
+                startActivityForResult(intent, ACTION_SELECT_DEVICE);
+            }
+        } else if (R.id.measure_select_patient_btn == id) { //选择病人按钮
+            Intent intent = new Intent(this, SelectPatientActivity.class);
+            startActivityForResult(intent, ACTION_SELECT_PATIENT);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (ACTION_SELECT_DEVICE == requestCode && RESULT_OK == resultCode) {
+            //选择设备成功
+            assert data != null;
+            selectDevice = data.getParcelableExtra(EXTRAS_SELECTED_DEVICE);
+            mDeviceName = selectDevice.getName();
+            mDeviceAddress = selectDevice.getAddress();
+        } else if (ACTION_SELECT_PATIENT == requestCode && RESULT_OK == resultCode) {
+            //选择病人成功
+            assert data != null;
+            selectPatientId = data.getIntExtra(EXTRAS_SELECTED_PATIENT_ID, -1);
+            selectPatientName = data.getStringExtra(EXTRAS_SELECTED_PATIENT_NAME);
+            selectedPatientTextView.setText(selectPatientName); //设置已选择的病人姓名
         }
     }
 
@@ -270,7 +305,8 @@ public class DeviceMeasureActivity extends AppCompatActivity implements View.OnC
             if (BluetoothLeService.ACTION_GATT_CONNECTED.equals(action)) { //连接到GATT 服务器
                 //设置连接状态
                 mConnected = true;
-                deviceConnectStatus.setText("已连接");
+                String connectInfo = mDeviceName + " 已连接";
+                deviceConnectStatus.setText(connectInfo);
             } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) { //与 GATT 服务器断开连接
                 //设置连接状态
                 mConnected = false;
@@ -337,6 +373,8 @@ public class DeviceMeasureActivity extends AppCompatActivity implements View.OnC
     //初始化界面组件
     private void initView() {
         //初始化组件引用
+        connectDeviceBtn = findViewById(R.id.measure_connect_device_btn);
+        selectPatientBtn = findViewById(R.id.measure_select_patient_btn);
         clearImageBtn = findViewById(R.id.clear_image);//清除图像
         startTestBtn = findViewById((R.id.button_start_test));
         endTestBtn = findViewById((R.id.button_end_test));
@@ -349,15 +387,13 @@ public class DeviceMeasureActivity extends AppCompatActivity implements View.OnC
         mChart = findViewById(R.id.chart);
 
         //设置点击事件
+        connectDeviceBtn.setOnClickListener(this);
+        selectPatientBtn.setOnClickListener(this);
         clearImageBtn.setOnClickListener(this);
         startTestBtn.setOnClickListener(this);
         endTestBtn.setOnClickListener(this);
         clearTimeBtn.setOnClickListener(this);
         uploadRecordBtn.setOnClickListener(this);
-
-        if (extrasPatientName != null) {
-            selectedPatientTextView.setText(extrasPatientName); //设置已选择的病人姓名
-        }
     }
 
     //一些文件的初始化工作
@@ -375,7 +411,7 @@ public class DeviceMeasureActivity extends AppCompatActivity implements View.OnC
         deviceInfo.add("deviceMac");
         deviceInfo.add(mDeviceAddress);
         deviceInfo.add("patientId");
-        deviceInfo.add(String.valueOf(extrasPatientId));
+        deviceInfo.add(String.valueOf(selectPatientId));
         FileUtils.addLineToCsvFile(baseDirPath + fileToBeSend, deviceInfo);
     }
 

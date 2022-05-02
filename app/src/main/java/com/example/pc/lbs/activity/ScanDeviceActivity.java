@@ -60,7 +60,7 @@ public class ScanDeviceActivity extends AppCompatActivity implements Handler.Cal
     private BleDeviceListAdapter mBleDeviceListAdapter; //蓝牙设别列表数据适配器
     private BluetoothDevice mSelectedBluetoothDevice; //列表选择的蓝牙设备
     // 设备扫描回调
-    private BluetoothAdapter.LeScanCallback mLeScanCallback = new BluetoothAdapter.LeScanCallback() {
+    private final BluetoothAdapter.LeScanCallback mLeScanCallback = new BluetoothAdapter.LeScanCallback() {
         @Override
         public void onLeScan(final BluetoothDevice device, final int rssi, byte[] scanRecord) {
             if (!mBleDeviceListAdapter.isDeviceExist(device)) {
@@ -80,6 +80,13 @@ public class ScanDeviceActivity extends AppCompatActivity implements Handler.Cal
     private boolean mScanning = false; //是否在扫描的标志
     private static String fromActivity; //本活动是由那个活动发起的,注意这个参数必须通过intent传进来
 
+    //启动活动的方法，要启动本活动请调用此方法，传递参数fromActivity
+    public static void actionStart(Context context, String fromActivity) {
+        Intent intent = new Intent(context, ScanDeviceActivity.class);
+        intent.putExtra("fromActivity", fromActivity);
+        context.startActivity(intent);
+    }
+
     //活动创建的钩子
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +95,7 @@ public class ScanDeviceActivity extends AppCompatActivity implements Handler.Cal
 
         mHandler = new Handler(this);
 
+        //解析从那个活动来的
         Intent intent = getIntent();
         fromActivity = intent.getStringExtra("fromActivity");
 
@@ -165,11 +173,11 @@ public class ScanDeviceActivity extends AppCompatActivity implements Handler.Cal
             if (!flag) {
                 Toast.makeText(this, "你选择的设备未绑定", Toast.LENGTH_SHORT).show();
             } else {
-                //跳转到选择病人界面
-                Intent intent = new Intent(ScanDeviceActivity.this, SelectPatientActivity.class);
+                //回到测量界面
                 //传递参数
+                Intent intent = new Intent();
                 intent.putExtra(DeviceMeasureActivity.EXTRAS_SELECTED_DEVICE, mSelectedBluetoothDevice);
-                startActivity(intent);
+                setResult(RESULT_OK, intent);
                 //结束活动
                 finish();
             }
@@ -276,8 +284,8 @@ public class ScanDeviceActivity extends AppCompatActivity implements Handler.Cal
 
     //根据fromActivity执行相应的逻辑
     private void jumpActivity() {
-        if (MainActivity.INTENT_SCAN_DEVICE_FOR_MEASURE.equals(fromActivity)) {
-            //从主菜单来的，下一步要跳转到测量界面
+        if (DeviceMeasureActivity.INTENT_SCAN_DEVICE_FOR_MEASURE.equals(fromActivity)) {
+            //从测量界面来的，下一步要回到测量界面
             //先判断一下设备是否被登录用户绑定
             String fetchDevicesURL = BuildConfig.baseUrl + "device/allDevices";
             HttpUtil.getRequest(fetchDevicesURL, new Callback() {
