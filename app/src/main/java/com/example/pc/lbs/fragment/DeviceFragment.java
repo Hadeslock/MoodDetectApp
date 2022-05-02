@@ -11,6 +11,7 @@ import android.widget.ListView;
 import androidx.fragment.app.Fragment;
 import com.example.pc.lbs.activity.BindDeviceActivity;
 import com.example.pc.lbs.R;
+import com.example.pc.lbs.activity.ViewBoundDeviceActivity;
 
 import java.util.ArrayList;
 
@@ -53,7 +54,6 @@ public class DeviceFragment extends Fragment {
         ArrayList<String> funcListData = new ArrayList<>();
         funcListData.add("查看我的设备");
         funcListData.add("设备绑定");
-        funcListData.add("设备解绑");
         funcListView.setAdapter(new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, funcListData));
     }
 
@@ -64,6 +64,9 @@ public class DeviceFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Class<?> targetClass = null;
                 switch (i) {
+                    case 0:
+                        targetClass = ViewBoundDeviceActivity.class;
+                        break;
                     case 1:
                         targetClass = BindDeviceActivity.class;
                         break;

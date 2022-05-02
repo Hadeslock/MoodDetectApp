@@ -42,6 +42,15 @@ public class HttpUtil {
         client.newCall(request).enqueue(callback);
     }
 
+    //发送put请求
+    public static void putRequest(String address, RequestBody body, okhttp3.Callback callback) {
+        Request request = new Request.Builder()
+                .url(address)
+                .put(body)
+                .build();
+        client.newCall(request).enqueue(callback);
+    }
+
     /*
      * 上传文件，异步请求
      * @author hadeslock

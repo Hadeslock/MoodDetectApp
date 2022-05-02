@@ -95,4 +95,5 @@
     <string name="uploadAllRecord">一键上传</string>
     <string name="ensureSelect">确认选择</string>
     <string name="connectDevice">连接设备</string>
+    <string name="unbind">解绑</string>
 </resources>

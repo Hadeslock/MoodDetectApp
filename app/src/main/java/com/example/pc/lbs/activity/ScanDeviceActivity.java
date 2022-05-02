@@ -1,7 +1,5 @@
 package com.example.pc.lbs.activity;
 
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
@@ -14,17 +12,18 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.*;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import com.example.pc.lbs.BuildConfig;
 import com.example.pc.lbs.R;
-import com.example.pc.lbs.utils.HttpUtil;
 import com.example.pc.lbs.adapter.BleDeviceListAdapter;
 import com.example.pc.lbs.pojo.Device;
+import com.example.pc.lbs.utils.HttpUtil;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -110,7 +109,7 @@ public class ScanDeviceActivity extends AppCompatActivity implements Handler.Cal
     @Override
     protected void onResume() {
         super.onResume();
-        //确认蓝牙已开启，如果未开启，开一个弹窗请求开启蓝牙
+        //检查蓝牙是否开启
         if (!mBluetoothAdapter.isEnabled()) {
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
@@ -136,16 +135,14 @@ public class ScanDeviceActivity extends AppCompatActivity implements Handler.Cal
                     })
                     .show();
         }
-        initBleListData();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         //用户拒绝开启蓝牙，就结束活动
-        if (requestCode == REQUEST_ENABLE_BT && resultCode == Activity.RESULT_CANCELED) {
+        if (requestCode == REQUEST_ENABLE_BT && resultCode == RESULT_CANCELED) {
             Toast.makeText(this, "您已拒绝开启蓝牙，无法使用", Toast.LENGTH_SHORT).show();
             finish();
-            return;
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -331,8 +328,7 @@ public class ScanDeviceActivity extends AppCompatActivity implements Handler.Cal
             finish();
         }
         //初始化蓝牙适配器，获取设备自身的蓝牙适配器 https://developer.android.com/guide/topics/connectivity/bluetooth-le#setupzzzzzzz
-        final BluetoothManager bluetoothManager =
-                (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
+        final BluetoothManager bluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
         mBluetoothAdapter = bluetoothManager.getAdapter();
         //检查设备是否支持蓝牙
         if (mBluetoothAdapter == null) {

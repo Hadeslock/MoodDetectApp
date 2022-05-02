@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.example.pc.lbs">
-
     <!-- 蓝牙权限：https://developer.android.com/guide/topics/connectivity/bluetooth#Permissions -->
     <uses-permission android:name="android.permission.BLUETOOTH"/>
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
-    <!-- 百度地图定位相关权限 -->
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/> <!-- 百度地图定位相关权限 -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/> <!-- 这个权限用于访问GPS定位 -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/> <!-- 这个权限用于进行网络定位 -->
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/> <!-- 用于访问wifi网络信息，wifi信息会用于进行网络定位 -->
@@ -13,52 +11,45 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/> <!-- 这个权限用于获取wifi的获取权限，wifi信息会用来进行网络定位 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/> <!-- 写入扩展存储，向扩展卡写入数据，用于写入离线定位数据 -->
     <uses-permission android:name="android.permission.INTERNET"/> <!-- 访问网络，网络定位需要上网 -->
-
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
 
-    <!--usesCleartextTraffic:防止网络请求报错 - https://blog.csdn.net/zhang33565417/article/details/102806236-->
     <application
-            android:name="com.example.pc.lbs.MyApplication"
+            android:name=".MyApplication"
             android:icon="@drawable/second"
             android:label="@string/app_name"
-            android:usesCleartextTraffic="true"
             android:roundIcon="@drawable/second"
             android:supportsRtl="true"
-            android:theme="@style/AppTheme">
-
-        <!--设备测量界面-->
+            android:theme="@style/AppTheme"
+            android:usesCleartextTraffic="true">
         <activity
-                android:name="com.example.pc.lbs.activity.DeviceMeasureActivity"
+                android:name=".activity.ViewBoundDeviceActivity"
                 android:exported="true"/>
-        <!--添加病人页面-->
+        <!-- 设备测量界面 -->
         <activity
-                android:name="com.example.pc.lbs.activity.AddPatientActivity"
-                android:exported="true"/>
-        <!--选择病人页面-->
+                android:name=".activity.DeviceMeasureActivity"
+                android:exported="true"/> <!-- 添加病人页面 -->
         <activity
-                android:name="com.example.pc.lbs.activity.SelectPatientActivity"
-                android:exported="true"/>
-        <!--查看未上传页面-->
+                android:name=".activity.AddPatientActivity"
+                android:exported="true"/> <!-- 选择病人页面 -->
         <activity
-                android:name="com.example.pc.lbs.activity.ViewUnuploadRecordActivity"
-                android:exported="true"/>
-        <!--扫描设备页面-->
+                android:name=".activity.SelectPatientActivity"
+                android:exported="true"/> <!-- 查看未上传页面 -->
         <activity
-                android:name="com.example.pc.lbs.activity.ScanDeviceActivity"
-                android:exported="true"/>
-        <!--绑定设备页面-->
+                android:name=".activity.ViewUnuploadRecordActivity"
+                android:exported="true"/> <!-- 扫描设备页面 -->
         <activity
-                android:name="com.example.pc.lbs.activity.BindDeviceActivity"
-                android:exported="true"/>
-        <!--注册页面-->
+                android:name=".activity.ScanDeviceActivity"
+                android:exported="true"/> <!-- 绑定设备页面 -->
         <activity
-                android:name="com.example.pc.lbs.activity.RegisterActivity"
-                android:exported="false"/>
-        <!--登录页面-->
+                android:name=".activity.BindDeviceActivity"
+                android:exported="true"/> <!-- 注册页面 -->
         <activity
-                android:name="com.example.pc.lbs.activity.LoginActivity"
+                android:name=".activity.RegisterActivity"
+                android:exported="false"/> <!-- 登录页面 -->
+        <activity
+                android:name=".activity.LoginActivity"
                 android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -67,31 +58,24 @@
             </intent-filter>
         </activity>
         <activity
-                android:name="com.example.pc.lbs.activity.ResultActivity"
+                android:name=".activity.ResultActivity"
                 android:label="@string/title_activity_result"
                 android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name="com.example.pc.lbs.activity.TestActivity"/>
-        <!--主功能菜单-->
-        <activity android:name="com.example.pc.lbs.activity.MainActivity"/>
-
-
-        <!-- 百度地图定位service，每个App拥有自己单独的定位service -->
+        <activity android:name=".activity.TestActivity"/> <!-- 主功能菜单 -->
+        <activity android:name=".activity.MainActivity"/> <!-- 百度地图定位service，每个App拥有自己单独的定位service -->
         <service
                 android:name="com.baidu.location.f"
                 android:enabled="true"
-                android:process=":remote"/>
-        <!-- BLE前台提醒服务 -->
+                android:process=":remote"/> <!-- BLE前台提醒服务 -->
         <service
-                android:name="com.example.pc.lbs.service.BLEReadService"
+                android:name=".service.BLEReadService"
                 android:enabled="true"
-                android:exported="false"/>
-        <!--蓝牙低功耗服务页面-->
+                android:exported="false"/> <!-- 蓝牙低功耗服务页面 -->
         <service
-                android:name="com.example.pc.lbs.service.BluetoothLeService"
+                android:name=".service.BluetoothLeService"
                 android:enabled="true"
                 android:exported="false">
-        </service>
-        <!-- 百度地图定位的key -->
+        </service> <!-- 百度地图定位的key -->
         <meta-data
                 android:name="com.baidu.lbsapi.API_KEY"
                 android:value="RzXlX7iW5AmXdgXKAvMNg39Th62dZwid"/>

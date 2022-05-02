@@ -15,9 +15,9 @@ import java.util.List;
  */
 @Data
 public class Device {
-    private Integer id;
-    private String device_id;
-    private String device_name;
+    private Integer id; //设备在数据库中的id
+    private String device_id; //设备的mac地址
+    private String device_name; //设备的名称
 
     public Device(String deviceAddress, String deviceName) {
         this.device_id = deviceAddress;

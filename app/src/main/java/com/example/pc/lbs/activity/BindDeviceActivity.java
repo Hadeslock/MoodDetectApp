@@ -124,14 +124,14 @@ public class BindDeviceActivity extends AppCompatActivity implements View.OnClic
                 deviceName = data.getStringExtra(EXTRAS_SELECTED_DEVICE_NAME);
                 deviceAddress = data.getStringExtra(EXTRAS_SELECTED_DEVICE_ADDRESS);
             }
-            Log.i(TAG, "接收到被点击的设备数据: deviceName = " + deviceName
+            Log.i(TAG, "接收到被点击的设备数据: device_name = " + deviceName
                     + "\ndeviceAddress = " + deviceAddress);
             selectedDeviceName.setText(deviceName);
         }
     }
 
     //消息回调
-    private Handler mHandler = new Handler(new Handler.Callback() {
+    private final Handler mHandler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message msg) {
             int what = msg.what;
