@@ -82,12 +82,14 @@ public class DeviceMeasureActivity extends AppCompatActivity implements View.OnC
     private Button clearTimeBtn; //清除时间戳按钮
     private Button clearImageBtn; //清除图像按钮
     private Button startTestBtn; //用于记录开始测试时间
+    private Button keyTimeBtn; //用于记录关键时间点的按钮
     private Button endTestBtn; //记录结束测试时间按钮
     private Button uploadRecordBtn; //上传测试记录的按钮
     private TextView deviceConnectStatus; //设备连接状态内容标签
     private TextView selectedPatientTextView; //选择的病人显示标签
     private LineChart mChart; //绘图区
     private TextView startTime; //开始时间时间戳
+    private TextView keyTimeTextView; //关键时间点时间戳
     private TextView endTime; //结束时间时间戳
     // endregion
 
@@ -106,8 +108,11 @@ public class DeviceMeasureActivity extends AppCompatActivity implements View.OnC
     private int selectPatientId;
     private String selectPatientName;
 
+    //测试相关
     private boolean mConnected = false; //连接状态
     private boolean mMeasuring = false; //测量状态
+    private int keyTimeIdx = 0; //关键时间点编号
+    private List<String> keyTimeList = new ArrayList<>(); //关键时间点集合
     public static String fileToBeSend; //要发送给服务器的文件名
     private String fileLocalStore; //存储在本地的数据文件
 
@@ -195,23 +200,13 @@ public class DeviceMeasureActivity extends AppCompatActivity implements View.OnC
             endTime.setText(endTimeTag);
             //设置测量状态
             mMeasuring = false;
+            //断开蓝牙连接
+            mBluetoothLeService.disconnect();
             //关闭前台通知
             stopBLEForegroundService();
-            //弹窗提示
-            new AlertDialog.Builder(this)
-                    .setTitle("提示")
-                    .setMessage("测试结束，是否立即上传测试记录？")
-                    .setPositiveButton("是", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            //上传测试记录
-                            Intent uploadIntent = new Intent(
-                                    DeviceMeasureActivity.this, ViewUnuploadRecordActivity.class);
-                            startActivity(uploadIntent);
-                            finish();
-                        }
-                    })
-                    .show();
+            //将关键点信息写入测试记录文件
+            FileUtils.addDataToSpecifiedLineOfCsv(baseDirPath, fileLocalStore, keyTimeList, 1, 0);
+            FileUtils.addDataToSpecifiedLineOfCsv(baseDirPath, fileToBeSend, keyTimeList, 2, 0);
         } else if (R.id.button_clear_time == id) { //清除时间按钮
             startTime.setText("");
             endTime.setText("");
@@ -220,7 +215,6 @@ public class DeviceMeasureActivity extends AppCompatActivity implements View.OnC
             Intent uploadIntent = new Intent(
                     DeviceMeasureActivity.this, ViewUnuploadRecordActivity.class);
             startActivity(uploadIntent);
-            finish();
         } else if (R.id.measure_connect_device_btn == id) { //连接设备按钮
             //连接设备前先选择病人，不然会少信息
             if (StringUtils.isEmpty(selectPatientName)) {
@@ -233,6 +227,12 @@ public class DeviceMeasureActivity extends AppCompatActivity implements View.OnC
         } else if (R.id.measure_select_patient_btn == id) { //选择病人按钮
             Intent intent = new Intent(this, SelectPatientActivity.class);
             startActivityForResult(intent, ACTION_SELECT_PATIENT);
+        } else if (R.id.button_mark_key_point == id) { //关键时间点按钮
+            String curTime = DateUtil.getNowTime();
+            //在时间点集合添加数据
+            keyTimeList.add(curTime);
+            //在时间戳添加信息
+            keyTimeTextView.append("关键点" + (++keyTimeIdx) + ":" + curTime + "\n");
         }
     }
 
@@ -315,6 +315,10 @@ public class DeviceMeasureActivity extends AppCompatActivity implements View.OnC
                 mConnected = true;
                 String connectInfo = mDeviceName + " 已连接";
                 deviceConnectStatus.setText(connectInfo);
+                //使能几个测试按钮
+                startTestBtn.setEnabled(true);
+                keyTimeBtn.setEnabled(true);
+                endTestBtn.setEnabled(true);
             } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) { //与 GATT 服务器断开连接
                 //设置连接状态
                 mConnected = false;
@@ -340,8 +344,6 @@ public class DeviceMeasureActivity extends AppCompatActivity implements View.OnC
                     //处理数据,去掉开头的b和结尾的a
                     potentialStr = potentialStr.substring(1, potentialStr.length() - 1);
                     //绘图
-                    //potentialList.add(new Entry(Float.parseFloat(potentialStr), potentialList.size()));
-                    //setChartData(potentialList);
                     addChartEntry(potentialStr);
                     //如果未测量就直接返回
                     if (!mMeasuring) return;
@@ -351,11 +353,9 @@ public class DeviceMeasureActivity extends AppCompatActivity implements View.OnC
                     dataList.add(DateUtil.getNowTime());
                     dataList.add(potentialStr);
                     //保存至本地文件
-                    FileUtils.makeFilePath(baseDirPath, fileLocalStore);
-                    FileUtils.addLineToCsvFile(baseDirPath + fileLocalStore, dataList);
+                    FileUtils.addLineToCsvFile(baseDirPath, fileLocalStore, dataList);
                     //保存至发送到云服务器的文件，因为和本地数据格式不同
-                    FileUtils.makeFilePath(baseDirPath, fileToBeSend);
-                    FileUtils.addLineToCsvFile(baseDirPath + fileToBeSend, dataList);
+                    FileUtils.addLineToCsvFile(baseDirPath, fileToBeSend, dataList);
                 }
             }
         }
@@ -383,12 +383,14 @@ public class DeviceMeasureActivity extends AppCompatActivity implements View.OnC
         selectPatientBtn = findViewById(R.id.measure_select_patient_btn);
         clearImageBtn = findViewById(R.id.clear_image);//清除图像
         startTestBtn = findViewById((R.id.button_start_test));
+        keyTimeBtn = findViewById(R.id.button_mark_key_point);
         endTestBtn = findViewById((R.id.button_end_test));
         clearTimeBtn = findViewById(R.id.button_clear_time);
         uploadRecordBtn = findViewById(R.id.measure_upload_btn);
         selectedPatientTextView = findViewById(R.id.measure_selected_patient);
         deviceConnectStatus = findViewById(R.id.device_connect_status);
         startTime = findViewById((R.id.start_time));
+        keyTimeTextView = findViewById(R.id.key_time);
         endTime = findViewById((R.id.end_time));
         mChart = findViewById(R.id.chart);
 
@@ -397,6 +399,7 @@ public class DeviceMeasureActivity extends AppCompatActivity implements View.OnC
         selectPatientBtn.setOnClickListener(this);
         clearImageBtn.setOnClickListener(this);
         startTestBtn.setOnClickListener(this);
+        keyTimeBtn.setOnClickListener(this);
         endTestBtn.setOnClickListener(this);
         clearTimeBtn.setOnClickListener(this);
         uploadRecordBtn.setOnClickListener(this);
@@ -424,7 +427,7 @@ public class DeviceMeasureActivity extends AppCompatActivity implements View.OnC
         deviceInfo.add(mDeviceAddress);
         deviceInfo.add("patientId");
         deviceInfo.add(String.valueOf(selectPatientId));
-        FileUtils.addLineToCsvFile(baseDirPath + fileToBeSend, deviceInfo);
+        FileUtils.addLineToCsvFile(baseDirPath, fileToBeSend, deviceInfo);
     }
 
     //开启前台服务提醒的函数。

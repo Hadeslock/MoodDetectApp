@@ -62,6 +62,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/开始测试"
+                android:enabled="false"
                 tools:ignore="ButtonStyle"/>
         <!--标记关键时间点按钮-->
         <Button
@@ -70,6 +71,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/标记关键点"
+                android:enabled="false"
                 tools:ignore="ButtonStyle"/>
         <!--结束测试按钮-->
         <Button
@@ -78,6 +80,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/结束测试"
+                android:enabled="false"
                 tools:ignore="ButtonStyle"/>
         <!--上传测试记录按钮-->
         <Button

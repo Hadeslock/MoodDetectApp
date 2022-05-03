@@ -4,15 +4,7 @@ package com.example.pc.lbs.utils;
 import android.os.Environment;
 import android.util.Log;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.RandomAccessFile;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Vector;
@@ -168,45 +160,63 @@ public class FileUtils {
     /**
      * 向 csv 文件写入的函数。
      */
-    public static void addLineToCsvFile(String path, List<String> inputs) {
-        appendStringToFile(path, constructCsvString(inputs));
+    public static void addLineToCsvFile(String path, String filename, List<String> inputs) {
+        makeFilePath(path, filename);
+        appendStringToFile(path + filename, constructCsvString(inputs));
     }
 
     /*
-     * 将数据附加到csv文件指定行的后面,返回值表示是否添加成功
-     * @author Hadeslock
-     * @time 2022/4/14 16:15
+     * 将数据添加到csv文件指定行
+     * @author hadeslock
+     * @date 2022/5/3 14:53
+     * @param filePath 文件所在的目录
+     * @param fileName 文件名
+     * @param data 要添加的数据集
+     * @param targetLineIndex 要添加到的行数
+     * @param mode 0-插入 1-附加到末尾
+     * @return boolean true-成功 false-失败
      */
-    public static boolean appendDataToSpecifiedLineOfCsv(String filePath, List<String> data,
-                                                         int targetLineIndex) {
+    public static boolean addDataToSpecifiedLineOfCsv(String filePath, String fileName, List<String> data,
+                                                      int targetLineIndex, int mode) {
         //构造字符串
-        String csvString = constructCsvString(data);
-        if (csvString == null) {
+        String dataString = constructCsvString(data);
+        if (dataString == null) {
             return false;
         }
 
         // ---------- 添加到文件 --------------
-        //确认文件名是否存在
-        if (!checkIfFileExist(filePath)) return false;
+        //先生成文件
+        makeFilePath(filePath, fileName);
+
         String curLineString; //读入的一行数据
         int curLineIndex = 0; //当前读到的行
-        File srcFile = new File(filePath); //源文件
+
+        String fullFilePath = filePath + fileName;
+        File srcFile = new File(fullFilePath); //源文件
         //生成临时的输出文件名
-        int split = filePath.lastIndexOf('.');
-        String outputPath = filePath.substring(0, split) + "(1)" + filePath.substring(split);
+        int split = fullFilePath.lastIndexOf('.');
+        String outputPath = fullFilePath.substring(0, split) + "(1)" + fullFilePath.substring(split);
+
         // 源文件输入输出流
         BufferedReader in = null; // 源文件输入流
         FileReader fileReader = null;
         FileWriter fileWriter = null;
+
         try {
             //生成输入输出流
-            fileReader = new FileReader(filePath);
+            fileReader = new FileReader(fullFilePath);
             in = new BufferedReader(fileReader);
             fileWriter = new FileWriter(outputPath);
             while ((curLineString = in.readLine()) != null) {
                 if (++curLineIndex == targetLineIndex) {
-                    //读到指定的行数,拼接字符串
-                    curLineString = curLineString + "," + csvString.substring(0, csvString.length() - 1);
+                    //读到指定的行数
+                    if (mode == 0) {
+                        //模式为插入，直接写入字符串
+                        fileWriter.write(dataString);
+                    } else if (mode == 1) {
+                        //模式为附加，拼接字符串
+                        curLineString = curLineString + "," + dataString.substring(0, dataString.length() - 1);
+                    }
                 }
                 fileWriter.write(curLineString + '\n');
             }
@@ -214,6 +224,7 @@ public class FileUtils {
             new File(outputPath).renameTo(srcFile); //新文件重命名为原文件
         } catch (IOException e) {
             e.printStackTrace();
+            return false;
         } finally {
             try {
                 //关流
