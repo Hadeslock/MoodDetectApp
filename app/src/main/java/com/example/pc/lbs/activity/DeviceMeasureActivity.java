@@ -38,6 +38,8 @@ import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 
+import java.io.File;
+import java.io.FileFilter;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -46,7 +48,6 @@ import java.util.List;
 import java.util.Locale;
 
 import static com.example.pc.lbs.utils.FileUtils.baseDirPath;
-import static com.example.pc.lbs.utils.FileUtils.getSDCardPath;
 
 /**
  * Author: Hadeslock
@@ -108,6 +109,7 @@ public class DeviceMeasureActivity extends AppCompatActivity implements View.OnC
     private boolean mConnected = false; //连接状态
     private boolean mMeasuring = false; //测量状态
     public static String fileToBeSend; //要发送给服务器的文件名
+    private String fileLocalStore; //存储在本地的数据文件
 
     //活动创建的钩子
     @Override
@@ -172,15 +174,21 @@ public class DeviceMeasureActivity extends AppCompatActivity implements View.OnC
             //重置所有缩放和拖动并使图表完全适合它的边界
             mChart.fitScreen();
         } else if (R.id.button_start_test == id) { //开始测试按钮
-            //设置标签
-            String startTimeTag = "开始时间：" + DateUtil.getNowTime();
-            startTime.setText(startTimeTag);
-            //设置测量状态
-            mMeasuring = true;
-            //进行一些文件的初始化工作
-            initFileStore();
-            //开启前台通知
-            startBLEForegroundService();
+            //检查病人和设备是否选择
+            if (StringUtils.isEmpty(selectPatientName) || selectDevice == null) {
+                Toast.makeText(this, "请选择病人和设备", Toast.LENGTH_SHORT).show();
+            } else {
+                //设置标签
+                String startTimeTag = "开始时间：" + DateUtil.getNowTime();
+                startTime.setText(startTimeTag);
+                //设置测量状态
+                mMeasuring = true;
+                //进行一些文件的初始化工作
+                initFileStore();
+                //开启前台通知
+                startBLEForegroundService();
+            }
+
         } else if (R.id.button_end_test == id) { //结束测试按钮
             //设置标签
             String endTimeTag = "结束时间：" + DateUtil.getNowTime();
@@ -343,10 +351,8 @@ public class DeviceMeasureActivity extends AppCompatActivity implements View.OnC
                     dataList.add(DateUtil.getNowTime());
                     dataList.add(potentialStr);
                     //保存至本地文件
-                    FileUtils.makeFilePath(baseDirPath,
-                            DateUtil.getNowDate() + ".csv");
-                    FileUtils.addLineToCsvFile(baseDirPath +
-                            DateUtil.getNowDate() + ".csv", dataList);
+                    FileUtils.makeFilePath(baseDirPath, fileLocalStore);
+                    FileUtils.addLineToCsvFile(baseDirPath + fileLocalStore, dataList);
                     //保存至发送到云服务器的文件，因为和本地数据格式不同
                     FileUtils.makeFilePath(baseDirPath, fileToBeSend);
                     FileUtils.addLineToCsvFile(baseDirPath + fileToBeSend, dataList);
@@ -398,14 +404,20 @@ public class DeviceMeasureActivity extends AppCompatActivity implements View.OnC
 
     //一些文件的初始化工作
     private void initFileStore() {
-        // 标记今天日期和时间
-        FileUtils.addStringToFile(getSDCardPath() + "/bletest/Datalist.txt", "\n");    //datalist
-        FileUtils.addStringToFile(getSDCardPath() + "/bletest/Datalist.txt",
-                DateUtil.getNowDateTime().substring(0, 8));
-        //初始化要发送给服务器的文件名.tbs-to be send
+        //初始化存储在本地的数据文件
+        File filePath = new File(FileUtils.baseDirPath);
+        File[] files = filePath.listFiles(new FileFilter() {
+            @Override
+            public boolean accept(File pathname) {
+                String fileName = pathname.getName();
+                return fileName.startsWith(DateUtil.getNowDate());
+            }
+        });
+        int idx = files.length + 1;
+        fileLocalStore = DateUtil.getNowDate() + "_" + idx + ".csv";
+        //初始化要发送给服务器的文件名.tbs-to be sent
         fileToBeSend = "tbs" + mDeviceName + DateUtil.getNowDateTime() + ".csv";
         FileUtils.makeFilePath(baseDirPath, fileToBeSend);
-        Log.i(TAG, "requestPermissionsSuccess: " + fileToBeSend);
         //添加设备mac
         ArrayList<String> deviceInfo = new ArrayList<>();
         deviceInfo.add("deviceMac");
@@ -437,7 +449,7 @@ public class DeviceMeasureActivity extends AppCompatActivity implements View.OnC
         return intentFilter;
     }
 
-    // ---------------------- 绘图方法开始 -------------------------
+    // region ---------------------- 绘图方法开始 -------------------------
     // reference: https://weeklycoding.com/mpandroidchart-documentation/
     //初始化图表
     private void initChart() {
@@ -601,7 +613,7 @@ public class DeviceMeasureActivity extends AppCompatActivity implements View.OnC
         });
         return set;
     }
-    // ---------------------- 绘图方法结束 -------------------------
+    // endregion ---------------------- 绘图方法结束 -------------------------
 
 
 }

@@ -123,7 +123,7 @@ public class FileUtils {
      * 使用 FileWriter 方法向 filename 追加 content 内容的函数。
      * 与本类中 writeTextToFile 的区别在于，本函数是以追加的形式在文件后写入内容。
      */
-    public static void addStringToFile(String fileName, String content) {
+    public static void appendStringToFile(String fileName, String content) {
         try {
             if (!checkIfFileExist(fileName)) return;
 
@@ -140,7 +140,7 @@ public class FileUtils {
         // 检查是否存在这样的文件，不存在则报错
         File f = new File(fileName);
         if (!f.exists()) {
-            Log.e(TAG, "addStringToFile: File does not exist");
+            Log.e(TAG, "File does not exist");
             return false;
         }
         return true;
@@ -169,7 +169,7 @@ public class FileUtils {
      * 向 csv 文件写入的函数。
      */
     public static void addLineToCsvFile(String path, List<String> inputs) {
-        addStringToFile(path, constructCsvString(inputs));
+        appendStringToFile(path, constructCsvString(inputs));
     }
 
     /*

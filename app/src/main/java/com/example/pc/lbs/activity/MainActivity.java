@@ -11,7 +11,6 @@ import androidx.navigation.ui.NavigationUI;
 import com.example.pc.lbs.R;
 import com.example.pc.lbs.permission.PermissionHelper;
 import com.example.pc.lbs.permission.PermissionInterface;
-import com.example.pc.lbs.utils.FileUtils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 /**
@@ -70,9 +69,6 @@ public class MainActivity extends AppCompatActivity implements PermissionInterfa
     @Override
     public void requestPermissionsSuccess() {
         //所有权限都已满足，可以进行界面操作
-        // 创建 DataList.txt 文件
-        FileUtils.makeFilePath(FileUtils.getSDCardPath() + "/bletest/",
-                "DataList.txt");
     }
 
     @Override
