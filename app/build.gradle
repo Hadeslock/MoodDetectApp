@@ -83,5 +83,7 @@ dependencies {
     //导航组件
     implementation 'androidx.navigation:navigation-fragment:2.3.5'
     implementation 'androidx.navigation:navigation-ui:2.3.5'
+    //城市选择器
+    implementation 'com.github.crazyandcoder:citypicker:6.0.2'
 
 }
