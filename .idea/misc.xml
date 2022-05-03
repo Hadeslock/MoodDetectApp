@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Develop/GraduateProj/mood_detect/app/MoodDetectApp/app/src/main/res/drawable/textview_border.xml" value="0.25625" />
         <entry key="..\:/Develop/GraduateProj/mood_detect/app/MoodDetectApp/app/src/main/res/layout/activity_add_patient.xml" value="0.2125" />
         <entry key="..\:/Develop/GraduateProj/mood_detect/app/MoodDetectApp/app/src/main/res/layout/activity_bind_device.xml" value="0.24114583333333334" />
         <entry key="..\:/Develop/GraduateProj/mood_detect/app/MoodDetectApp/app/src/main/res/layout/activity_device_measure.xml" value="0.24114583333333334" />

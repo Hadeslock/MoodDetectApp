@@ -72,6 +72,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:hint="@string/selectPatientGander"
+                    android:padding="5dp"
                     android:gravity="center_vertical"
                     android:textSize="18sp"/>
 
@@ -95,18 +96,35 @@
                     android:textColor="#000000"
                     android:textSize="20sp"/>
         </RadioGroup>
-        <!--病人地理位置显示-->
+        <!--病人地区-->
         <TextView
-                android:id="@+id/add_patient_position"
+                android:id="@+id/add_patient_location"
                 android:layout_width="0dp"
                 android:layout_height="48dp"
                 android:layout_marginTop="20dp"
-                android:text="@string/notAquireAddr"
+                android:hint="请选择病人地区"
                 android:textSize="20sp"
+                android:padding="5dp"
                 android:gravity="center_vertical"
+                android:background="@drawable/textview_border"
                 app:layout_constraintTop_toBottomOf="@+id/add_patient_gender"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"/>
+        <!--病人详细住址-->
+        <EditText
+                android:id="@+id/add_patient_address"
+                android:layout_width="0dp"
+                android:layout_height="96dp"
+                android:layout_marginTop="20dp"
+                android:hint="请输入病人详细住址"
+                android:textSize="20sp"
+                android:padding="5dp"
+                android:gravity="top"
+                android:background="@drawable/textview_border"
+                app:layout_constraintTop_toBottomOf="@+id/add_patient_location"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:inputType="textMultiLine"/>
         <!--病人身份证号输入-->
         <EditText
                 android:id="@+id/add_patient_identity"
@@ -119,7 +137,7 @@
                 android:inputType="textPersonName"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/add_patient_position"/>
+                app:layout_constraintTop_toBottomOf="@+id/add_patient_address"/>
 
         <Button
                 android:id="@+id/add_patient_addBtn"
