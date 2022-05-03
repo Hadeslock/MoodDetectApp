@@ -20,6 +20,10 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import com.baidu.location.BDAbstractLocationListener;
+import com.baidu.location.BDLocation;
+import com.baidu.location.LocationClient;
+import com.baidu.location.LocationClientOption;
 import com.blankj.utilcode.util.StringUtils;
 import com.example.pc.lbs.R;
 import com.example.pc.lbs.service.BLEReadService;
@@ -101,12 +105,15 @@ public class DeviceMeasureActivity extends AppCompatActivity implements View.OnC
     private BluetoothDevice selectDevice; //选择的蓝牙设备
     private String mDeviceName; //蓝牙设备名称
     private String mDeviceAddress; //蓝牙设备地址
-    private ArrayList<ArrayList<BluetoothGattCharacteristic>> mGattCharacteristics;
-    private BluetoothGattCharacteristic mNotifyCharacteristic;
 
     //病人相关
     private int selectPatientId;
     private String selectPatientName;
+
+    //定位相关
+    private LocationClient mLocationClient;
+    double latitude;  //纬度信息
+    double longitude;  //经度信息
 
     //测试相关
     private boolean mConnected = false; //连接状态
@@ -123,6 +130,7 @@ public class DeviceMeasureActivity extends AppCompatActivity implements View.OnC
         setContentView(R.layout.activity_device_measure);
 
         initView(); //初始化界面引用
+        initLocation(); //初始化定位组件
 
         //绑定蓝牙服务，同时连接到蓝牙服务器
         Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
@@ -218,6 +226,7 @@ public class DeviceMeasureActivity extends AppCompatActivity implements View.OnC
             Intent uploadIntent = new Intent(
                     DeviceMeasureActivity.this, ViewUnuploadRecordActivity.class);
             startActivity(uploadIntent);
+            finish();
         } else if (R.id.measure_connect_device_btn == id) { //连接设备按钮
             //连接设备前先选择病人，不然会少信息
             if (StringUtils.isEmpty(selectPatientName)) {
@@ -408,6 +417,40 @@ public class DeviceMeasureActivity extends AppCompatActivity implements View.OnC
         uploadRecordBtn.setOnClickListener(this);
     }
 
+    //初始化定位服务
+    private void initLocation() {
+        //声明LocationClient类
+        mLocationClient = new LocationClient(getApplicationContext());
+        //注册监听函数
+        mLocationClient.registerLocationListener(new myLocationListener());
+        //定位选项
+        LocationClientOption option = new LocationClientOption();
+        //可选，设置定位模式，默认高精度
+        option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);
+        //可选，设置返回经纬度坐标类型，默认GCJ02
+        //option.setCoorType("bd09ll");
+        //可选，设置发起定位请求的间隔，int类型，单位ms
+        //如果设置为0，则代表单次定位，即仅定位一次，默认为0
+        //如果设置非0，需设置1000ms以上才有效
+        //option.setScanSpan(1000);
+        //可选，设置是否使用gps，默认false
+        //使用高精度和仅用设备两种定位模式的，参数必须设置为true
+        option.setOpenGps(true);
+        //需将配置好的LocationClientOption对象，通过setLocOption方法传递给LocationClient对象使用
+        mLocationClient.setLocOption(option);
+        //启动服务
+        mLocationClient.start();
+    }
+
+    public class myLocationListener extends BDAbstractLocationListener {
+        @Override
+        public void onReceiveLocation(BDLocation bdLocation) {
+            latitude = bdLocation.getLatitude();    //获取纬度信息
+            longitude = bdLocation.getLongitude();    //获取经度信息
+            Log.i(TAG, "获取到经纬度信息: " + latitude + " - " + longitude);
+        }
+    }
+
     //一些文件的初始化工作
     private void initFileStore() {
         //初始化存储在本地的数据文件
@@ -424,13 +467,17 @@ public class DeviceMeasureActivity extends AppCompatActivity implements View.OnC
         //初始化要发送给服务器的文件名.tbs-to be sent
         fileToBeSend = "tbs" + mDeviceName + DateUtil.getNowDateTime() + ".csv";
         FileUtils.makeFilePath(baseDirPath, fileToBeSend);
-        //添加设备mac
-        ArrayList<String> deviceInfo = new ArrayList<>();
-        deviceInfo.add("deviceMac");
-        deviceInfo.add(mDeviceAddress);
-        deviceInfo.add("patientId");
-        deviceInfo.add(String.valueOf(selectPatientId));
-        FileUtils.addLineToCsvFile(baseDirPath, fileToBeSend, deviceInfo);
+        //添加设备信息、病人信息、经纬度信息
+        ArrayList<String> dataInfo = new ArrayList<>();
+        dataInfo.add("deviceMac");
+        dataInfo.add(mDeviceAddress);
+        dataInfo.add("patientId");
+        dataInfo.add(String.valueOf(selectPatientId));
+        dataInfo.add("latitude");
+        dataInfo.add(String.valueOf(latitude));
+        dataInfo.add("longitude");
+        dataInfo.add(String.valueOf(longitude));
+        FileUtils.addLineToCsvFile(baseDirPath, fileToBeSend, dataInfo);
     }
 
     //开启前台服务提醒的函数。
