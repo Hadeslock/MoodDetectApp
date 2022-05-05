@@ -13,19 +13,26 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.DialogFragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import com.baidu.location.BDAbstractLocationListener;
 import com.baidu.location.BDLocation;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.blankj.utilcode.util.StringUtils;
 import com.example.pc.lbs.R;
+import com.example.pc.lbs.fragment.KeyTimeDialogFragment;
 import com.example.pc.lbs.service.BLEReadService;
 import com.example.pc.lbs.service.BluetoothLeService;
 import com.example.pc.lbs.utils.DateUtil;
@@ -41,6 +48,7 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.github.mikephil.charting.utils.ViewPortHandler;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -59,7 +67,8 @@ import static com.example.pc.lbs.utils.FileUtils.baseDirPath;
  * Email: hadeslock@126.com
  * Desc: 设备测量的活动
  */
-public class DeviceMeasureActivity extends AppCompatActivity implements View.OnClickListener {
+public class DeviceMeasureActivity extends AppCompatActivity
+        implements View.OnClickListener, KeyTimeDialogFragment.KeyTimeDialogListener {
     private static final String TAG = DeviceMeasureActivity.class.getSimpleName();
 
     //请求跳转扫描设备界面，本活动的标识码
@@ -93,7 +102,7 @@ public class DeviceMeasureActivity extends AppCompatActivity implements View.OnC
     private TextView selectedPatientTextView; //选择的病人显示标签
     private LineChart mChart; //绘图区
     private TextView startTime; //开始时间时间戳
-    private TextView keyTimeTextView; //关键时间点时间戳
+    private RecyclerView keyTimeRV; //关键时间点列表
     private TextView endTime; //结束时间时间戳
     // endregion
 
@@ -130,6 +139,7 @@ public class DeviceMeasureActivity extends AppCompatActivity implements View.OnC
         setContentView(R.layout.activity_device_measure);
 
         initView(); //初始化界面引用
+        initEvent(); //初始化组件时间
         initLocation(); //初始化定位组件
 
         //绑定蓝牙服务，同时连接到蓝牙服务器
@@ -201,7 +211,6 @@ public class DeviceMeasureActivity extends AppCompatActivity implements View.OnC
                 //开启前台通知
                 startBLEForegroundService();
             }
-
         } else if (R.id.button_end_test == id) { //结束测试按钮
             //设置标签
             String endTimeTag = "结束时间：" + DateUtil.getNowTime();
@@ -244,7 +253,8 @@ public class DeviceMeasureActivity extends AppCompatActivity implements View.OnC
             //在时间点集合添加数据
             keyTimeList.add(curTime);
             //在时间戳添加信息
-            keyTimeTextView.append("关键点" + (++keyTimeIdx) + ":" + curTime + "\n");
+            KeyTimeAdapter keyTimeAdapter = new KeyTimeAdapter(keyTimeList);
+            keyTimeRV.setAdapter(keyTimeAdapter);
         }
     }
 
@@ -402,10 +412,19 @@ public class DeviceMeasureActivity extends AppCompatActivity implements View.OnC
         selectedPatientTextView = findViewById(R.id.measure_selected_patient);
         deviceConnectStatus = findViewById(R.id.device_connect_status);
         startTime = findViewById((R.id.start_time));
-        keyTimeTextView = findViewById(R.id.key_time);
+        keyTimeRV = findViewById(R.id.rv_key_time);
         endTime = findViewById((R.id.end_time));
         mChart = findViewById(R.id.chart);
 
+
+        //设置线性视图
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        keyTimeRV.setLayoutManager(layoutManager);
+
+    }
+
+    //初始化事件
+    private void initEvent() {
         //设置点击事件
         connectDeviceBtn.setOnClickListener(this);
         selectPatientBtn.setOnClickListener(this);
@@ -415,6 +434,73 @@ public class DeviceMeasureActivity extends AppCompatActivity implements View.OnC
         endTestBtn.setOnClickListener(this);
         clearTimeBtn.setOnClickListener(this);
         uploadRecordBtn.setOnClickListener(this);
+    }
+
+    //关键时间点点击后弹出的对话框的监听回调
+    @Override
+    public void onDialogPositiveClick(int position, String note) {
+        //接收到修改后的关键时间点描述，更新对应的数据
+        keyTimeList.set(position, note);
+        KeyTimeAdapter keyTimeAdapter = new KeyTimeAdapter(keyTimeList);
+        keyTimeRV.setAdapter(keyTimeAdapter);
+        //更新本地文件
+        FileUtils.addDataToSpecifiedLineOfCsv(baseDirPath, fileLocalStore, keyTimeList, 1, 2);
+        FileUtils.addDataToSpecifiedLineOfCsv(baseDirPath, fileToBeSend, keyTimeList, 2, 2);
+    }
+
+    //关键时间点循环列表的数据适配器
+    private class KeyTimeAdapter extends RecyclerView.Adapter<KeyTimeAdapter.ViewHolder> {
+
+        List<String> keyTimeList;
+
+        public KeyTimeAdapter(List<String> keyTimeList) {
+            this.keyTimeList = keyTimeList;
+        }
+
+        @NonNull
+        @NotNull
+        @Override
+        public ViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.key_time_item, parent, false);
+            final ViewHolder viewHolder = new ViewHolder(view);
+            viewHolder.keyTimeValueTV.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //传递被点击的是第几个
+                    int position = viewHolder.getAdapterPosition();
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("position", position);
+                    bundle.putString("keyTimeVal", keyTimeList.get(position));
+                    //开弹窗
+                    DialogFragment keyTimeDialogFragment = new KeyTimeDialogFragment();
+                    keyTimeDialogFragment.setArguments(bundle);
+                    keyTimeDialogFragment.show(getSupportFragmentManager(), "keyTimeNote");
+                }
+            });
+            return viewHolder;
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
+            String keyTime = keyTimeList.get(position);
+            String keyTimeInfo = "关键时间点" + (position + 1) + "：" + keyTime;
+            holder.keyTimeValueTV.setText(keyTimeInfo);
+        }
+
+        @Override
+        public int getItemCount() {
+            return keyTimeList.size();
+        }
+
+        public class ViewHolder extends RecyclerView.ViewHolder {
+            TextView keyTimeValueTV;
+
+            public ViewHolder(@NonNull @NotNull View itemView) {
+                super(itemView);
+                keyTimeValueTV = itemView.findViewById(R.id.tv_key_time_value);
+            }
+        }
     }
 
     //初始化定位服务
