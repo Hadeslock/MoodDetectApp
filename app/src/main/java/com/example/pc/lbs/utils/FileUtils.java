@@ -173,7 +173,7 @@ public class FileUtils {
      * @param fileName 文件名
      * @param data 要添加的数据集
      * @param targetLineIndex 要添加到的行数
-     * @param mode 0-插入 1-附加到末尾
+     * @param mode 0-插入 1-附加到末尾 2-替换
      * @return boolean true-成功 false-失败
      */
     public static boolean addDataToSpecifiedLineOfCsv(String filePath, String fileName, List<String> data,
@@ -210,15 +210,20 @@ public class FileUtils {
             while ((curLineString = in.readLine()) != null) {
                 if (++curLineIndex == targetLineIndex) {
                     //读到指定的行数
-                    if (mode == 0) {
-                        //模式为插入，直接写入字符串
+                    if (mode == 0 || mode == 2) {
+                        //模式为插入或替换，直接写入字符串
                         fileWriter.write(dataString);
                     } else if (mode == 1) {
                         //模式为附加，拼接字符串
                         curLineString = curLineString + "," + dataString.substring(0, dataString.length() - 1);
                     }
+                    //如果mode不为替换，读到的这一行才需要写入
+                    if (mode != 2) {
+                        fileWriter.write(curLineString + '\n');
+                    }
+                } else {
+                    fileWriter.write(curLineString + '\n');
                 }
-                fileWriter.write(curLineString + '\n');
             }
             srcFile.delete(); //删除源文件
             new File(outputPath).renameTo(srcFile); //新文件重命名为原文件

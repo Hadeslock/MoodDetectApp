@@ -154,20 +154,23 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"/>
+            android:layout_marginEnd="10dp"
+            android:text="开始时间："
+            android:textSize="14sp"/>
     <!--关键时间戳-->
-    <TextView
-            android:id="@+id/key_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"/>
+    <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="160dp"
+            android:padding="5dp"
+            android:id="@+id/rv_key_time"/>
     <!--结束测试时间戳-->
     <TextView
             android:id="@+id/end_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"/>
+            android:layout_marginEnd="10dp"
+            android:text="结束时间："
+            android:textSize="14sp"/>
 
 </LinearLayout>
