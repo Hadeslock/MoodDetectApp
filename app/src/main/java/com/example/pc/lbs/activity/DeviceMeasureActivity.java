@@ -129,7 +129,6 @@ public class DeviceMeasureActivity extends AppCompatActivity
     private boolean mMeasuring = false; //测量状态
     private int keyTimeIdx = 0; //关键时间点编号
     private List<String> keyTimeList = new ArrayList<>(); //关键时间点集合
-    public static String fileToBeSend; //要发送给服务器的文件名
     private String fileLocalStore; //存储在本地的数据文件
 
     //活动创建的钩子
@@ -225,8 +224,7 @@ public class DeviceMeasureActivity extends AppCompatActivity
             if (keyTimeList.size() == 0) {
                 keyTimeList.add("null");
             }
-            FileUtils.addDataToSpecifiedLineOfCsv(baseDirPath, fileLocalStore, keyTimeList, 1, 0);
-            FileUtils.addDataToSpecifiedLineOfCsv(baseDirPath, fileToBeSend, keyTimeList, 2, 0);
+            FileUtils.addDataToSpecifiedLineOfCsv(baseDirPath, fileLocalStore, keyTimeList, 2, 0);
         } else if (R.id.button_clear_time == id) { //清除时间按钮
             startTime.setText("");
             endTime.setText("");
@@ -376,8 +374,6 @@ public class DeviceMeasureActivity extends AppCompatActivity
                     dataList.add(potentialStr);
                     //保存至本地文件
                     FileUtils.addLineToCsvFile(baseDirPath, fileLocalStore, dataList);
-                    //保存至发送到云服务器的文件，因为和本地数据格式不同
-                    FileUtils.addLineToCsvFile(baseDirPath, fileToBeSend, dataList);
                 }
             }
         }
@@ -444,8 +440,7 @@ public class DeviceMeasureActivity extends AppCompatActivity
         KeyTimeAdapter keyTimeAdapter = new KeyTimeAdapter(keyTimeList);
         keyTimeRV.setAdapter(keyTimeAdapter);
         //更新本地文件
-        FileUtils.addDataToSpecifiedLineOfCsv(baseDirPath, fileLocalStore, keyTimeList, 1, 2);
-        FileUtils.addDataToSpecifiedLineOfCsv(baseDirPath, fileToBeSend, keyTimeList, 2, 2);
+        FileUtils.addDataToSpecifiedLineOfCsv(baseDirPath, fileLocalStore, keyTimeList, 2, 2);
     }
 
     //关键时间点循环列表的数据适配器
@@ -549,10 +544,7 @@ public class DeviceMeasureActivity extends AppCompatActivity
             }
         });
         int idx = files.length + 1;
-        fileLocalStore = DateUtil.getNowDate() + "_" + idx + ".csv";
-        //初始化要发送给服务器的文件名.tbs-to be sent
-        fileToBeSend = "tbs" + mDeviceName + DateUtil.getNowDateTime() + ".csv";
-        FileUtils.makeFilePath(baseDirPath, fileToBeSend);
+        fileLocalStore = "tbs_" + DateUtil.getNowDate() + "_" + idx + ".csv";
         //添加设备信息、病人信息、经纬度信息
         ArrayList<String> dataInfo = new ArrayList<>();
         dataInfo.add("deviceMac");
@@ -563,7 +555,7 @@ public class DeviceMeasureActivity extends AppCompatActivity
         dataInfo.add(String.valueOf(latitude));
         dataInfo.add("longitude");
         dataInfo.add(String.valueOf(longitude));
-        FileUtils.addLineToCsvFile(baseDirPath, fileToBeSend, dataInfo);
+        FileUtils.addLineToCsvFile(baseDirPath, fileLocalStore, dataInfo);
     }
 
     //开启前台服务提醒的函数。

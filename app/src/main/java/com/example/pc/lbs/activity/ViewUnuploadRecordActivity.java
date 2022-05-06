@@ -165,12 +165,18 @@ public class ViewUnuploadRecordActivity extends AppCompatActivity {
                 return true;
             } else if (MSG_UPLOAD_RECORD_SUCCESS == what) {
                 Toast.makeText(ViewUnuploadRecordActivity.this, fileName + "上传成功", Toast.LENGTH_SHORT).show();
-                //删除文件
-                File file = new File(FileUtils.baseDirPath + fileName);
-                file.delete();
-                //删除列表的数据
-                fileList.remove(fileName);
-                setListViewAdapter(fileListView, fileList);
+                //重命名文件
+                File originFile = new File(FileUtils.baseDirPath + fileName);
+                assert fileName != null;
+                String newFileName = FileUtils.baseDirPath + fileName.substring(4);
+                if (!originFile.renameTo(new File(newFileName))) {
+                    Toast.makeText(ViewUnuploadRecordActivity.this,
+                            "重命名文件出错", Toast.LENGTH_SHORT).show();
+                } else {
+                    //删除列表的数据
+                    fileList.remove(fileName);
+                    setListViewAdapter(fileListView, fileList);
+                }
                 return true;
             } else if (MSG_UPLOAD_RECORD_FAILURE == what) {
                 Toast.makeText(ViewUnuploadRecordActivity.this, fileName + "上传失败\n" + responseMsg, Toast.LENGTH_SHORT).show();
