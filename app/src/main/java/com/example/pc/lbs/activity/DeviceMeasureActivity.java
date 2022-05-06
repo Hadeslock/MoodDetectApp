@@ -32,6 +32,7 @@ import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.blankj.utilcode.util.StringUtils;
 import com.example.pc.lbs.R;
+import com.example.pc.lbs.fragment.AppendCommentDialogFragment;
 import com.example.pc.lbs.fragment.KeyTimeDialogFragment;
 import com.example.pc.lbs.service.BLEReadService;
 import com.example.pc.lbs.service.BluetoothLeService;
@@ -68,7 +69,8 @@ import static com.example.pc.lbs.utils.FileUtils.baseDirPath;
  * Desc: 设备测量的活动
  */
 public class DeviceMeasureActivity extends AppCompatActivity
-        implements View.OnClickListener, KeyTimeDialogFragment.KeyTimeDialogListener {
+        implements View.OnClickListener, KeyTimeDialogFragment.KeyTimeDialogListener,
+        AppendCommentDialogFragment.AppendCommentDialogListener {
     private static final String TAG = DeviceMeasureActivity.class.getSimpleName();
 
     //请求跳转扫描设备界面，本活动的标识码
@@ -92,7 +94,7 @@ public class DeviceMeasureActivity extends AppCompatActivity
     // region 界面组件引用
     private Button connectDeviceBtn; //连接设备按钮
     private Button selectPatientBtn; //选择病人按钮
-    private Button clearTimeBtn; //清除时间戳按钮
+    private Button appendCommentBtn; //添加备注按钮
     private Button clearImageBtn; //清除图像按钮
     private Button startTestBtn; //用于记录开始测试时间
     private Button keyTimeBtn; //用于记录关键时间点的按钮
@@ -130,6 +132,7 @@ public class DeviceMeasureActivity extends AppCompatActivity
     private int keyTimeIdx = 0; //关键时间点编号
     private List<String> keyTimeList = new ArrayList<>(); //关键时间点集合
     private String fileLocalStore; //存储在本地的数据文件
+    private String comment; // 测试结束后添加的备注
 
     //活动创建的钩子
     @Override
@@ -207,6 +210,10 @@ public class DeviceMeasureActivity extends AppCompatActivity
                 mMeasuring = true;
                 //进行一些文件的初始化工作
                 initFileStore();
+                //失效开始测试按钮，使能添加关键点和结束测试按钮
+                startTestBtn.setEnabled(false);
+                keyTimeBtn.setEnabled(true);
+                endTestBtn.setEnabled(true);
                 //开启前台通知
                 startBLEForegroundService();
             }
@@ -220,14 +227,23 @@ public class DeviceMeasureActivity extends AppCompatActivity
             mBluetoothLeService.disconnect();
             //关闭前台通知
             stopBLEForegroundService();
+            //失效添加关键点和结束测试按钮，使能添加备注按钮
+            keyTimeBtn.setEnabled(false);
+            endTestBtn.setEnabled(false);
+            appendCommentBtn.setEnabled(true);
             //将关键点信息写入测试记录文件
             if (keyTimeList.size() == 0) {
                 keyTimeList.add("null");
             }
-            FileUtils.addDataToSpecifiedLineOfCsv(baseDirPath, fileLocalStore, keyTimeList, 2, 0);
-        } else if (R.id.button_clear_time == id) { //清除时间按钮
-            startTime.setText("");
-            endTime.setText("");
+            FileUtils.addDataToSpecifiedLineOfCsv(baseDirPath, fileLocalStore, keyTimeList, 2, FileUtils.REPLACE);
+        } else if (R.id.btn_append_comment == id) { //添加备注按钮
+            //传递当前的备注
+            Bundle bundle = new Bundle();
+            bundle.putString("comment", comment);
+            //开弹窗
+            AppendCommentDialogFragment dialogFragment = new AppendCommentDialogFragment();
+            dialogFragment.setArguments(bundle);
+            dialogFragment.show(getSupportFragmentManager(), "appendComment");
         } else if (R.id.measure_upload_btn == id) { //上传记录按钮
             //跳转上传测试记录页面
             Intent uploadIntent = new Intent(
@@ -235,14 +251,10 @@ public class DeviceMeasureActivity extends AppCompatActivity
             startActivity(uploadIntent);
             finish();
         } else if (R.id.measure_connect_device_btn == id) { //连接设备按钮
-            //连接设备前先选择病人，不然会少信息
-            if (StringUtils.isEmpty(selectPatientName)) {
-                Toast.makeText(this, "请先选择病人", Toast.LENGTH_SHORT).show();
-            } else {
-                Intent intent = new Intent(this, ScanDeviceActivity.class);
-                intent.putExtra("fromActivity", INTENT_SCAN_DEVICE_FOR_MEASURE);
-                startActivityForResult(intent, ACTION_SELECT_DEVICE);
-            }
+            //跳转设备扫描界面
+            Intent intent = new Intent(this, ScanDeviceActivity.class);
+            intent.putExtra("fromActivity", INTENT_SCAN_DEVICE_FOR_MEASURE);
+            startActivityForResult(intent, ACTION_SELECT_DEVICE);
         } else if (R.id.measure_select_patient_btn == id) { //选择病人按钮
             Intent intent = new Intent(this, SelectPatientActivity.class);
             startActivityForResult(intent, ACTION_SELECT_PATIENT);
@@ -335,10 +347,6 @@ public class DeviceMeasureActivity extends AppCompatActivity
                 mConnected = true;
                 String connectInfo = mDeviceName + " 已连接";
                 deviceConnectStatus.setText(connectInfo);
-                //使能几个测试按钮
-                startTestBtn.setEnabled(true);
-                keyTimeBtn.setEnabled(true);
-                endTestBtn.setEnabled(true);
             } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) { //与 GATT 服务器断开连接
                 //设置连接状态
                 mConnected = false;
@@ -403,7 +411,7 @@ public class DeviceMeasureActivity extends AppCompatActivity
         startTestBtn = findViewById((R.id.button_start_test));
         keyTimeBtn = findViewById(R.id.button_mark_key_point);
         endTestBtn = findViewById((R.id.button_end_test));
-        clearTimeBtn = findViewById(R.id.button_clear_time);
+        appendCommentBtn = findViewById(R.id.btn_append_comment);
         uploadRecordBtn = findViewById(R.id.measure_upload_btn);
         selectedPatientTextView = findViewById(R.id.measure_selected_patient);
         deviceConnectStatus = findViewById(R.id.device_connect_status);
@@ -428,7 +436,7 @@ public class DeviceMeasureActivity extends AppCompatActivity
         startTestBtn.setOnClickListener(this);
         keyTimeBtn.setOnClickListener(this);
         endTestBtn.setOnClickListener(this);
-        clearTimeBtn.setOnClickListener(this);
+        appendCommentBtn.setOnClickListener(this);
         uploadRecordBtn.setOnClickListener(this);
     }
 
@@ -440,7 +448,23 @@ public class DeviceMeasureActivity extends AppCompatActivity
         KeyTimeAdapter keyTimeAdapter = new KeyTimeAdapter(keyTimeList);
         keyTimeRV.setAdapter(keyTimeAdapter);
         //更新本地文件
-        FileUtils.addDataToSpecifiedLineOfCsv(baseDirPath, fileLocalStore, keyTimeList, 2, 2);
+        FileUtils.addDataToSpecifiedLineOfCsv(baseDirPath, fileLocalStore, keyTimeList, 2, FileUtils.REPLACE);
+    }
+
+    //添加备注按钮点击后弹出的对话框的监听回调
+    @Override
+    public void onDialogPositiveClick(String comment) {
+        //保存备注并添加到文件
+        this.comment = comment;
+        ArrayList<String> comments = new ArrayList<>();
+        comments.add(comment);
+        boolean appendResult = FileUtils.addDataToSpecifiedLineOfCsv(
+                baseDirPath, fileLocalStore, comments, 3, FileUtils.REPLACE);
+        if (appendResult) {
+            Toast.makeText(this, "更新备注成功", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "更新备注失败", Toast.LENGTH_SHORT).show();
+        }
     }
 
     //关键时间点循环列表的数据适配器
@@ -544,7 +568,13 @@ public class DeviceMeasureActivity extends AppCompatActivity
             }
         });
         int idx = files.length + 1;
-        fileLocalStore = "tbs_" + DateUtil.getNowDate() + "_" + idx + ".csv";
+        fileLocalStore = DateUtil.getNowDate() + "_" + idx + "_tbs.csv";
+        //文件开头空10行出来
+        ArrayList<String> fileHeader = new ArrayList<>();
+        for (int i = 0; i < 9; i++) {
+            fileHeader.add("\n");
+        }
+        FileUtils.addLineToCsvFile(baseDirPath, fileLocalStore, fileHeader);
         //添加设备信息、病人信息、经纬度信息
         ArrayList<String> dataInfo = new ArrayList<>();
         dataInfo.add("deviceMac");
@@ -555,7 +585,7 @@ public class DeviceMeasureActivity extends AppCompatActivity
         dataInfo.add(String.valueOf(latitude));
         dataInfo.add("longitude");
         dataInfo.add(String.valueOf(longitude));
-        FileUtils.addLineToCsvFile(baseDirPath, fileLocalStore, dataInfo);
+        FileUtils.addDataToSpecifiedLineOfCsv(baseDirPath, fileLocalStore, dataInfo, 1, FileUtils.REPLACE);
     }
 
     //开启前台服务提醒的函数。

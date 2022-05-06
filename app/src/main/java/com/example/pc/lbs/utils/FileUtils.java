@@ -165,6 +165,11 @@ public class FileUtils {
         appendStringToFile(path + filename, constructCsvString(inputs));
     }
 
+    //模式代码
+    public static final int INSERT = 0;
+    public static final int APPEND = 1;
+    public static final int REPLACE = 2;
+
     /*
      * 将数据添加到csv文件指定行
      * @author hadeslock

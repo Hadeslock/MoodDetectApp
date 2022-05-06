@@ -37,13 +37,13 @@
                 android:layout_weight="1"
                 android:text="@string/清图像"
                 tools:ignore="ButtonStyle"/>
-        <!--清除时间戳按钮-->
+        <!--上传测试记录按钮-->
         <Button
-                android:id="@+id/button_clear_time"
+                android:id="@+id/measure_upload_btn"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/清除时间"
+                android:text="@string/upload_record"
                 tools:ignore="ButtonStyle"/>
     </LinearLayout>
 
@@ -62,7 +62,6 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/开始测试"
-                android:enabled="false"
                 tools:ignore="ButtonStyle"/>
         <!--标记关键时间点按钮-->
         <Button
@@ -82,13 +81,14 @@
                 android:text="@string/结束测试"
                 android:enabled="false"
                 tools:ignore="ButtonStyle"/>
-        <!--上传测试记录按钮-->
+        <!--添加备注按钮-->
         <Button
-                android:id="@+id/measure_upload_btn"
+                android:id="@+id/btn_append_comment"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/upload_record"
+                android:text="添加备注"
+                android:enabled="false"
                 tools:ignore="ButtonStyle"/>
     </LinearLayout>
 
@@ -160,7 +160,7 @@
     <!--关键时间戳-->
     <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
-            android:layout_height="160dp"
+            android:layout_height="120dp"
             android:padding="5dp"
             android:id="@+id/rv_key_time"/>
     <!--结束测试时间戳-->

@@ -63,7 +63,8 @@ public class ViewUnuploadRecordActivity extends AppCompatActivity {
             @Override
             public boolean accept(File pathname) {
                 String fileName = pathname.getName();
-                return fileName.startsWith("tbs");
+                int split = fileName.lastIndexOf('.');
+                return fileName.substring(0, split).endsWith("_tbs");
             }
         });
         //添加符合的文件
@@ -167,9 +168,8 @@ public class ViewUnuploadRecordActivity extends AppCompatActivity {
                 Toast.makeText(ViewUnuploadRecordActivity.this, fileName + "上传成功", Toast.LENGTH_SHORT).show();
                 //重命名文件
                 File originFile = new File(FileUtils.baseDirPath + fileName);
-                assert fileName != null;
-                String newFileName = FileUtils.baseDirPath + fileName.substring(4);
-                if (!originFile.renameTo(new File(newFileName))) {
+                String newFullPath = FileUtils.baseDirPath + getNewFileName(fileName);
+                if (!originFile.renameTo(new File(newFullPath))) {
                     Toast.makeText(ViewUnuploadRecordActivity.this,
                             "重命名文件出错", Toast.LENGTH_SHORT).show();
                 } else {
@@ -185,4 +185,10 @@ public class ViewUnuploadRecordActivity extends AppCompatActivity {
             return false;
         }
     });
+
+    //获取新的不带 _tbs 的文件名
+    private String getNewFileName(String originName) {
+        int split = originName.lastIndexOf('.') - 4;
+        return originName.substring(0, split) + ".csv";
+    }
 }
