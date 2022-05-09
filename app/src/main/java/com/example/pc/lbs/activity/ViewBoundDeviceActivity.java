@@ -166,7 +166,7 @@ public class ViewBoundDeviceActivity extends AppCompatActivity {
         @Override
         public ViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.bound_device_item, parent, false);
+                    .inflate(R.layout.item_bound_device, parent, false);
             final ViewHolder holder = new ViewHolder(view);
             //为解绑按钮设置点击事件
             holder.unbindBtn.setOnClickListener(new View.OnClickListener() {

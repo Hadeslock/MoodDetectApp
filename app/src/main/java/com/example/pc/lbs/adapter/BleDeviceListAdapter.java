@@ -76,7 +76,7 @@ public class BleDeviceListAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder;
         if (convertView == null) {
-            convertView = LayoutInflater.from(mContext).inflate(R.layout.bluetooth_devices_list_item, null);
+            convertView = LayoutInflater.from(mContext).inflate(R.layout.item_bluetooth_devices, null);
             viewHolder = new ViewHolder(convertView);
             convertView.setTag(viewHolder);
         } else {

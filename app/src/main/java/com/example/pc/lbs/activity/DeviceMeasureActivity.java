@@ -507,7 +507,7 @@ public class DeviceMeasureActivity extends AppCompatActivity
         @Override
         public ViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.key_time_item, parent, false);
+                    .inflate(R.layout.item_key_time, parent, false);
             final ViewHolder viewHolder = new ViewHolder(view);
             viewHolder.keyTimeValueTV.setOnClickListener(new View.OnClickListener() {
                 @Override
