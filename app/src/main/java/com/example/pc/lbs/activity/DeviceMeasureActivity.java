@@ -653,7 +653,7 @@ public class DeviceMeasureActivity extends AppCompatActivity
     //初始化图表的各项设置
     private void initChartSetting() {
         // 设置描述
-        //mChart.setDescription("动态折线图");
+        mChart.setDescription("动态折线图");
         // 设置可触摸
         mChart.setTouchEnabled(true);
         // 可拖曳
