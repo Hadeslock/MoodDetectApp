@@ -16,9 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -34,6 +32,7 @@ import com.blankj.utilcode.util.StringUtils;
 import com.example.pc.lbs.R;
 import com.example.pc.lbs.fragment.AppendCommentDialogFragment;
 import com.example.pc.lbs.fragment.KeyTimeDialogFragment;
+import com.example.pc.lbs.module.extremumQueue;
 import com.example.pc.lbs.service.BLEReadService;
 import com.example.pc.lbs.service.BluetoothLeService;
 import com.example.pc.lbs.utils.DateUtil;
@@ -88,9 +87,6 @@ public class DeviceMeasureActivity extends AppCompatActivity
     //消息代码
     private static final int MSG_DISCONNECT_UNEXPECTED = 1;
 
-    private final int MAX_VISIBLE_COUNT = 300; //图表最多显示的x范围
-    private final int MAX_DRAW_COUNT = 3000; //图表最多画多少数据量
-
     // region 界面组件引用
     private Button connectDeviceBtn; //连接设备按钮
     private Button selectPatientBtn; //选择病人按钮
@@ -106,6 +102,7 @@ public class DeviceMeasureActivity extends AppCompatActivity
     private TextView startTime; //开始时间时间戳
     private RecyclerView keyTimeRV; //关键时间点列表
     private TextView endTime; //结束时间时间戳
+    private CheckBox adaptiveChartCB; //自适应图表单选框
     // endregion
 
     //服务和特征值
@@ -116,6 +113,12 @@ public class DeviceMeasureActivity extends AppCompatActivity
     private BluetoothDevice selectDevice; //选择的蓝牙设备
     private String mDeviceName; //蓝牙设备名称
     private String mDeviceAddress; //蓝牙设备地址
+
+    //绘图相关
+    private final int MAX_VISIBLE_COUNT = 300; //图表最多显示的x范围
+    private final int MAX_DRAW_COUNT = 3000; //图表最多画多少数据量
+    private extremumQueue<Float> shownData = new extremumQueue<>(); //显示在图表上的数据范围
+    private boolean adaptiveChart; //是否自适应图表
 
     //病人相关
     private int selectPatientId;
@@ -373,7 +376,23 @@ public class DeviceMeasureActivity extends AppCompatActivity
                     potentialStr = potentialStr.substring(1, potentialStr.length() - 1);
                     //绘图
                     addChartEntry(potentialStr);
-                    //如果未测量就直接返回
+                    //维护显示窗口的数据
+                    shownData.pushLast(Float.valueOf((potentialStr)));
+                    if (shownData.size() > MAX_VISIBLE_COUNT) {
+                        shownData.popFirst();
+                    }
+                    //自适应显示
+                    YAxis axisLeft = mChart.getAxisLeft();
+                    if (adaptiveChart) {
+                        float max = shownData.max(), min = shownData.min();
+                        axisLeft.setStartAtZero(false);
+                        axisLeft.setAxisMaxValue(max + 3);
+                        axisLeft.setAxisMinValue(min - 3);
+                    } else {
+                        axisLeft.resetAxisMaxValue();
+                        axisLeft.resetAxisMinValue();
+                    }
+                    //如果未测量就直接返回,不把数据存到本地文件中，只是显示图表
                     if (!mMeasuring) return;
                     //格式化数据
                     List<String> dataList = new ArrayList<>();
@@ -419,7 +438,7 @@ public class DeviceMeasureActivity extends AppCompatActivity
         keyTimeRV = findViewById(R.id.rv_key_time);
         endTime = findViewById((R.id.end_time));
         mChart = findViewById(R.id.chart);
-
+        adaptiveChartCB = findViewById(R.id.cb_adaptive_chart);
 
         //设置线性视图
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -438,6 +457,13 @@ public class DeviceMeasureActivity extends AppCompatActivity
         endTestBtn.setOnClickListener(this);
         appendCommentBtn.setOnClickListener(this);
         uploadRecordBtn.setOnClickListener(this);
+
+        adaptiveChartCB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                adaptiveChart = isChecked;
+            }
+        });
     }
 
     //关键时间点点击后弹出的对话框的监听回调
@@ -627,7 +653,7 @@ public class DeviceMeasureActivity extends AppCompatActivity
     //初始化图表的各项设置
     private void initChartSetting() {
         // 设置描述
-        mChart.setDescription("动态折线图");
+        //mChart.setDescription("动态折线图");
         // 设置可触摸
         mChart.setTouchEnabled(true);
         // 可拖曳

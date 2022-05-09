@@ -146,31 +146,52 @@
             android:layout_width="match_parent"
             android:layout_height="300dp"/>
 
-
-    <!--时间戳-->
-    <!--开始测试时间戳-->
-    <TextView
-            android:id="@+id/start_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:text="开始时间："
-            android:textSize="14sp"/>
-    <!--关键时间戳-->
-    <androidx.recyclerview.widget.RecyclerView
+    <!--下方功能区-->
+    <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="120dp"
-            android:padding="5dp"
-            android:id="@+id/rv_key_time"/>
-    <!--结束测试时间戳-->
-    <TextView
-            android:id="@+id/end_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:text="结束时间："
-            android:textSize="14sp"/>
+            android:layout_height="wrap_content">
+        <!--时间戳-->
+        <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:orientation="vertical">
+            <!--开始测试时间戳-->
+            <TextView
+                    android:id="@+id/start_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="开始时间："
+                    android:textSize="14sp"/>
+            <!--关键时间戳-->
+            <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:id="@+id/rv_key_time"/>
+            <!--结束测试时间戳-->
+            <TextView
+                    android:id="@+id/end_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="结束时间："
+                    android:textSize="14sp"/>
+        </LinearLayout>
+
+        <!--选项-->
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingEnd="10dp"
+                android:gravity="end">
+            <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/cb_adaptive_chart"
+                    android:text="自适应图表"/>
+        </LinearLayout>
+    </LinearLayout>
 
 </LinearLayout>
