@@ -24,9 +24,11 @@
             android:theme="@style/AppTheme"
             android:usesCleartextTraffic="true">
         <activity
-                android:name=".activity.ViewBoundDeviceActivity"
+                android:name=".activity.ViewDetectRecordActivity"
                 android:exported="true"/>
-        <!-- 设备测量界面 -->
+        <activity
+                android:name=".activity.ViewBoundDeviceActivity"
+                android:exported="true"/> <!-- 设备测量界面 -->
         <activity
                 android:name=".activity.DeviceMeasureActivity"
                 android:exported="true"/> <!-- 添加病人页面 -->
@@ -61,7 +63,7 @@
                 android:name=".activity.ResultActivity"
                 android:label="@string/title_activity_result"
                 android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".activity.TestActivity"/> <!-- 主功能菜单 -->
+        <activity android:name=".activity.DetectRecordAnalyseActivity"/> <!-- 主功能菜单 -->
         <activity android:name=".activity.MainActivity"/> <!-- 百度地图定位service，每个App拥有自己单独的定位service -->
         <service
                 android:name="com.baidu.location.f"
