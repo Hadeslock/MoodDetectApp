@@ -201,6 +201,8 @@ public class DeviceMeasureActivity extends AppCompatActivity
             initChart();
             //重置所有缩放和拖动并使图表完全适合它的边界
             mChart.fitScreen();
+            //清除时间窗数据
+            shownData = new extremumQueue<>();
         } else if (R.id.button_start_test == id) { //开始测试按钮
             //检查病人和设备是否选择
             if (StringUtils.isEmpty(selectPatientName) || selectDevice == null) {
@@ -443,6 +445,8 @@ public class DeviceMeasureActivity extends AppCompatActivity
         //设置线性视图
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         keyTimeRV.setLayoutManager(layoutManager);
+
+        adaptiveChart = adaptiveChartCB.isChecked();
 
     }
 

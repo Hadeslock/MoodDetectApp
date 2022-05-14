@@ -152,8 +152,9 @@
             android:layout_height="wrap_content">
         <!--时间戳-->
         <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="2"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
                 android:orientation="vertical">
@@ -182,14 +183,16 @@
 
         <!--选项-->
         <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:paddingEnd="10dp"
                 android:gravity="end">
             <CheckBox
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/cb_adaptive_chart"
+                    android:checked="true"
                     android:text="自适应图表"/>
         </LinearLayout>
     </LinearLayout>
