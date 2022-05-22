@@ -19,3 +19,7 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+#glide 相关 https://muyangmin.github.io/glide-docs-cn/doc/configuration.html#%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F
+-keep class com.example.pc.lbs.module.MyGlideModule
+

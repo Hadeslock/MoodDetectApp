@@ -1,5 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Develop/GraduateProj/mood_detect/app/MoodDetectApp/app/src/main/res/drawable/textview_border.xml" value="0.25625" />
+        <entry key="..\:/Develop/GraduateProj/mood_detect/app/MoodDetectApp/app/src/main/res/layout/activity_add_patient.xml" value="0.2125" />
+        <entry key="..\:/Develop/GraduateProj/mood_detect/app/MoodDetectApp/app/src/main/res/layout/activity_bind_device.xml" value="0.24114583333333334" />
+        <entry key="..\:/Develop/GraduateProj/mood_detect/app/MoodDetectApp/app/src/main/res/layout/activity_device_measure.xml" value="0.24114583333333334" />
+        <entry key="..\:/Develop/GraduateProj/mood_detect/app/MoodDetectApp/app/src/main/res/layout/activity_device_messure.xml" value="0.2125" />
+        <entry key="..\:/Develop/GraduateProj/mood_detect/app/MoodDetectApp/app/src/main/res/layout/activity_login.xml" value="0.24114583333333334" />
+        <entry key="..\:/Develop/GraduateProj/mood_detect/app/MoodDetectApp/app/src/main/res/layout/activity_main.xml" value="0.22708333333333333" />
+        <entry key="..\:/Develop/GraduateProj/mood_detect/app/MoodDetectApp/app/src/main/res/layout/activity_register.xml" value="0.2265625" />
+        <entry key="..\:/Develop/GraduateProj/mood_detect/app/MoodDetectApp/app/src/main/res/layout/activity_result.xml" value="0.1" />
+        <entry key="..\:/Develop/GraduateProj/mood_detect/app/MoodDetectApp/app/src/main/res/layout/activity_scan_device.xml" value="0.2265625" />
+        <entry key="..\:/Develop/GraduateProj/mood_detect/app/MoodDetectApp/app/src/main/res/layout/activity_select_patient.xml" value="0.2125" />
+        <entry key="..\:/Develop/GraduateProj/mood_detect/app/MoodDetectApp/app/src/main/res/layout/activity_test.xml" value="0.24114583333333334" />
+        <entry key="..\:/Develop/GraduateProj/mood_detect/app/MoodDetectApp/app/src/main/res/layout/activity_view_binded_device.xml" value="0.2125" />
+        <entry key="..\:/Develop/GraduateProj/mood_detect/app/MoodDetectApp/app/src/main/res/layout/activity_view_detect_record.xml" value="0.2265625" />
+        <entry key="..\:/Develop/GraduateProj/mood_detect/app/MoodDetectApp/app/src/main/res/layout/activity_view_unupload_record.xml" value="0.22708333333333333" />
+        <entry key="..\:/Develop/GraduateProj/mood_detect/app/MoodDetectApp/app/src/main/res/layout/bind_device_item.xml" value="0.24010416666666667" />
+        <entry key="..\:/Develop/GraduateProj/mood_detect/app/MoodDetectApp/app/src/main/res/layout/bluetooth_devices_list_item.xml" value="0.22708333333333333" />
+        <entry key="..\:/Develop/GraduateProj/mood_detect/app/MoodDetectApp/app/src/main/res/layout/bound_device_item.xml" value="0.264" />
+        <entry key="..\:/Develop/GraduateProj/mood_detect/app/MoodDetectApp/app/src/main/res/layout/dialog_keytime.xml" value="0.24010416666666667" />
+        <entry key="..\:/Develop/GraduateProj/mood_detect/app/MoodDetectApp/app/src/main/res/layout/dialog_measure_comment.xml" value="0.24010416666666667" />
+        <entry key="..\:/Develop/GraduateProj/mood_detect/app/MoodDetectApp/app/src/main/res/layout/fragment_device.xml" value="0.2125" />
+        <entry key="..\:/Develop/GraduateProj/mood_detect/app/MoodDetectApp/app/src/main/res/layout/fragment_item.xml" value="0.22708333333333333" />
+        <entry key="..\:/Develop/GraduateProj/mood_detect/app/MoodDetectApp/app/src/main/res/layout/fragment_item_list.xml" value="0.24114583333333334" />
+        <entry key="..\:/Develop/GraduateProj/mood_detect/app/MoodDetectApp/app/src/main/res/layout/fragment_me.xml" value="0.2125" />
+        <entry key="..\:/Develop/GraduateProj/mood_detect/app/MoodDetectApp/app/src/main/res/layout/fragment_measure.xml" value="0.2265625" />
+        <entry key="..\:/Develop/GraduateProj/mood_detect/app/MoodDetectApp/app/src/main/res/layout/fragment_view.xml" value="0.22708333333333333" />
+        <entry key="..\:/Develop/GraduateProj/mood_detect/app/MoodDetectApp/app/src/main/res/layout/item_key_time.xml" value="0.24114583333333334" />
+        <entry key="..\:/Develop/GraduateProj/mood_detect/app/MoodDetectApp/app/src/main/res/layout/item_patient.xml" value="0.24010416666666667" />
+        <entry key="..\:/Develop/GraduateProj/mood_detect/app/MoodDetectApp/app/src/main/res/layout/key_time_item.xml" value="0.24010416666666667" />
+        <entry key="..\:/Develop/GraduateProj/mood_detect/app/MoodDetectApp/app/src/main/res/menu/main_bottom_nav_menu.xml" value="0.24166666666666667" />
+      </map>
+    </option>
+  </component>
   <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="FrameworkDetectionExcludesConfiguration">
     <file type="web" url="file://$PROJECT_DIR$" />

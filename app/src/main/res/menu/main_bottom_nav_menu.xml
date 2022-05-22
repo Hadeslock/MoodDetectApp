@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--首页底部导航栏的菜单数据文件，这里写几个item，导航栏就有几项-->
+    <!--注意item的id必须和main_navigation里面对应项的id相同-->
+    <item
+            android:id="@+id/navigation_view"
+            android:icon="@drawable/view"
+            android:title="查看"/>
+
+    <item
+            android:id="@+id/navigation_measure"
+            android:icon="@drawable/measure"
+            android:title="测量"/>
+
+    <item
+            android:id="@+id/navigation_device"
+            android:icon="@drawable/device"
+            android:title="设备"/>
+
+    <item
+            android:id="@+id/navigation_me"
+            android:icon="@drawable/me"
+            android:title="我的"/>
+</menu>

@@ -17,26 +17,27 @@
     <string name="saving_battery_desc">低功耗定位模式下，仅使用网络定位即Wifi和基站定位，返回的是当前条件下精度最好的网络定位结果</string>
     <string name="device_sensor_desc">仅用设备定位模式下，只使用用户的GPS进行定位。这个模式下，由于GPS芯片锁定需要时间，首次定位速度会需要一定的时间</string>
     <string name="error_code_detail">61 ： GPS定位结果\n
-		62 ： 扫描整合定位依据失败。此时定位结果无效。\n
-		63 ： 网络异常，没有成功向服务器发起请求。此时定位结果无效。\n
-		65 ： 定位缓存的结果。\n
-		66 ： 离线定位结果。通过requestOfflineLocaiton调用时对应的返回结果\n
-		67 ： 离线定位失败。通过requestOfflineLocaiton调用时对应的返回结果\n
-		68 ： 网络连接失败时，查找本地离线定位时对应的返回结果\n
-		161： 表示网络定位结果\n
-		162~167： 服务端定位失败\n
-		502：key参数错误\n
-		505：key不存在或者非法\n
-		601：key服务被开发者自己禁用\n
-		602：key mcode不匹配\n
-		501～700：key验证失败\n</string>
+        62 ： 扫描整合定位依据失败。此时定位结果无效。\n
+        63 ： 网络异常，没有成功向服务器发起请求。此时定位结果无效。\n
+        65 ： 定位缓存的结果。\n
+        66 ： 离线定位结果。通过requestOfflineLocaiton调用时对应的返回结果\n
+        67 ： 离线定位失败。通过requestOfflineLocaiton调用时对应的返回结果\n
+        68 ： 网络连接失败时，查找本地离线定位时对应的返回结果\n
+        161： 表示网络定位结果\n
+        162~167： 服务端定位失败\n
+        502：key参数错误\n
+        505：key不存在或者非法\n
+        601：key服务被开发者自己禁用\n
+        602：key mcode不匹配\n
+        501～700：key验证失败\n
+    </string>
     <string name="qa_callback">问题反馈</string>
     <string name="qa_format">邮件格式格式：\n
-		1、手机标识（移动联通IMEI，电信MEID）\n
-		2、问题发生时间\n
-		3、定位类型：失败（给出返回码），或者不准（给出真实位置）等\n
-		4、具体描述：细节描述，可以给出问题发生的频率或者APP名称，sdk版本等，也可以加上附件如日志，贴图等\n
-        </string>
+        1、手机标识（移动联通IMEI，电信MEID）\n
+        2、问题发生时间\n
+        3、定位类型：失败（给出返回码），或者不准（给出真实位置）等\n
+        4、具体描述：细节描述，可以给出问题发生的频率或者APP名称，sdk版本等，也可以加上附件如日志，贴图等\n
+    </string>
     <string name="title_activity_result">ResultActivity</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
@@ -46,4 +47,53 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="BlueToothIcon">BLE</string>
+    <string name="BlueToothSearchNotConnected">未连接</string>
+    <string name="开前台">开前台</string>
+    <string name="关前台">关前台</string>
+    <string name="重连蓝牙">重连蓝牙</string>
+    <string name="清图像">清图像</string>
+    <string name="选通道">选通道</string>
+    <string name="开始测试">开始测试</string>
+    <string name="结束测试">结束测试</string>
+    <string name="清除时间">清除时间</string>
+    <string name="设备返回">设备返回：</string>
+    <string name="inputUsername">请输入用户名</string>
+    <string name="inputPassword">请输入密码</string>
+    <string name="inputPhone">请输入手机号</string>
+    <string name="inputEmail">请输入邮箱</string>
+    <string name="registerImmediate">立即注册</string>
+    <string name="username">用户名</string>
+    <string name="password">密码</string>
+    <string name="register">注册</string>
+    <string name="login">登录</string>
+    <string name="captcha">验证码</string>
+    <string name="selectPatient">选择病人</string>
+    <string name="addPatient">添加病人</string>
+    <string name="uploadRecord">上传测试记录</string>
+    <string name="admin">admin</string>
+    <string name="defaultUsername">hadeslock</string>
+    <string name="defaultPassword">123456</string>
+    <string name="inputPatientName">请输入病人姓名</string>
+    <string name="inputPatientAge">请输入病人年龄</string>
+    <string name="male">男</string>
+    <string name="female">女</string>
+    <string name="selectPatientGander">请选择病人性别</string>
+    <string name="inputPatientIdentity">请输入病人身份证号</string>
+    <string name="notAquireAddr">未获取地址</string>
+    <string name="mainTitle">你的情绪监测助手</string>
+    <string name="selectDevice">选择设备</string>
+    <string name="bindDevice">绑定设备</string>
+    <string name="deviceConnectState">设备连接状态：</string>
+    <string name="disconnected">未连接</string>
+    <string name="标记关键点">标记关键点</string>
+    <string name="notSelect">未选择</string>
+    <string name="upload_record">上传记录</string>
+    <string name="cur_patient">当前测试病人：</string>
+    <string name="unselected">未选择</string>
+    <string name="unuploadedRecord">未上传的测试记录</string>
+    <string name="uploadAllRecord">一键上传</string>
+    <string name="ensureSelect">确认选择</string>
+    <string name="connectDevice">连接设备</string>
+    <string name="unbind">解绑</string>
 </resources>

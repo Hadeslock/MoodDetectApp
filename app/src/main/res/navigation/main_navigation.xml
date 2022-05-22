@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/main_navigation"
+            app:startDestination="@id/navigation_view">
+    <!--导航xml文件，作为首页底部导航栏的配置-->
+    <fragment
+            android:id="@+id/navigation_view"
+            android:name="com.example.pc.lbs.fragment.ViewFragment"
+            android:label="查看"
+            tools:layout="@layout/fragment_view"/>
+    <fragment
+            android:id="@+id/navigation_measure"
+            android:name="com.example.pc.lbs.fragment.MeasureFragment"
+            android:label="测量"
+            tools:layout="@layout/fragment_measure"/>
+    <fragment
+            android:id="@+id/navigation_device"
+            android:name="com.example.pc.lbs.fragment.DeviceFragment"
+            android:label="设备"
+            tools:layout="@layout/fragment_device"/>
+    <fragment
+            android:id="@+id/navigation_me"
+            android:name="com.example.pc.lbs.fragment.MeFragment"
+            android:label="我的"
+            tools:layout="@layout/fragment_me"/>
+
+</navigation>
