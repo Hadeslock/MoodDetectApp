@@ -1,5 +1,7 @@
 package com.example.pc.lbs.pojo;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import com.example.pc.lbs.utils.GsonUtil;
 import com.google.gson.reflect.TypeToken;
 import lombok.Data;
@@ -18,7 +20,7 @@ import java.util.List;
  */
 
 @Data
-public class Patient {
+public class Patient implements Parcelable {
     private Integer id; //病人id
     private String name; //病人姓名
     private Integer age; //病人年龄
@@ -33,6 +35,39 @@ public class Patient {
         this.position = position;
         this.identity = identity;
     }
+
+    protected Patient(Parcel in) {
+        if (in.readByte() == 0) {
+            id = null;
+        } else {
+            id = in.readInt();
+        }
+        name = in.readString();
+        if (in.readByte() == 0) {
+            age = null;
+        } else {
+            age = in.readInt();
+        }
+        if (in.readByte() == 0) {
+            gender = null;
+        } else {
+            gender = in.readInt();
+        }
+        position = in.readString();
+        identity = in.readString();
+    }
+
+    public static final Creator<Patient> CREATOR = new Creator<Patient>() {
+        @Override
+        public Patient createFromParcel(Parcel in) {
+            return new Patient(in);
+        }
+
+        @Override
+        public Patient[] newArray(int size) {
+            return new Patient[size];
+        }
+    };
 
     /*
      * 从返回结果中解析病人列表
@@ -61,5 +96,35 @@ public class Patient {
             list.add(patient.getName());
         }
         return list;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        if (id == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeInt(id);
+        }
+        dest.writeString(name);
+        if (age == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeInt(age);
+        }
+        if (gender == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeInt(gender);
+        }
+        dest.writeString(position);
+        dest.writeString(identity);
     }
 }

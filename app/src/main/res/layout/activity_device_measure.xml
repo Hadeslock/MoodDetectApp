@@ -4,18 +4,17 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical"
+              android:padding="10dp"
               tools:context=".activity.DeviceMeasureActivity">
     <!--设备测量界面-->
 
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
             android:orientation="horizontal">
         <!--选择病人按钮-->
-        <Button android:id="@+id/measure_select_patient_btn"
+        <Button
+                android:id="@+id/measure_select_patient_btn"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -23,11 +22,11 @@
                 style="@style/TextAppearance.AppCompat.Button"/>
         <!--连接设备按钮-->
         <Button
-                android:id="@+id/measure_connect_device_btn"
+                android:id="@+id/btn_scan_device"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/connectDevice"
+                android:text="@string/scanDevice"
                 style="@style/Widget.AppCompat.Button"/>
         <!--清图像按钮-->
         <Button
@@ -52,12 +51,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
             android:orientation="horizontal">
-        <!--开始测试按钮-->
+        <!--测试按钮-->
         <Button
-                android:id="@+id/button_start_test"
+                android:id="@+id/btn_measure"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -65,20 +62,11 @@
                 tools:ignore="ButtonStyle"/>
         <!--标记关键时间点按钮-->
         <Button
-                android:id="@+id/button_mark_key_point"
+                android:id="@+id/btn_mark_key_point"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/标记关键点"
-                android:enabled="false"
-                tools:ignore="ButtonStyle"/>
-        <!--结束测试按钮-->
-        <Button
-                android:id="@+id/button_end_test"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/结束测试"
                 android:enabled="false"
                 tools:ignore="ButtonStyle"/>
         <!--添加备注按钮-->
@@ -97,8 +85,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
             android:orientation="horizontal">
         <!--选择的病人tag-->
         <TextView
@@ -109,6 +95,7 @@
                 android:maxLines="5"
                 android:scrollbars="vertical"
                 android:text="@string/cur_patient"/>
+
         <TextView
                 android:id="@+id/measure_selected_patient"
                 android:layout_width="wrap_content"
@@ -116,29 +103,12 @@
                 android:text="@string/unselected"/>
     </LinearLayout>
 
-    <!--显示连接状态-->
-    <LinearLayout
+    <!--扫描设备列表-->
+    <ListView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:orientation="horizontal">
-        <!--设备连接状态tag-->
-        <TextView
-                android:id="@+id/device_connect_status_tag"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="5dp"
-                android:maxLines="5"
-                android:scrollbars="vertical"
-                android:text="@string/deviceConnectState"/>
-        <TextView
-                android:id="@+id/device_connect_status"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/disconnected"/>
-    </LinearLayout>
+            android:layout_marginTop="10dp"
+            android:id="@+id/lv_scanned_device"/>
 
     <!--绘图区-->
     <com.github.mikephil.charting.charts.LineChart
@@ -155,8 +125,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
                 android:orientation="vertical">
             <!--开始测试时间戳-->
             <TextView
@@ -186,8 +154,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:paddingEnd="10dp"
                 android:gravity="end">
+
             <CheckBox
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

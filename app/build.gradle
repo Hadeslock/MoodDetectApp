@@ -8,7 +8,7 @@ android {
         //noinspection ExpiredTargetSdkVersion
         targetSdkVersion 28
         versionCode 1
-        versionName "1.1"
+        versionName "1.1.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         //百度地图设置
@@ -89,5 +89,7 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui:2.3.5'
     //城市选择器 https://github.com/crazyandcoder/citypicker
     implementation 'com.github.crazyandcoder:citypicker:6.0.2'
+    //fastble
+    implementation 'com.github.Jasonchenlijian:FastBle:2.4.0'
 
 }

@@ -156,8 +156,7 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
                 //确认选择病人，跳转到测量界面
                 //传递参数
                 Intent intent = new Intent();
-                intent.putExtra(DeviceMeasureActivity.EXTRAS_SELECTED_PATIENT_ID, selectedPatient.getId());
-                intent.putExtra(DeviceMeasureActivity.EXTRAS_SELECTED_PATIENT_NAME, selectedPatient.getName());
+                intent.putExtra(DeviceMeasureActivity.EXTRAS_SELECTED_PATIENT, selectedPatient);
                 setResult(RESULT_OK, intent);
                 //结束活动
                 finish();
