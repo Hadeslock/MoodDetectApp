@@ -73,11 +73,7 @@
                 android:name=".service.BLEReadService"
                 android:enabled="true"
                 android:exported="false"/> <!-- 蓝牙低功耗服务页面 -->
-        <service
-                android:name=".service.BluetoothLeService"
-                android:enabled="true"
-                android:exported="false">
-        </service> <!-- 百度地图定位的key -->
+        <!-- 百度地图定位的key -->
         <meta-data
                 android:name="com.baidu.lbsapi.API_KEY"
                 android:value="RzXlX7iW5AmXdgXKAvMNg39Th62dZwid"/>
