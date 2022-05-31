@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import androidx.fragment.app.Fragment;
+import com.example.pc.lbs.BuildConfig;
 import com.example.pc.lbs.activity.LoginActivity;
 import com.example.pc.lbs.R;
 
@@ -61,7 +62,7 @@ public class MeFragment extends Fragment {
         ArrayList<String> funcListData = new ArrayList<>();
         funcListData.add("查看个人信息（todo）");
         funcListData.add("设置（todo）");
-        funcListData.add("版本更新（todo）");
+        funcListData.add("当前版本 " + BuildConfig.VERSION_NAME);
         funcListData.add("注销");
         funcListView.setAdapter(new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, funcListData));
     }
