@@ -3,21 +3,20 @@ package com.example.pc.lbs.activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
 import com.example.pc.lbs.BuildConfig;
 import com.example.pc.lbs.R;
+import com.example.pc.lbs.pojo.RespBean;
 import com.example.pc.lbs.utils.FileUtils;
 import com.example.pc.lbs.utils.HttpUtil;
-import com.example.pc.lbs.pojo.RespBean;
 import okhttp3.*;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -59,12 +58,13 @@ public class ViewUnuploadRecordActivity extends AppCompatActivity {
 
         //检测输出目录下的所有文件
         File filePath = new File(FileUtils.baseDirPath);
-        File[] files = filePath.listFiles(new FileFilter() {
-            @Override
-            public boolean accept(File pathname) {
-                String fileName = pathname.getName();
+        File[] files = filePath.listFiles(pathname -> {
+            String fileName = pathname.getName();
+            if (fileName.endsWith(".csv")) {
                 int split = fileName.lastIndexOf('.');
                 return fileName.substring(0, split).endsWith("_tbs");
+            } else {
+                return false;
             }
         });
         //添加符合的文件

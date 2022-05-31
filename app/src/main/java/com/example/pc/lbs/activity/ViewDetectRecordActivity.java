@@ -27,8 +27,10 @@ public class ViewDetectRecordActivity extends AppCompatActivity {
         File[] files = filePath.listFiles();
         for (File file : files) {
             String fileName = file.getName();
-            fileName = fileName.substring(0, fileName.lastIndexOf('.'));
-            fileNames.add(fileName);
+            if (fileName.endsWith(".csv")) {
+                fileName = fileName.substring(0, fileName.lastIndexOf('.'));
+                fileNames.add(fileName);
+            }
         }
 
         //设置数据适配器
