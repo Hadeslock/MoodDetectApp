@@ -305,19 +305,20 @@ public class DeviceMeasureController {
     public void stopMeasure() {
         //断开所有连接
         BleManager.getInstance().disconnectAllDevice();
-        //设置结束时间标签
-        mView.setTimeTag(false);
-        //关闭前台通知
-        mView.stopBLEForegroundService();
-        //失效添加关键点按钮，使能添加备注按钮
-        mView.findViewById(R.id.btn_mark_key_point).setEnabled(false);
-        mView.findViewById(R.id.btn_append_comment).setEnabled(true);
-        //将关键点信息写入测试记录文件
-        if (keyTimeList.size() == 0) {
-            keyTimeList.add("null");
+        if (isMeasure) {
+            //设置结束时间标签
+            mView.setTimeTag(false);
+            //关闭前台通知
+            mView.stopBLEForegroundService();
+            //失效添加关键点按钮，使能添加备注按钮
+            mView.findViewById(R.id.btn_mark_key_point).setEnabled(false);
+            mView.findViewById(R.id.btn_append_comment).setEnabled(true);
+            //将关键点信息写入测试记录文件
+            if (keyTimeList.size() == 0) {
+                keyTimeList.add("null");
+            }
+            FileUtils.addDataToSpecifiedLineOfCsv(baseDirPath, fileLocalStore, keyTimeList, 2, FileUtils.REPLACE);
         }
-        FileUtils.addDataToSpecifiedLineOfCsv(baseDirPath, fileLocalStore, keyTimeList, 2, FileUtils.REPLACE);
-
     }
 
     //一些文件的初始化工作
