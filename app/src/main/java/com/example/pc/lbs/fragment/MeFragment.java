@@ -62,7 +62,7 @@ public class MeFragment extends Fragment {
         ArrayList<String> funcListData = new ArrayList<>();
         funcListData.add("查看个人信息（todo）");
         funcListData.add("设置（todo）");
-        funcListData.add("当前版本 " + BuildConfig.VERSION_NAME);
+        funcListData.add("发布版本：V" + BuildConfig.VERSION_NAME);
         funcListData.add("注销");
         funcListView.setAdapter(new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, funcListData));
     }
