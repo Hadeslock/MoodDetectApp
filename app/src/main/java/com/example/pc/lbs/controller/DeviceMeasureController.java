@@ -261,12 +261,11 @@ public class DeviceMeasureController {
     public void changeMeasureStatus() {
         if (!isMeasure) {
             startMeasure();
-            mView.setMeasureStatus(true);
         } else {
             stopMeasure();
             mView.setMeasureStatus(false);
         }
-        isMeasure = !isMeasure;
+        //isMeasure = !isMeasure;
     }
 
     //开始测量
@@ -298,6 +297,9 @@ public class DeviceMeasureController {
             mView.findViewById(R.id.btn_mark_key_point).setEnabled(true);
             //开启前台通知
             mView.startBLEForegroundService();
+            //改标志位
+            isMeasure = true;
+            mView.setMeasureStatus(true);
         }
     }
 
@@ -318,6 +320,8 @@ public class DeviceMeasureController {
                 keyTimeList.add("null");
             }
             FileUtils.addDataToSpecifiedLineOfCsv(baseDirPath, fileLocalStore, keyTimeList, 2, FileUtils.REPLACE);
+            //改标志位
+            isMeasure = false;
         }
     }
 
